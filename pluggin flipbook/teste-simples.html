@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples - DearFlip</title>
+    <link rel="stylesheet" href="dearflip.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste Simples - DearFlip Plugin</h1>
+        
+        <div class="test-section">
+            <h2>Teste 1: Imagens</h2>
+            <button onclick="testImages()">Testar com Imagens</button>
+            <div class="status" id="status1">Aguardando...</div>
+            <div id="flipbook1"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Teste 2: PDF Online</h2>
+            <button onclick="testPDF()">Testar com PDF Online</button>
+            <div class="status" id="status2">Aguardando...</div>
+            <div id="flipbook2"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Teste 3: PDF Local</h2>
+            <input type="file" id="pdfFile" accept=".pdf" style="display: none;">
+            <button onclick="document.getElementById('pdfFile').click()">Escolher PDF</button>
+            <div class="status" id="status3">Aguardando...</div>
+            <div id="flipbook3"></div>
+        </div>
+    </div>
+
+    <!-- Dependências -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="dearflip-jquery-plugin.js"></script>
+
+    <script>
+        // Configurar PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+        
+        function updateStatus(id, message) {
+            document.getElementById(id).textContent = message;
+            console.log('Status ' + id + ':', message);
+        }
+        
+        function testImages() {
+            updateStatus('status1', 'Iniciando teste com imagens...');
+            
+            $('#flipbook1').dearFlip({
+                images: [
+                    'https://via.placeholder.com/400x600/FF6B6B/FFFFFF?text=Página+1',
+                    'https://via.placeholder.com/400x600/4ECDC4/FFFFFF?text=Página+2',
+                    'https://via.placeholder.com/400x600/45B7D1/FFFFFF?text=Página+3'
+                ],
+                width: 800,
+                height: 500,
+                onPageFlip: function(pageIndex) {
+                    updateStatus('status1', 'Página ' + pageIndex + ' carregada');
+                }
+            });
+            
+            updateStatus('status1', 'Teste com imagens concluído!');
+        }
+        
+        function testPDF() {
+            updateStatus('status2', 'Iniciando teste com PDF online...');
+            
+            $('#flipbook2').dearFlip({
+                pdfUrl: 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
+                width: 800,
+                height: 500,
+                onPageFlip: function(pageIndex) {
+                    updateStatus('status2', 'Página ' + pageIndex + ' carregada');
+                }
+            });
+            
+            updateStatus('status2', 'Teste com PDF online iniciado!');
+        }
+        
+        // Configurar input de arquivo
+        document.getElementById('pdfFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                updateStatus('status3', 'Processando arquivo PDF...');
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    updateStatus('status3', 'Carregando PDF no flipbook...');
+                    
+                    $('#flipbook3').dearFlip({
+                        pdfData: e.target.result,
+                        width: 800,
+                        height: 500,
+                        onPageFlip: function(pageIndex) {
+                            updateStatus('status3', 'Página ' + pageIndex + ' carregada');
+                        }
+                    });
+                    
+                    updateStatus('status3', 'PDF carregado com sucesso!');
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
+        
+        // Verificar se tudo carregou
+        $(document).ready(function() {
+            console.log('jQuery carregado:', typeof $ !== 'undefined');
+            console.log('PDF.js carregado:', typeof pdfjsLib !== 'undefined');
+            console.log('DearFlip carregado:', typeof $.fn.dearFlip !== 'undefined');
+            
+            if (typeof $ !== 'undefined' && typeof pdfjsLib !== 'undefined' && typeof $.fn.dearFlip !== 'undefined') {
+                console.log('✅ Todos os componentes carregados com sucesso!');
+            } else {
+                console.log('❌ Algum componente não foi carregado corretamente');
+            }
+        });
+    </script>
+</body>
+</html>

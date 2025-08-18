@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Flipbook Teste</title>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="jq-3d-flip-book/css/white-book-view.css" />
+<script src="jq-3d-flip-book/js/3dflipbook.min.js"></script>
+
+<style>
+  #container {
+    width: 100%;
+    height: 600px;
+  }
+</style>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script>
+  $("#container").flipBook({
+    pdf: "mulheres.pdf"
+  });
+</script>
+
+</body>
+</html>

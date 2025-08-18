@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste DearFlip Simples</title>
+    
+    <!-- CSS do DearFlip -->
+    <link rel="stylesheet" href="pluggin%20flipbook/dearflip.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        #meu-flipbook {
+            width: 100%;
+            height: 500px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .debug-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #d32f2f;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Teste DearFlip - Diagnóstico</h1>
+        
+        <div class="debug-info" id="debug-info">
+            Inicializando diagnóstico...
+        </div>
+        
+        <div id="meu-flipbook">
+            <div style="text-align: center; padding: 50px; color: #666;">
+                Carregando PDF...
+            </div>
+        </div>
+        
+        <div id="status"></div>
+    </div>
+
+    <!-- Scripts necessários -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="pluggin%20flipbook/dearflip-jquery-plugin.js"></script>
+
+    <script>
+        function updateDebug(message) {
+            const debugDiv = document.getElementById('debug-info');
+            debugDiv.innerHTML += '<br>' + new Date().toLocaleTimeString() + ': ' + message;
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = '<div class="' + type + '">' + message + '</div>';
+        }
+
+        // Configuração do PDF.js
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+            updateDebug('PDF.js configurado com sucesso');
+        } else {
+            updateDebug('ERRO: PDF.js não está disponível');
+            updateStatus('PDF.js não está carregado!', 'error');
+        }
+        
+        $(document).ready(function() {
+            updateDebug('jQuery carregado: ' + (typeof $ !== 'undefined'));
+            updateDebug('PDF.js carregado: ' + (typeof pdfjsLib !== 'undefined'));
+            updateDebug('DearFlip carregado: ' + (typeof $.fn.dearFlip !== 'undefined'));
+            
+            if (typeof $.fn.dearFlip === 'undefined') {
+                updateStatus('ERRO: Plugin DearFlip não está carregado!', 'error');
+                return;
+            }
+            
+            updateDebug('Iniciando flipbook...');
+            
+            try {
+                const flipbookInstance = $('#meu-flipbook').dearFlip({
+                    pdfUrl: 'mulheres.pdf',
+                    width: 900,
+                    height: 500,
+                    startPage: 1,
+                    renderScale: 1.0, // Reduzindo para melhor performance
+                    pageGap: 5,
+                    lazyRenderAhead: 2,
+                    onPageFlip: function(pageIndex) {
+                        updateDebug('Página virada para: ' + pageIndex);
+                    },
+                    onReady: function() {
+                        updateDebug('Flipbook carregado com sucesso!');
+                        updateStatus('Flipbook funcionando perfeitamente!', 'success');
+                    },
+                    onError: function(error) {
+                        updateDebug('ERRO no flipbook: ' + error.message);
+                        updateStatus('Erro ao carregar PDF: ' + error.message, 'error');
+                    }
+                });
+                
+                updateDebug('Flipbook inicializado, aguardando carregamento...');
+                
+            } catch (error) {
+                updateDebug('ERRO ao inicializar flipbook: ' + error.message);
+                updateStatus('Erro ao inicializar flipbook: ' + error.message, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <title>Diagnóstico Flipbook</title>
+  <meta charset="utf-8">
+</head>
+<body>
+
+<h1>Diagnóstico do Flipbook</h1>
+
+<div id="status"></div>
+
+<script src="jq-3d-flip-book/js/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    var status = $('#status');
+    status.append('<p>✅ jQuery carregado: ' + (typeof $ !== 'undefined') + '</p>');
+    
+    // Testa se o arquivo PDF existe
+    $.ajax({
+      url: 'mulheres.pdf',
+      type: 'HEAD',
+      success: function() {
+        status.append('<p>✅ Arquivo PDF encontrado</p>');
+      },
+      error: function() {
+        status.append('<p>❌ Arquivo PDF não encontrado</p>');
+      }
+    });
+    
+    // Testa outros scripts
+    var scripts = [
+      'jq-3d-flip-book/js/html2canvas.min.js',
+      'jq-3d-flip-book/js/three.min.js',
+      'jq-3d-flip-book/js/pdf.min.js',
+      'jq-3d-flip-book/js/3dflipbook.min.js'
+    ];
+    
+    scripts.forEach(function(script) {
+      $.ajax({
+        url: script,
+        type: 'HEAD',
+        success: function() {
+          status.append('<p>✅ ' + script + ' encontrado</p>');
+        },
+        error: function() {
+          status.append('<p>❌ ' + script + ' não encontrado</p>');
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo Mínimo - DearFlip</title>
+    <link rel="stylesheet" href="dearflip.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .flipbook-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Exemplo Mínimo - DearFlip</h1>
+        
+        <div class="flipbook-container">
+            <h2>Teste com Imagens</h2>
+            <button onclick="iniciarFlipbook()">Iniciar Flipbook</button>
+            <div class="status" id="status">Clique no botão para iniciar</div>
+            <div id="meu-flipbook"></div>
+        </div>
+    </div>
+
+    <!-- Dependências -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="dearflip-jquery-plugin.js"></script>
+
+    <script>
+        function atualizarStatus(mensagem) {
+            document.getElementById('status').textContent = mensagem;
+            console.log('Status:', mensagem);
+        }
+        
+        function iniciarFlipbook() {
+            atualizarStatus('Iniciando flipbook...');
+            
+            try {
+                $('#meu-flipbook').dearFlip({
+                    images: [
+                        'https://via.placeholder.com/400x600/FF6B6B/FFFFFF?text=Página+1',
+                        'https://via.placeholder.com/400x600/4ECDC4/FFFFFF?text=Página+2',
+                        'https://via.placeholder.com/400x600/45B7D1/FFFFFF?text=Página+3'
+                    ],
+                    width: 800,
+                    height: 500,
+                    onPageFlip: function(pageIndex) {
+                        atualizarStatus('Página atual: ' + pageIndex);
+                    }
+                });
+                
+                atualizarStatus('✅ Flipbook iniciado com sucesso!');
+            } catch (error) {
+                atualizarStatus('❌ Erro: ' + error.message);
+                console.error('Erro:', error);
+            }
+        }
+        
+        // Verificar se tudo carregou
+        $(document).ready(function() {
+            console.log('jQuery carregado:', typeof $ !== 'undefined');
+            console.log('DearFlip carregado:', typeof $.fn.dearFlip !== 'undefined');
+            
+            if (typeof $ !== 'undefined' && typeof $.fn.dearFlip !== 'undefined') {
+                atualizarStatus('✅ Tudo carregado! Clique no botão para testar.');
+            } else {
+                atualizarStatus('❌ Algum componente não foi carregado.');
+            }
+        });
+    </script>
+</body>
+</html>

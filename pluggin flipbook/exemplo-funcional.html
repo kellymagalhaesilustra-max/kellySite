@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo Funcional - DearFlip</title>
+    <link rel="stylesheet" href="dearflip.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .demo-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .status {
+            margin: 15px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .flipbook-area {
+            min-height: 400px;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fafafa;
+        }
+        .flipbook-area:empty::after {
+            content: "Área do Flipbook - Clique em um botão acima para carregar";
+            color: #999;
+            font-style: italic;
+        }
+        .controls {
+            margin: 15px 0;
+        }
+        .controls button {
+            background: #28a745;
+            margin: 2px;
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+        .controls button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Exemplo Funcional - DearFlip Plugin</h1>
+        
+        <div class="demo-section">
+            <h2>🎯 Teste 1: Imagens (Deve funcionar sempre)</h2>
+            <button onclick="testarImagens()">Carregar com Imagens</button>
+            <div class="status" id="status1">Clique no botão para testar</div>
+            <div class="flipbook-area" id="flipbook1"></div>
+            <div class="controls" id="controls1" style="display: none;">
+                <button onclick="navegar('1', 'prev')">← Anterior</button>
+                <button onclick="navegar('1', 'next')">Próxima →</button>
+                <button onclick="irParaPagina('1', 1)">Página 1</button>
+                <button onclick="irParaPagina('1', 2)">Página 2</button>
+                <button onclick="irParaPagina('1', 3)">Página 3</button>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>📄 Teste 2: PDF Online (Pode ter problemas de CORS)</h2>
+            <button onclick="testarPDFOnline()">Carregar PDF Online</button>
+            <div class="status" id="status2">Clique no botão para testar</div>
+            <div class="flipbook-area" id="flipbook2"></div>
+            <div class="controls" id="controls2" style="display: none;">
+                <button onclick="navegar('2', 'prev')">← Anterior</button>
+                <button onclick="navegar('2', 'next')">Próxima →</button>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>📁 Teste 3: PDF Local (Upload de arquivo)</h2>
+            <input type="file" id="pdfFile" accept=".pdf" style="display: none;">
+            <button onclick="document.getElementById('pdfFile').click()">Escolher PDF</button>
+            <div class="status" id="status3">Clique no botão para escolher um PDF</div>
+            <div class="flipbook-area" id="flipbook3"></div>
+            <div class="controls" id="controls3" style="display: none;">
+                <button onclick="navegar('3', 'prev')">← Anterior</button>
+                <button onclick="navegar('3', 'next')">Próxima →</button>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🔧 Debug - Verificar Componentes</h2>
+            <button onclick="verificarComponentes()">Verificar se tudo está carregado</button>
+            <div class="status" id="debug-status">Clique para verificar</div>
+        </div>
+    </div>
+
+    <!-- Dependências -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="dearflip-jquery-plugin.js"></script>
+
+    <script>
+        // Configurar PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+        
+        let flipbooks = {};
+        
+        function atualizarStatus(id, mensagem) {
+            document.getElementById(id).textContent = mensagem;
+            console.log('Status ' + id + ':', mensagem);
+        }
+        
+        function mostrarControles(id) {
+            document.getElementById('controls' + id).style.display = 'block';
+        }
+        
+        function testarImagens() {
+            atualizarStatus('status1', 'Carregando imagens...');
+            
+            try {
+                flipbooks['1'] = $('#flipbook1').dearFlip({
+                    images: [
+                        'https://via.placeholder.com/400x600/FF6B6B/FFFFFF?text=Página+1',
+                        'https://via.placeholder.com/400x600/4ECDC4/FFFFFF?text=Página+2',
+                        'https://via.placeholder.com/400x600/45B7D1/FFFFFF?text=Página+3'
+                    ],
+                    width: 800,
+                    height: 500,
+                    onPageFlip: function(pageIndex) {
+                        atualizarStatus('status1', 'Página ' + pageIndex + ' carregada');
+                    }
+                });
+                
+                mostrarControles('1');
+                atualizarStatus('status1', '✅ Imagens carregadas com sucesso!');
+            } catch (error) {
+                atualizarStatus('status1', '❌ Erro: ' + error.message);
+                console.error('Erro ao carregar imagens:', error);
+            }
+        }
+        
+        function testarPDFOnline() {
+            atualizarStatus('status2', 'Carregando PDF online...');
+            
+            try {
+                flipbooks['2'] = $('#flipbook2').dearFlip({
+                    pdfUrl: 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
+                    width: 800,
+                    height: 500,
+                    onPageFlip: function(pageIndex) {
+                        atualizarStatus('status2', 'Página ' + pageIndex + ' carregada');
+                    }
+                });
+                
+                mostrarControles('2');
+                atualizarStatus('status2', '✅ PDF online carregado!');
+            } catch (error) {
+                atualizarStatus('status2', '❌ Erro: ' + error.message);
+                console.error('Erro ao carregar PDF online:', error);
+            }
+        }
+        
+        // Configurar input de arquivo
+        document.getElementById('pdfFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                atualizarStatus('status3', 'Processando arquivo...');
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        flipbooks['3'] = $('#flipbook3').dearFlip({
+                            pdfData: e.target.result,
+                            width: 800,
+                            height: 500,
+                            onPageFlip: function(pageIndex) {
+                                atualizarStatus('status3', 'Página ' + pageIndex + ' carregada');
+                            }
+                        });
+                        
+                        mostrarControles('3');
+                        atualizarStatus('status3', '✅ PDF local carregado com sucesso!');
+                    } catch (error) {
+                        atualizarStatus('status3', '❌ Erro: ' + error.message);
+                        console.error('Erro ao carregar PDF local:', error);
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
+        
+        function navegar(id, direcao) {
+            if (flipbooks[id]) {
+                if (direcao === 'prev') {
+                    flipbooks[id].prev();
+                } else {
+                    flipbooks[id].next();
+                }
+            }
+        }
+        
+        function irParaPagina(id, pagina) {
+            if (flipbooks[id]) {
+                flipbooks[id].goTo(pagina);
+            }
+        }
+        
+        function verificarComponentes() {
+            const status = document.getElementById('debug-status');
+            let mensagem = '';
+            
+            // Verificar jQuery
+            if (typeof $ !== 'undefined') {
+                mensagem += '✅ jQuery carregado\n';
+            } else {
+                mensagem += '❌ jQuery não carregado\n';
+            }
+            
+            // Verificar PDF.js
+            if (typeof pdfjsLib !== 'undefined') {
+                mensagem += '✅ PDF.js carregado\n';
+            } else {
+                mensagem += '❌ PDF.js não carregado\n';
+            }
+            
+            // Verificar DearFlip
+            if (typeof $.fn.dearFlip !== 'undefined') {
+                mensagem += '✅ DearFlip plugin carregado\n';
+            } else {
+                mensagem += '❌ DearFlip plugin não carregado\n';
+            }
+            
+            // Verificar worker do PDF.js
+            if (pdfjsLib && pdfjsLib.GlobalWorkerOptions.workerSrc) {
+                mensagem += '✅ PDF.js worker configurado\n';
+            } else {
+                mensagem += '❌ PDF.js worker não configurado\n';
+            }
+            
+            status.textContent = mensagem;
+            console.log('Verificação de componentes:', mensagem);
+        }
+        
+        // Verificar automaticamente quando a página carregar
+        $(document).ready(function() {
+            setTimeout(verificarComponentes, 1000);
+        });
+    </script>
+</body>
+</html>

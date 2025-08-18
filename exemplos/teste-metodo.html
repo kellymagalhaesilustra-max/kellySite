@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <title>Teste Método Flipbook</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="jq-3d-flip-book/css/white-book-view.css">
+  <link rel="stylesheet" href="jq-3d-flip-book/css/font-awesome.min.css">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      height: 70vh;
+      width: 90%;
+      margin: 20px auto;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background: white;
+    }
+    .test-buttons {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .test-buttons button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      background: #FF4DC6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .test-buttons button:hover {
+      background: #e23dae;
+    }
+  </style>
+</head>
+<body>
+
+<h1 style="text-align: center;">Teste de Métodos do Flipbook</h1>
+
+<div class="test-buttons">
+  <button onclick="testFlipBook()">Testar FlipBook (maiúsculo)</button>
+  <button onclick="testFlipbook()">Testar flipBook (minúsculo)</button>
+  <button onclick="clearContainer()">Limpar</button>
+</div>
+
+<div class="container" id="container">
+  <div style="padding: 50px; text-align: center; color: #666;">
+    Clique em um dos botões acima para testar os métodos
+  </div>
+</div>
+
+<script src="jq-3d-flip-book/js/jquery.min.js"></script>
+<script src="jq-3d-flip-book/js/html2canvas.min.js"></script>
+<script src="jq-3d-flip-book/js/three.min.js"></script>
+<script src="jq-3d-flip-book/js/pdf.min.js"></script>
+<script src="jq-3d-flip-book/js/3dflipbook.min.js"></script>
+
+<script>
+function testFlipBook() {
+  console.log('Testando FlipBook (maiúsculo)...');
+  clearContainer();
+  
+  try {
+    $('#container').FlipBook({
+      pdf: 'mulheres.pdf',
+      template: {
+        html: 'jq-3d-flip-book/templates/default-book-view.html',
+        styles: ['jq-3d-flip-book/css/white-book-view.css'],
+        links: [{ rel: 'stylesheet', href: 'jq-3d-flip-book/css/font-awesome.min.css' }],
+        script: 'jq-3d-flip-book/js/default-book-view.js'
+      }
+    });
+    console.log('✅ FlipBook (maiúsculo) funcionou!');
+  } catch (error) {
+    console.error('❌ Erro com FlipBook (maiúsculo):', error);
+    $('#container').html('<div style="padding: 50px; text-align: center; color: red;">Erro com FlipBook (maiúsculo): ' + error.message + '</div>');
+  }
+}
+
+function testFlipbook() {
+  console.log('Testando flipBook (minúsculo)...');
+  clearContainer();
+  
+  try {
+    $('#container').flipBook({
+      pdf: 'mulheres.pdf',
+      template: {
+        html: 'jq-3d-flip-book/templates/default-book-view.html',
+        styles: ['jq-3d-flip-book/css/white-book-view.css'],
+        links: [{ rel: 'stylesheet', href: 'jq-3d-flip-book/css/font-awesome.min.css' }],
+        script: 'jq-3d-flip-book/js/default-book-view.js'
+      }
+    });
+    console.log('✅ flipBook (minúsculo) funcionou!');
+  } catch (error) {
+    console.error('❌ Erro com flipBook (minúsculo):', error);
+    $('#container').html('<div style="padding: 50px; text-align: center; color: red;">Erro com flipBook (minúsculo): ' + error.message + '</div>');
+  }
+}
+
+function clearContainer() {
+  $('#container').empty();
+}
+
+// Verifica quais métodos estão disponíveis
+$(document).ready(function() {
+  console.log('Métodos disponíveis:');
+  console.log('FlipBook:', typeof $.fn.FlipBook);
+  console.log('flipBook:', typeof $.fn.flipBook);
+});
+</script>
+
+</body>
+</html>

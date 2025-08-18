@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flipbook 3D - Kelly Magalhães</title>
+  <meta name="description" content="Flipbook 3D interativo - Visualize PDFs com efeito de página virando">
+  <meta name="keywords" content="flipbook, pdf, 3d, interativo, Kelly Magalhães">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=KG+Red+Hands&display=swap" rel="stylesheet">
+  
+  <!-- Fontes Neo Sans Std e MADE Tommy Soft -->
+  <style>
+    @font-face {
+      font-family: 'Neo Sans Std';
+      src: url('https://fonts.cdnfonts.com/css/neo-sans-std') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    @font-face {
+      font-family: 'MADE Tommy Soft';
+      src: url('https://fonts.cdnfonts.com/css/made-tommy-soft') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
+  </style>
+  
+  <!-- Fontes customizadas -->
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <style>
+    /* Estilos específicos para o flipbook */
+    body {
+      padding-top: 80px; /* Espaço para o navbar fixo */
+    }
+
+    .flipbook-section {
+      min-height: calc(100vh - 200px);
+      padding: 40px 0;
+      background: #EAEBE5;
+    }
+
+    .flipbook-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .flipbook-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .flipbook-title {
+      font-size: 2.5rem;
+      color: #000;
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-family: 'Neo Sans Std', sans-serif;
+    }
+
+    .flipbook-subtitle {
+      font-size: 1.2rem;
+      color: #000;
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-family: 'Neo Sans Std', sans-serif;
+    }
+
+    .flipbook-description {
+      font-size: 1rem;
+      color: #000;
+      margin-bottom: 30px;
+      font-family: 'MADE Tommy Soft', sans-serif;
+      border: 2px dashed #000;
+      padding: 20px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .pdf-selector {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
+
+    .cover-thumbnail {
+      width: 120px;
+      height: 160px;
+      background: white;
+      border: 3px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .cover-thumbnail:hover {
+      border-color: #FF4DC6;
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(255, 77, 198, 0.3);
+    }
+
+    .cover-thumbnail.active {
+      border-color: #FF4DC6;
+      box-shadow: 0 4px 12px rgba(255, 77, 198, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .cover-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .cover-thumbnail:hover .cover-image {
+      transform: scale(1.05);
+    }
+
+    /* Flipbook simples */
+    .simple-flipbook {
+      width: 100%;
+      height: 600px;
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Container da página - Estilo Revista */
+    .page-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.2),
+        0 2px 8px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .page-container canvas {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 8px;
+      pointer-events: none;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .empty-page {
+      width: 100%;
+      height: 100%;
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    /* Sombra dinâmica da página */
+    .page-shadow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    /* Borda da página */
+    .page-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* Efeitos 3D avançados - Estilo Revista */
+    .page-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.15) 0%,
+        rgba(255,255,255,0.08) 30%,
+        rgba(0,0,0,0.03) 70%,
+        rgba(0,0,0,0.08) 100%
+      );
+      border-radius: 12px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Efeito de profundidade - Estilo Revista */
+    .page-container::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      right: 3px;
+      bottom: 3px;
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.1) 0%,
+        rgba(0,0,0,0.02) 50%,
+        rgba(0,0,0,0.05) 100%
+      );
+      border-radius: 9px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+
+
+    .flipbook-page canvas {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Loading e error styles */
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #666;
+      z-index: 10;
+      font-size: 1.2rem;
+      font-family: 'Neo Sans Std', sans-serif;
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #FF4DC6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #d32f2f;
+      background: #ffebee;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      z-index: 10;
+      font-family: 'Neo Sans Std', sans-serif;
+    }
+
+    /* Controles do flipbook */
+    .flipbook-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .control-btn {
+      background: #FF4DC6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Neo Sans Std', sans-serif;
+    }
+
+    .control-btn:hover {
+      background: #e23dae;
+      transform: translateY(-1px);
+    }
+
+    .control-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .page-info {
+      text-align: center;
+      margin: 15px 0;
+      font-family: 'Neo Sans Std', sans-serif;
+      color: #000;
+      font-size: 1.1rem;
+    }
+
+
+
+    /* Textos finais */
+    .final-text {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .final-text h2 {
+      font-size: 2rem;
+      color: #000;
+      font-weight: bold;
+      font-family: 'Neo Sans Std', sans-serif;
+      margin-bottom: 20px;
+    }
+
+    .final-text p {
+      font-size: 1.1rem;
+      color: #000;
+      font-family: 'MADE Tommy Soft', sans-serif;
+      line-height: 1.6;
+    }
+
+    /* Responsivo */
+    @media (max-width: 768px) {
+      .flipbook-title {
+        font-size: 2rem;
+      }
+      
+      .pdf-selector {
+        gap: 15px;
+      }
+      
+      .cover-thumbnail {
+        width: 100px;
+        height: 130px;
+      }
+      
+      .simple-flipbook {
+        height: 500px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .flipbook-title {
+        font-size: 1.5rem;
+      }
+      
+      .simple-flipbook {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Menu Principal Sticky -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <img src="images/Logo KM Ilustra1.png" alt="Kelly Magalhães" class="logo">
+      </div>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="ilustracao.html" class="nav-link">Ilustração</a></li>
+        <li><a href="diagramacao.html" class="nav-link">Diagramação</a></li>
+        <li><a href="design.html" class="nav-link">Design</a></li>
+        <li><a href="pinturas.html" class="nav-link">Pinturas</a></li>
+        <li><a href="flipbook.html" class="nav-link">Flipbook 3D</a></li>
+        <li><a href="#contato" class="nav-link btn-contratar">✅ Contratar Kelly</a></li>
+      </ul>
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Seção do Flipbook -->
+  <section class="flipbook-section">
+    <div class="flipbook-container">
+      <div class="flipbook-header">
+        <h1 class="flipbook-title">Portfolio - Diagramação</h1>
+        <p class="flipbook-subtitle">REVISTA QUE UNEM ESTÉTICA E ESTRATÉGIA</p>
+                 <div class="flipbook-description">
+           <p style="text-align: center;">
+             Design gráfico profissional para projetos no Brasil<br>
+             e outros países como Canadá, USA, Dubai e Europa.
+           </p>
+         </div>
+      </div>
+      
+                                           <div class="simple-flipbook">
+          <div class="loading">Carregando PDF...</div>
+        </div>
+
+      <div class="page-info">
+        Página atual: <span id="current-page">1</span> de <span id="total-pages">0</span>
+      </div>
+
+      <div class="flipbook-controls">
+        <button class="control-btn" onclick="goToPage(1)" id="btn-first">Primeira</button>
+        <button class="control-btn" onclick="previousPage()" id="btn-prev">Anterior</button>
+        <button class="control-btn" onclick="nextPage()" id="btn-next">Próxima</button>
+        <button class="control-btn" onclick="goToLastPage()" id="btn-last">Última</button>
+      </div>
+
+      <div class="pdf-selector">
+        <div class="cover-thumbnail active" onclick="loadFlipbook('pdfs/mulheres.pdf', this)" data-pdf="pdfs/mulheres.pdf">
+          <img src="images/capamulheres.png" alt="Revista Mulheres" class="cover-image">
+        </div>
+        <div class="cover-thumbnail" onclick="loadFlipbook('pdfs/Revista Valor Busines.pdf', this)" data-pdf="pdfs/Revista Valor Busines.pdf">
+          <img src="images/valo_revista.png" alt="Revista Valor" class="cover-image">
+        </div>
+        <div class="cover-thumbnail" onclick="loadFlipbook('pdfs/1930_altagrafica.pdf', this)" data-pdf="pdfs/1930_altagrafica.pdf">
+          <img src="images/capa1930.png" alt="Revista 1930" class="cover-image">
+        </div>
+        <div class="cover-thumbnail" onclick="loadFlipbook('pdfs/Revista Casa Rara.pdf', this)" data-pdf="pdfs/Revista Casa Rara.pdf">
+          <img src="images/casa rara_capa.png" alt="Casa Rara" class="cover-image">
+        </div>
+        <div class="cover-thumbnail" onclick="loadFlipbook('pdfs/Magazine_Forbes_July2025.pdf', this)" data-pdf="pdfs/Magazine_Forbes_July2025.pdf">
+          <img src="images/forbes revista_capa.png" alt="Forbes Revista" class="cover-image">
+        </div>
+      </div>
+
+      <div class="final-text">
+        <h2>Do conceito à impressão design editorial completo</h2>
+        <p>Transformamos ideias em layouts editoriais que contam histórias e conectam com o público.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rodapé -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Sobre</h4>
+          <p>Kelly Magalhães é uma ilustradora e diagramadora apaixonada por criar 
+          personagens únicos e layouts editoriais que contam histórias.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Contato</h4>
+          <div class="social-links">
+            <a href="#" class="social-link"><img src="images/instagram.png" alt="Instagram"></a>
+            <a href="#" class="social-link"><img src="images/facebook.png" alt="Facebook"></a>
+            <a href="#" class="social-link"><img src="images/linkedin.png" alt="LinkedIn"></a>
+            <a href="#" class="social-link"><img src="images/behance.png" alt="Behance"></a>
+            <a href="#" class="social-link"><img src="images/whatsapp.png" alt="WhatsApp"></a>
+          </div>
+        </div>
+                 <div class="footer-section">
+           <h4>Newsletter</h4>
+           <form class="newsletter-form" id="newsletterForm">
+             <input type="email" placeholder="Seu e-mail" required id="newsletterEmail">
+             <button type="submit" id="newsletterBtn">Inscrever</button>
+           </form>
+           <div id="newsletterMessage" style="display: none; margin-top: 10px; padding: 10px; border-radius: 5px; text-align: center;"></div>
+           <img src="images/LOGO_BRANCO.png" alt="Logo Kelly Magalhães" style="width: 50px; height: auto; margin-top: 10px;">
+         </div>
+      </div>
+                             <div class="footer-bottom">
+           <p>&copy; 2024 Kelly Magalhães — Todos os direitos reservados | Desenvolvido por <a href="https://linkzinencurtador.online/index.html?r=yUfWLQ" target="_blank" style="color: inherit; text-decoration: none; transition: color 0.3s ease;">Bruno Ulrich</a></p>
+         </div>
+    </div>
+  </footer>
+
+     <!-- Scripts necessários -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+   <script src="js/main.js"></script>
+
+     <script>
+     // O JavaScript principal está no arquivo js/main.js
+     // Este arquivo agora usa o sistema melhorado com efeito 3D
+     console.log('Flipbook 3D carregado - Sistema melhorado ativo! 🎨');
+     
+     // Configuração do EmailJS
+     (function() {
+       emailjs.init("YOUR_PUBLIC_KEY"); // Substitua pela sua chave pública do EmailJS
+     })();
+     
+     // Gerenciamento do formulário de newsletter
+     document.addEventListener('DOMContentLoaded', function() {
+       const newsletterForm = document.getElementById('newsletterForm');
+       const newsletterEmail = document.getElementById('newsletterEmail');
+       const newsletterBtn = document.getElementById('newsletterBtn');
+       const newsletterMessage = document.getElementById('newsletterMessage');
+       
+       newsletterForm.addEventListener('submit', function(e) {
+         e.preventDefault();
+         
+         const email = newsletterEmail.value.trim();
+         
+         if (!email) {
+           showMessage('Por favor, insira um e-mail válido.', 'error');
+           return;
+         }
+         
+         // Desabilitar botão durante o envio
+         newsletterBtn.disabled = true;
+         newsletterBtn.textContent = 'Enviando...';
+         
+         // Template de e-mail para o EmailJS
+         const templateParams = {
+           to_email: 'kellymagalhaesilustra@gmail.com',
+           from_email: email,
+           subject: 'Nova inscrição na Newsletter - Kelly Magalhães',
+           message: `Nova inscrição na newsletter!\n\nE-mail: ${email}\nData: ${new Date().toLocaleString('pt-BR')}\n\nEsta pessoa se inscreveu na newsletter do site.`
+         };
+         
+         // Enviar e-mail usando EmailJS
+         emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+           .then(function(response) {
+             console.log('E-mail enviado com sucesso:', response);
+             showMessage('Obrigado! Você foi inscrito na newsletter com sucesso!', 'success');
+             newsletterEmail.value = '';
+           }, function(error) {
+             console.error('Erro ao enviar e-mail:', error);
+             showMessage('Erro ao enviar inscrição. Tente novamente.', 'error');
+           })
+           .finally(function() {
+             // Reabilitar botão
+             newsletterBtn.disabled = false;
+             newsletterBtn.textContent = 'Inscrever';
+           });
+       });
+       
+       function showMessage(message, type) {
+         newsletterMessage.textContent = message;
+         newsletterMessage.style.display = 'block';
+         
+         if (type === 'success') {
+           newsletterMessage.style.backgroundColor = '#d4edda';
+           newsletterMessage.style.color = '#155724';
+           newsletterMessage.style.border = '1px solid #c3e6cb';
+         } else {
+           newsletterMessage.style.backgroundColor = '#f8d7da';
+           newsletterMessage.style.color = '#721c24';
+           newsletterMessage.style.border = '1px solid #f5c6cb';
+         }
+         
+         // Esconder mensagem após 5 segundos
+         setTimeout(function() {
+           newsletterMessage.style.display = 'none';
+         }, 5000);
+       }
+     });
+   </script>
+
+</body>
+</html>

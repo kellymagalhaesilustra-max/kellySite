@@ -1,0 +1,385 @@
+/* Animações do Site */
+
+/* Animação de flutuação para os músicos */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Animação de gradiente dançante para "Ilustradora" */
+@keyframes gradientDance {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    25% {
+        background-position: 100% 50%;
+    }
+
+    50% {
+        background-position: 100% 100%;
+    }
+
+    75% {
+        background-position: 0% 100%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Animação de entrada para elementos */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animação de entrada para cards */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animação de pulso para botões */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Animação de rotação para elementos decorativos */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animação de brilho */
+@keyframes shine {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+/* Animação de bounce para elementos interativos */
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Aplicação das animações */
+
+/* Animação de entrada para seções */
+.hero-section,
+.personagens-section,
+.ilustracao-section,
+.projetos-section,
+.galeria-section {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Animação para cards de projetos */
+.projeto-card {
+    animation: slideInLeft 0.8s ease-out;
+}
+
+.projeto-card:nth-child(even) {
+    animation: slideInRight 0.8s ease-out;
+}
+
+/* Animação para botões */
+.btn-projeto,
+.btn-contratar,
+.btn-submit {
+    transition: all 0.3s ease;
+}
+
+.btn-projeto:hover,
+.btn-contratar:hover,
+.btn-submit:hover {
+    animation: pulse 0.6s ease-in-out;
+}
+
+/* Animação para elementos decorativos */
+.sugar-skull,
+.starburst {
+    animation: rotate 20s linear infinite;
+}
+
+/* Animação de brilho para elementos especiais */
+.hero-title::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shine 3s infinite;
+}
+
+/* Animação para galeria */
+.galeria-item {
+    transition: all 0.3s ease;
+}
+
+.galeria-item:hover {
+    animation: bounce 0.6s ease-in-out;
+}
+
+/* Animação para menu mobile */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/* Animação para modal */
+.modal-content {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Animação para lightbox */
+.lightbox img {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+/* Animação para setas da galeria */
+.galeria-nav {
+    transition: all 0.3s ease;
+}
+
+.galeria-nav:hover {
+    animation: pulse 0.6s ease-in-out;
+}
+
+/* Animação para elementos de ferramentas */
+.tool-logo {
+    transition: all 0.3s ease;
+}
+
+.tool-logo:hover {
+    animation: bounce 0.6s ease-in-out;
+}
+
+/* Animação para colunas */
+.column {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.column:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.column:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Animação para links sociais */
+.social-link {
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    animation: bounce 0.6s ease-in-out;
+}
+
+/* Animação para wave border */
+.wave-border {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Animação para play button */
+.play-button {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Animação para setas de ferramentas */
+.arrow-left,
+.arrow-right {
+    transition: all 0.3s ease;
+}
+
+.arrow-left:hover,
+.arrow-right:hover {
+    animation: bounce 0.6s ease-in-out;
+}
+
+/* Animação para título principal */
+.hero-title {
+    animation: fadeInUp 1.2s ease-out;
+}
+
+/* Animação para descrição */
+.hero-description {
+    animation: fadeInUp 1.4s ease-out;
+}
+
+/* Animação para banda de músicos */
+.banda-muertos {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Animação para elementos decorativos */
+.decorative-elements {
+    animation: fadeInUp 1.6s ease-out;
+}
+
+/* Animação para seção ilustradora */
+.ilustradora-section {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Animação para footer */
+.footer {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Animações responsivas */
+@media (max-width: 768px) {
+    .hero-title {
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .main-title.koblenz {
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .banda-muertos {
+        animation: fadeInUp 0.8s ease-out;
+    }
+}
+
+/* Animações de scroll */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.scroll-animate.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animação para loading */
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading {
+    animation: loading 1s linear infinite;
+}
+
+/* Animação para hover em cards */
+.projeto-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.projeto-card:hover::before {
+    left: 100%;
+}
+
+/* Animação para formulário */
+.form-group input:focus,
+.form-group select:focus {
+    animation: pulse 0.3s ease-in-out;
+}
+
+/* Animação para newsletter */
+.newsletter-form button:hover {
+    animation: pulse 0.6s ease-in-out;
+}
+
+/* Animação para close do modal */
+.close:hover {
+    animation: rotate 0.3s ease-in-out;
+}
+
+/* Animação para lightbox close */
+.lightbox-close:hover {
+    animation: rotate 0.3s ease-in-out;
+}

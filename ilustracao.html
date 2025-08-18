@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ilustração - Kelly Magalhães</title>
+    <meta name="description" content="Portfólio de ilustrações de Kelly Magalhães - Criação de personagens e ilustrações únicas">
+    <meta name="keywords" content="ilustração, personagens, Kelly Magalhães, portfólio">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=KG+Red+Hands&display=swap" rel="stylesheet">
+    
+    <!-- Fontes customizadas -->
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <!-- Menu Principal Sticky -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="images/Logo KM Ilustra1.png" alt="Kelly Magalhães" class="logo">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="ilustracao.html" class="nav-link">Ilustração</a></li>
+                <li><a href="diagramacao.html" class="nav-link">Diagramação</a></li>
+                <li><a href="design.html" class="nav-link">Design</a></li>
+                <li><a href="pinturas.html" class="nav-link">Pinturas</a></li>
+                <li><a href="flipbook.html" class="nav-link">Flipbook 3D</a></li>
+                <li><a href="#contato" class="nav-link btn-contratar">✅ Contratar Kelly</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Seção Hero - Ilustração -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">ILUSTRAÇÃO E CRIAÇÃO DE PERSONAGENS</h1>
+            <p class="hero-description">
+                Transformando ideias em personagens únicos com personalidade própria, 
+                desde o conceito inicial até a finalização digital.
+            </p>
+        </div>
+        <div class="wave-border"></div>
+    </section>
+
+    <!-- Seção Criação de Personagens -->
+    <section class="personagens-section">
+        <div class="container">
+            <h2 class="section-title">CRIAÇÃO DE PERSONAGENS</h2>
+            <div class="video-demo" style="width: 100%; max-width: 600px; margin: 0 auto; border-radius: 15px; overflow: hidden;">
+                <video 
+                    src="MOJITO_KELLY.mp4" 
+                    autoplay 
+                    muted 
+                    loop 
+                    playsinline
+                    style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                </video>
+            </div>
+            <div class="tools-showcase">
+                <div class="arrow-left"></div>
+                <div class="tools-logos">
+                    <div class="tool-logo">
+                        <span>Toon Boom</span>
+                    </div>
+                    <div class="tool-logo">
+                        <span>Adobe Illustrator</span>
+                    </div>
+                </div>
+                <div class="arrow-right"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Processo de Ilustração -->
+    <section class="ilustracao-section">
+        <div class="container">
+            <h3 class="headline">Especializada em Ilustração</h3>
+            <h2 class="main-title koblenz">PROCESSO DE ILUSTRAÇÃO</h2>
+            
+            <div class="three-columns">
+                <div class="column">
+                    <h4>Conceito e Sketch</h4>
+                    <p>Desenvolvimento do conceito inicial através de sketches e estudos, 
+                    explorando diferentes possibilidades visuais e características 
+                    que definem a personalidade do personagem.</p>
+                </div>
+                <div class="column">
+                    <h4>Refinamento Digital</h4>
+                    <p>Transformação dos sketches em ilustrações digitais refinadas, 
+                    aplicando cores, texturas e detalhes que dão vida ao personagem 
+                    e definem seu estilo visual único.</p>
+                </div>
+                <div class="column">
+                    <h4>Finalização</h4>
+                    <p>Polimento final com ajustes de iluminação, sombras e detalhes 
+                    que elevam a qualidade da ilustração, garantindo um resultado 
+                    profissional e pronto para uso.</p>
+                </div>
+            </div>
+            
+            <div class="cta-center">
+                <button class="btn-projeto" onclick="openForm()">Crie seu personagem comigo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Galeria de Ilustrações -->
+    <section class="galeria-section">
+        <div class="container">
+            <h2 class="section-title">Galeria de Ilustrações</h2>
+            <div class="galeria-container">
+                <button class="galeria-nav prev">←</button>
+                <div class="galeria-wrapper">
+                    <div class="galeria-track">
+                        <div class="galeria-item">
+                            <img src="images/beauty_01 (1).png" alt="Beauty Ilustração 1" onclick="openLightbox(this)">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/beauty_02.png" alt="Beauty Ilustração 2" onclick="openLightbox(this)">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/beauty_3.png" alt="Beauty Ilustração 3" onclick="openLightbox(this)">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/orange_01 (1).png" alt="Orange Ilustração 1" onclick="openLightbox(this)">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/orange_02.png" alt="Orange Ilustração 2" onclick="openLightbox(this)">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/Duda Beat, é uma cantora e compositora brasileira.png" alt="Duda Beat - Cantora e Compositora Brasileira" onclick="openLightbox(this)">
+                        </div>
+                    </div>
+                </div>
+                <button class="galeria-nav next">→</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal do Formulário -->
+    <div id="formModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeForm()">&times;</span>
+            <h3>Crie seu personagem comigo</h3>
+            <form class="project-form">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefone">Telefone / WhatsApp</label>
+                    <input type="tel" id="telefone" name="telefone" required>
+                </div>
+                <div class="form-group">
+                    <label for="projeto">Tipo de Projeto</label>
+                    <select id="projeto" name="projeto" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="personagem">CRIAÇÃO DE PERSONAGEM</option>
+                        <option value="ilustracao">ILUSTRAÇÃO EDITORIAL</option>
+                        <option value="conceito">CONCEITO ART</option>
+                        <option value="outro">OUTRO</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Enviar Projeto</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Sobre</h4>
+                    <p>Kelly Magalhães é uma ilustradora especializada em criação de personagens 
+                    únicos e ilustrações que contam histórias através da arte visual.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><img src="images/instagram.png" alt="Instagram"></a>
+                        <a href="#" class="social-link"><img src="images/facebook.png" alt="Facebook"></a>
+                        <a href="#" class="social-link"><img src="images/linkedin.png" alt="LinkedIn"></a>
+                        <a href="#" class="social-link"><img src="images/behance.png" alt="Behance"></a>
+                        <a href="#" class="social-link"><img src="images/whatsapp.png" alt="WhatsApp"></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Seu e-mail" required>
+                        <button type="submit">Inscrever</button>
+                    </form>
+                    <img src="images/LOGO_BRANCO.png" alt="Logo Kelly Magalhães" style="width: 50px; height: auto; margin-top: 10px;">
+                </div>
+            </div>
+                         <div class="footer-bottom">
+                 <p>&copy; 2024 Kelly Magalhães — Todos os direitos reservados | Desenvolvido por <a href="https://linkzinencurtador.online/index.html?r=yUfWLQ" target="_blank" style="color: inherit; text-decoration: none; transition: color 0.3s ease;">Bruno Ulrich</a></p>
+             </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teste Debug PDF</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .error {
+      color: #d32f2f;
+      background: #ffebee;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    .success {
+      color: #2e7d32;
+      background: #e8f5e8;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    button {
+      background: #FF4DC6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background: #e23dae;
+    }
+    #log {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Teste de Debug - Carregamento de PDF</h1>
+    
+    <div id="status">Aguardando...</div>
+    
+    <div>
+      <button onclick="testPDF('mulheres.pdf')">Testar mulheres.pdf</button>
+      <button onclick="testPDF('jq-3d-flip-book/books/pdf/CondoLiving.pdf')">Testar CondoLiving.pdf</button>
+      <button onclick="testPDF('jq-3d-flip-book/books/pdf/TheThreeMusketeers.pdf')">Testar TheThreeMusketeers.pdf</button>
+    </div>
+    
+    <div id="log"></div>
+  </div>
+
+  <script>
+    function log(message) {
+      const logDiv = document.getElementById('log');
+      const timestamp = new Date().toLocaleTimeString();
+      logDiv.textContent += `[${timestamp}] ${message}\n`;
+      logDiv.scrollTop = logDiv.scrollHeight;
+      console.log(message);
+    }
+
+    function updateStatus(message, isError = false) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = `<div class="${isError ? 'error' : 'success'}">${message}</div>`;
+    }
+
+    async function testPDF(pdfPath) {
+      log(`Iniciando teste para: ${pdfPath}`);
+      
+      try {
+        // Teste 1: Verificar se o arquivo existe
+        log('Teste 1: Verificando se o arquivo existe...');
+        const response = await fetch(pdfPath);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        log(`✓ Arquivo encontrado (${response.headers.get('content-length')} bytes)`);
+        
+        // Teste 2: Verificar se é um PDF válido
+        log('Teste 2: Verificando se é um PDF válido...');
+        const arrayBuffer = await response.arrayBuffer();
+        const uint8Array = new Uint8Array(arrayBuffer);
+        
+        // Verificar assinatura do PDF (%PDF)
+        const header = String.fromCharCode(...uint8Array.slice(0, 4));
+        if (header !== '%PDF') {
+          throw new Error('Arquivo não é um PDF válido (assinatura incorreta)');
+        }
+        
+        log('✓ Arquivo é um PDF válido');
+        
+        // Teste 3: Tentar carregar com PDF.js
+        log('Teste 3: Tentando carregar com PDF.js...');
+        
+        // Verificar se PDF.js está disponível
+        if (typeof PDFJS === 'undefined') {
+          throw new Error('PDF.js não está carregado');
+        }
+        
+        log('✓ PDF.js está disponível');
+        
+        // Configurar worker do PDF.js
+        PDFJS.workerSrc = 'jq-3d-flip-book/js/pdf.worker.js';
+        
+        const loadingTask = PDFJS.getDocument({
+          data: uint8Array,
+          rangeChunkSize: 524288
+        });
+        
+        const pdf = await loadingTask.promise;
+        log(`✓ PDF carregado com sucesso (${pdf.numPages} páginas)`);
+        
+        updateStatus(`PDF carregado com sucesso: ${pdfPath} (${pdf.numPages} páginas)`);
+        
+      } catch (error) {
+        log(`✗ Erro: ${error.message}`);
+        updateStatus(`Erro ao carregar PDF: ${error.message}`, true);
+      }
+    }
+
+    // Verificar dependências na inicialização
+    window.addEventListener('load', function() {
+      log('=== Verificação de Dependências ===');
+      
+      // Verificar jQuery
+      if (typeof $ !== 'undefined') {
+        log('✓ jQuery carregado');
+      } else {
+        log('✗ jQuery não encontrado');
+      }
+      
+      // Verificar PDF.js
+      if (typeof PDFJS !== 'undefined') {
+        log('✓ PDF.js carregado');
+      } else {
+        log('✗ PDF.js não encontrado');
+      }
+      
+      // Verificar Three.js
+      if (typeof THREE !== 'undefined') {
+        log('✓ Three.js carregado');
+      } else {
+        log('✗ Three.js não encontrado');
+      }
+      
+      // Verificar html2canvas
+      if (typeof html2canvas !== 'undefined') {
+        log('✓ html2canvas carregado');
+      } else {
+        log('✗ html2canvas não encontrado');
+      }
+      
+      log('=== Fim da Verificação ===');
+    });
+  </script>
+
+  <!-- Carregar dependências -->
+  <script src="jq-3d-flip-book/js/jquery.min.js"></script>
+  <script src="jq-3d-flip-book/js/pdf.min.js"></script>
+  <script src="jq-3d-flip-book/js/three.min.js"></script>
+  <script src="jq-3d-flip-book/js/html2canvas.min.js"></script>
+</body>
+</html>

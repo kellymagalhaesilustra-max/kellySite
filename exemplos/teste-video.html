@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste do Vídeo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .video-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(45deg, #FF4DC6, #FF6B9D);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        video {
+            width: 100%;
+            height: 300px;
+            border-radius: 15px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Teste do Vídeo MOJITO_KELLY.h264</h1>
+
+    <div class="video-container">
+        <video id="meuVideo" 
+               src="MOJITO_KELLY.h264" 
+               autoplay 
+               muted 
+               loop 
+               playsinline 
+               preload="auto">
+        </video>
+    </div>
+
+    <div class="status" id="status">Status do vídeo: Carregando...</div>
+
+    <script>
+        const video = document.getElementById('meuVideo');
+        const status = document.getElementById('status');
+
+        video.addEventListener('canplay', () => {
+            status.textContent = 'Status: Vídeo pronto para reprodução';
+        });
+
+        video.addEventListener('play', () => {
+            status.textContent = 'Status: Vídeo reproduzindo';
+        });
+
+        video.addEventListener('error', () => {
+            status.textContent = 'Status: Erro ao carregar vídeo';
+            console.error('Erro:', video.error);
+        });
+
+        // Forçar autoplay com fallback
+        window.addEventListener('load', () => {
+            video.play().then(() => {
+                status.textContent = 'Status: Vídeo reproduzido automaticamente';
+            }).catch((error) => {
+                status.textContent = 'Erro no autoplay: ' + error.message;
+                console.warn('Erro no autoplay:', error);
+            });
+        });
+    </script>
+
+</body>
+</html>

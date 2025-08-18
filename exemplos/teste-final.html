@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <title>Teste Flipbook Final</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="jq-3d-flip-book/css/white-book-view.css">
+  <link rel="stylesheet" href="jq-3d-flip-book/css/font-awesome.min.css">
+</head>
+<body>
+
+<style type="text/css">
+  body {
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  .container {
+    height: 80vh;
+    width: 90%;
+    margin: 20px auto;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background: white;
+  }
+</style>
+
+<h1 style="text-align: center; color: #333;">Teste Flipbook - Kelly Magalhães</h1>
+
+<div class="container" id="container"></div>
+
+<script src="jq-3d-flip-book/js/jquery.min.js"></script>
+<script src="jq-3d-flip-book/js/html2canvas.min.js"></script>
+<script src="jq-3d-flip-book/js/three.min.js"></script>
+<script src="jq-3d-flip-book/js/pdf.min.js"></script>
+<script src="jq-3d-flip-book/js/3dflipbook.min.js"></script>
+
+<script type="text/javascript">
+  $('#container').FlipBook({
+    pdf: 'mulheres.pdf',
+    template: {
+      html: 'jq-3d-flip-book/templates/default-book-view.html',
+      styles: [
+        'jq-3d-flip-book/css/white-book-view.css'
+      ],
+      links: [
+        {
+          rel: 'stylesheet',
+          href: 'jq-3d-flip-book/css/font-awesome.min.css'
+        }
+      ],
+      script: 'jq-3d-flip-book/js/default-book-view.js'
+    }
+  });
+</script>
+
+</body>
+</html>

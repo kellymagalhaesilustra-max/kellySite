@@ -1,0 +1,32 @@
+/* Fontes Customizadas */
+
+/* KG Red Hands - Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=KG+Red+Hands&display=swap');
+
+/* Koblenz-Serial-ExtraBold - Fonte customizada */
+@font-face {
+    font-family: 'Koblenz-Serial-ExtraBold';
+    src: url('../fonts/Koblenz-Serial-ExtraBold.woff2') format('woff2'),
+        url('../fonts/Koblenz-Serial-ExtraBold.woff') format('woff'),
+        url('../fonts/Koblenz-Serial-ExtraBold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Fallback para Koblenz caso não carregue */
+@font-face {
+    font-family: 'Koblenz-Fallback';
+    src: local('Arial Black'), local('Helvetica Neue Bold'), local('sans-serif');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Classes de fonte */
+.font-kg-red-hands {
+    font-family: 'KG Red Hands', cursive;
+}
+
+.font-koblenz {
+    font-family: 'Koblenz-Serial-ExtraBold', 'Koblenz-Fallback', sans-serif;
+}

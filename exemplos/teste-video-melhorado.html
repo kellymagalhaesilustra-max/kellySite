@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste Avançado do Vídeo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #FF4DC6;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .video-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #FF4DC6;
+            border-radius: 10px;
+        }
+
+        .video-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(45deg, #FF4DC6, #FF6B9D);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        video {
+            width: 100%;
+            height: 300px;
+            border-radius: 15px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .status {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-family: monospace;
+            border-left: 4px solid #FF4DC6;
+        }
+
+        .error {
+            background: #ffebee;
+            border-left-color: #d32f2f;
+            color: #d32f2f;
+        }
+
+        .success {
+            background: #e8f5e8;
+            border-left-color: #2e7d32;
+            color: #2e7d32;
+        }
+
+        .warning {
+            background: #fff3e0;
+            border-left-color: #f57c00;
+            color: #f57c00;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        button {
+            background: #FF4DC6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #e23dae;
+        }
+
+        .format-test {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .format-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Teste Avançado do Vídeo</h1>
+
+        <div class="status" id="generalStatus">
+            <strong>Status Geral:</strong> Iniciando diagnóstico...
+        </div>
+
+                 <!-- Teste 1: MOJITO_KELLY.mp4 (Convertido) -->
+         <div class="video-section">
+             <h3>Teste 1: MOJITO_KELLY.mp4 (Convertido)</h3>
+             <div class="video-container">
+                 <video id="video1" 
+                        src="MOJITO_KELLY.mp4" 
+                        controls 
+                        preload="metadata">
+                     Seu navegador não suporta o elemento de vídeo.
+                 </video>
+             </div>
+             <div class="status" id="status1">Status: Aguardando...</div>
+             <div class="controls">
+                 <button onclick="testVideo('video1')">Testar Reprodução</button>
+                 <button onclick="checkVideoInfo('video1')">Verificar Informações</button>
+             </div>
+         </div>
+
+        <!-- Teste 2: Mojito_aula1.mp4 (formato original) -->
+        <div class="video-section">
+            <h3>Teste 2: Mojito_aula1.mp4 (Formato Original)</h3>
+            <div class="video-container">
+                <video id="video2" 
+                       src="Mojito_aula1.mp4" 
+                       controls 
+                       preload="metadata">
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+            </div>
+            <div class="status" id="status2">Status: Aguardando...</div>
+            <div class="controls">
+                <button onclick="testVideo('video2')">Testar Reprodução</button>
+                <button onclick="checkVideoInfo('video2')">Verificar Informações</button>
+            </div>
+        </div>
+
+        <!-- Teste 3: artes.mp4 -->
+        <div class="video-section">
+            <h3>Teste 3: artes.mp4 (Outro vídeo disponível)</h3>
+            <div class="video-container">
+                <video id="video3" 
+                       src="artes.mp4" 
+                       controls 
+                       preload="metadata">
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+            </div>
+            <div class="status" id="status3">Status: Aguardando...</div>
+            <div class="controls">
+                <button onclick="testVideo('video3')">Testar Reprodução</button>
+                <button onclick="checkVideoInfo('video3')">Verificar Informações</button>
+            </div>
+        </div>
+
+        <!-- Informações do Navegador -->
+        <div class="video-section">
+            <h3>📊 Informações do Navegador</h3>
+            <div class="status" id="browserInfo">
+                <strong>Detectando informações do navegador...</strong>
+            </div>
+        </div>
+
+        <!-- Formatos Suportados -->
+        <div class="video-section">
+            <h3>🎬 Formatos de Vídeo Suportados</h3>
+            <div class="format-test">
+                <div class="format-item">
+                    <h4>MP4 (H.264)</h4>
+                    <div id="mp4Support">Testando...</div>
+                </div>
+                <div class="format-item">
+                    <h4>WebM</h4>
+                    <div id="webmSupport">Testando...</div>
+                </div>
+                <div class="format-item">
+                    <h4>Ogg</h4>
+                    <div id="oggSupport">Testando...</div>
+                </div>
+                <div class="format-item">
+                    <h4>H.264 Raw</h4>
+                    <div id="h264Support">Testando...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recomendações -->
+        <div class="video-section">
+            <h3>💡 Recomendações</h3>
+            <div class="status warning" id="recommendations">
+                <strong>Aguardando resultados dos testes...</strong>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para atualizar status
+        function updateStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+
+        // Função para testar vídeo
+        function testVideo(videoId) {
+            const video = document.getElementById(videoId);
+            const statusId = videoId.replace('video', 'status');
+            
+            updateStatus(statusId, 'Testando reprodução...', 'warning');
+            
+            video.play().then(() => {
+                updateStatus(statusId, '✅ Vídeo reproduzindo com sucesso!', 'success');
+                video.pause();
+            }).catch((error) => {
+                updateStatus(statusId, `❌ Erro na reprodução: ${error.message}`, 'error');
+            });
+        }
+
+        // Função para verificar informações do vídeo
+        function checkVideoInfo(videoId) {
+            const video = document.getElementById(videoId);
+            const statusId = videoId.replace('video', 'status');
+            
+            if (video.readyState >= 1) {
+                const duration = video.duration;
+                const width = video.videoWidth;
+                const height = video.videoHeight;
+                
+                updateStatus(statusId, 
+                    `📊 Informações: ${width}x${height}px, ${duration.toFixed(2)}s`, 
+                    'success'
+                );
+            } else {
+                updateStatus(statusId, '⚠️ Vídeo ainda não carregou completamente', 'warning');
+            }
+        }
+
+        // Verificar formatos suportados
+        function checkVideoSupport() {
+            const video = document.createElement('video');
+            
+            // Testar MP4
+            const mp4Supported = video.canPlayType('video/mp4; codecs="avc1.42E01E"');
+            document.getElementById('mp4Support').textContent = 
+                mp4Supported ? '✅ Suportado' : '❌ Não suportado';
+            
+            // Testar WebM
+            const webmSupported = video.canPlayType('video/webm; codecs="vp8, vorbis"');
+            document.getElementById('webmSupport').textContent = 
+                webmSupported ? '✅ Suportado' : '❌ Não suportado';
+            
+            // Testar Ogg
+            const oggSupported = video.canPlayType('video/ogg; codecs="theora"');
+            document.getElementById('oggSupport').textContent = 
+                oggSupported ? '✅ Suportado' : '❌ Não suportado';
+            
+            // Testar H.264 raw
+            const h264Supported = video.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+            document.getElementById('h264Support').textContent = 
+                h264Supported ? '✅ Suportado' : '❌ Não suportado';
+        }
+
+        // Informações do navegador
+        function getBrowserInfo() {
+            const userAgent = navigator.userAgent;
+            const browserInfo = document.getElementById('browserInfo');
+            
+            let browser = 'Desconhecido';
+            if (userAgent.includes('Chrome')) browser = 'Chrome';
+            else if (userAgent.includes('Firefox')) browser = 'Firefox';
+            else if (userAgent.includes('Safari')) browser = 'Safari';
+            else if (userAgent.includes('Edge')) browser = 'Edge';
+            
+            browserInfo.innerHTML = `
+                <strong>Navegador:</strong> ${browser}<br>
+                <strong>User Agent:</strong> ${userAgent}<br>
+                <strong>Cookies habilitados:</strong> ${navigator.cookieEnabled ? 'Sim' : 'Não'}<br>
+                <strong>JavaScript habilitado:</strong> Sim
+            `;
+        }
+
+        // Gerar recomendações
+        function generateRecommendations() {
+            const recommendations = document.getElementById('recommendations');
+            
+            // Verificar se os vídeos estão carregando
+            const video1 = document.getElementById('video1');
+            const video2 = document.getElementById('video2');
+            const video3 = document.getElementById('video3');
+            
+            let recommendationsText = '<strong>Recomendações:</strong><br>';
+            
+            if (video1.readyState === 0) {
+                recommendationsText += '• O arquivo MOJITO_KELLY.h264 pode não ser suportado pelo navegador<br>';
+                recommendationsText += '• Considere converter para MP4 (H.264)<br>';
+            }
+            
+            if (video2.readyState >= 1) {
+                recommendationsText += '• Mojito_aula1.mp4 funciona corretamente<br>';
+                recommendationsText += '• Use este formato como referência<br>';
+            }
+            
+            if (video3.readyState >= 1) {
+                recommendationsText += '• artes.mp4 também funciona<br>';
+            }
+            
+            recommendationsText += '• Para melhor compatibilidade, use MP4 com codec H.264<br>';
+            recommendationsText += '• Mantenha o arquivo com tamanho otimizado para web';
+            
+            recommendations.innerHTML = recommendationsText;
+        }
+
+        // Inicialização
+        window.addEventListener('load', function() {
+            updateStatus('generalStatus', '✅ Página carregada, iniciando testes...', 'success');
+            
+            // Verificar suporte a formatos
+            checkVideoSupport();
+            
+            // Obter informações do navegador
+            getBrowserInfo();
+            
+            // Configurar event listeners para os vídeos
+            ['video1', 'video2', 'video3'].forEach(videoId => {
+                const video = document.getElementById(videoId);
+                const statusId = videoId.replace('video', 'status');
+                
+                video.addEventListener('loadstart', () => {
+                    updateStatus(statusId, '🔄 Iniciando carregamento...', 'warning');
+                });
+                
+                video.addEventListener('canplay', () => {
+                    updateStatus(statusId, '✅ Vídeo carregado e pronto para reprodução', 'success');
+                    generateRecommendations();
+                });
+                
+                video.addEventListener('error', (e) => {
+                    updateStatus(statusId, `❌ Erro no carregamento: ${video.error ? video.error.message : 'Erro desconhecido'}`, 'error');
+                    generateRecommendations();
+                });
+                
+                video.addEventListener('loadedmetadata', () => {
+                    checkVideoInfo(videoId);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

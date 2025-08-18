@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flipbook 3D - Kelly Magalhães</title>
+
+  <!-- CSS do Flipbook -->
+  <link rel="stylesheet" href="jq-3d-flip-book/css/white-book-view.css" />
+  <link rel="stylesheet" href="jq-3d-flip-book/css/font-awesome.min.css" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #fff;
+      padding: 15px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    nav button {
+      background-color: #FF4DC6;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    nav button:hover,
+    nav button:focus {
+      background-color: #e23dae;
+      outline: none;
+    }
+
+    main {
+      flex: 1;
+      padding: 15px;
+      min-height: calc(100vh - 140px);
+    }
+
+    #container {
+      width: 100%;
+      height: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #666;
+    }
+
+    .error {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #d32f2f;
+      background: #ffebee;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+    }
+
+    footer {
+      background: #fff;
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 600px) {
+      nav button {
+        padding: 8px 14px;
+        font-size: 14px;
+      }
+      main {
+        min-height: calc(100vh - 130px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <button onclick="loadFlipbook('mulheres.pdf')">📖 Mulheres</button>
+      <button onclick="loadFlipbook('jq-3d-flip-book/books/pdf/CondoLiving.pdf')">📖 Condo Living</button>
+      <button onclick="loadFlipbook('jq-3d-flip-book/books/pdf/TheThreeMusketeers.pdf')">📖 The Three Musketeers</button>
+    </nav>
+  </header>
+
+  <main>
+    <div id="container">
+      <div class="loading">
+        <h3>Carregando flipbook...</h3>
+        <p>Aguarde enquanto o PDF é processado.</p>
+      </div>
+    </div>
+  </main>
+
+      <footer>
+      &copy; 2024 Kelly Magalhães — Todos os direitos reservados | Desenvolvido por <a href="https://linkzinencurtador.online/index.html?r=yUfWLQ" target="_blank" style="color: inherit; text-decoration: none; transition: color 0.3s ease;">Bruno Ulrich</a>
+    </footer>
+
+  <!-- Scripts necessários para o flipbook -->
+  <script src="jq-3d-flip-book/js/jquery.min.js"></script>
+  <script src="jq-3d-flip-book/js/html2canvas.min.js"></script>
+  <script src="jq-3d-flip-book/js/three.min.js"></script>
+  <script src="jq-3d-flip-book/js/pdf.min.js"></script>
+  <script src="jq-3d-flip-book/js/3dflipbook.min.js"></script>
+
+  <script>
+    var currentFlipbook = null;
+
+    function loadFlipbook(pdfPath) {
+      console.log('Carregando flipbook:', pdfPath);
+      
+      // Remove loading e error messages
+      $('#container .loading, #container .error').remove();
+      
+      // Adiciona loading
+      $('#container').append('<div class="loading"><h3>Carregando flipbook...</h3><p>Aguarde enquanto o PDF é processado.</p></div>');
+
+      // Verifica se o arquivo existe
+      $.ajax({
+        url: pdfPath,
+        type: 'HEAD',
+        success: function() {
+          console.log('PDF encontrado, iniciando flipbook...');
+          initFlipbook(pdfPath);
+        },
+        error: function() {
+          console.error('PDF não encontrado:', pdfPath);
+          showError('Arquivo PDF não encontrado: ' + pdfPath);
+        }
+      });
+    }
+
+    function initFlipbook(pdfPath) {
+      try {
+        // Limpa o container
+        $('#container').empty();
+        
+        // Inicializa o flipbook
+        currentFlipbook = $('#container').FlipBook({
+          pdf: pdfPath,
+          template: {
+            html: 'jq-3d-flip-book/templates/default-book-view.html',
+            styles: [
+              'jq-3d-flip-book/css/white-book-view.css'
+            ],
+            links: [
+              { rel: 'stylesheet', href: 'jq-3d-flip-book/css/font-awesome.min.css' }
+            ],
+            script: 'jq-3d-flip-book/js/default-book-view.js'
+          },
+          propertiesCallback: function (props) {
+            if(props.page && props.page.depth) {
+              props.page.depth /= 2;
+            }
+            return props;
+          }
+        });
+        
+        console.log('Flipbook inicializado com sucesso!');
+      } catch (error) {
+        console.error('Erro ao inicializar flipbook:', error);
+        showError('Erro ao carregar o flipbook: ' + error.message);
+      }
+    }
+
+    function showError(message) {
+      $('#container').empty().append(
+        '<div class="error">' +
+        '<h3>Erro</h3>' +
+        '<p>' + message + '</p>' +
+        '<button onclick="location.reload()" style="margin-top: 10px; padding: 8px 16px; background: #FF4DC6; color: white; border: none; border-radius: 4px; cursor: pointer;">Tentar Novamente</button>' +
+        '</div>'
+      );
+    }
+
+    // Carrega o primeiro PDF por padrão
+    $(document).ready(function () {
+      console.log('Página carregada, iniciando flipbook...');
+      loadFlipbook('mulheres.pdf');
+    });
+  </script>
+
+</body>
+</html>

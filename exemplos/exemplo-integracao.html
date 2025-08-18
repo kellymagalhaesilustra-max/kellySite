@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Integração - DearFlip</title>
+    
+    <!-- CSS do DearFlip -->
+    <link rel="stylesheet" href="pluggin%20flipbook/dearflip.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .instructions h3 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+        
+        .flipbook-demo {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        #meu-flipbook {
+            width: 100%;
+            height: 500px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .controls {
+            margin: 20px 0;
+        }
+        
+        .controls button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .controls button:hover {
+            background: #1976d2;
+        }
+        
+        .page-info {
+            margin: 15px 0;
+            font-weight: bold;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Exemplo de Integração - DearFlip</h1>
+        
+        <div class="instructions">
+            <h3>Como integrar o DearFlip no seu site:</h3>
+            
+            <h4>1️⃣ Adicione o CSS:</h4>
+            <div class="code-block">
+&lt;link rel="stylesheet" href="pluggin%20flipbook/dearflip.css"&gt;
+            </div>
+            
+            <h4>2️⃣ Adicione os Scripts:</h4>
+            <div class="code-block">
+&lt;script src="https://code.jquery.com/jquery-3.6.0.min.js"&gt;&lt;/script&gt;<br>
+&lt;script src="https://mozilla.github.io/pdf.js/build/pdf.js"&gt;&lt;/script&gt;<br>
+&lt;script src="pluggin%20flipbook/dearflip-jquery-plugin.js"&gt;&lt;/script&gt;
+            </div>
+            
+            <h4>3️⃣ Adicione a área do flipbook:</h4>
+            <div class="code-block">
+&lt;div id="meu-flipbook"&gt;&lt;/div&gt;
+            </div>
+            
+            <h4>4️⃣ Adicione o script de inicialização:</h4>
+            <div class="code-block">
+&lt;script&gt;<br>
+&nbsp;&nbsp;$('#meu-flipbook').dearFlip({<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pdfUrl: 'pluggin%20flipbook/revista.pdf', // coloque o caminho do seu PDF<br>
+&nbsp;&nbsp;&nbsp;&nbsp;width: 900,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;height: 600<br>
+&nbsp;&nbsp;});<br>
+&lt;/script&gt;
+            </div>
+            
+            <p><strong>⚠️ Dica importante:</strong> Se o nome da pasta continuar como "pluggin flipbook" com espaço, o caminho no HTML deve usar %20 no lugar do espaço. Mas o ideal é renomear a pasta para "pluggin-flipbook".</p>
+        </div>
+        
+        <div class="flipbook-demo">
+            <h3>Demonstração do Flipbook:</h3>
+            
+            <div id="meu-flipbook">
+                <div style="text-align: center; padding: 50px; color: #666;">
+                    Carregando PDF...
+                </div>
+            </div>
+            
+            <div class="page-info">
+                Página atual: <span id="current-page">1</span> de <span id="total-pages">0</span>
+            </div>
+            
+            <div class="controls">
+                <button onclick="goToPage(1)">Primeira</button>
+                <button onclick="previousPage()">Anterior</button>
+                <button onclick="nextPage()">Próxima</button>
+                <button onclick="goToLastPage()">Última</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts necessários -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="pluggin%20flipbook/dearflip-jquery-plugin.js"></script>
+
+    <script>
+        // Configuração do PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+        
+        let flipbookInstance;
+        let totalPages = 0;
+
+        function updatePageInfo(currentPage) {
+            document.getElementById('current-page').textContent = currentPage;
+            document.getElementById('total-pages').textContent = totalPages || '?';
+        }
+
+        function goToPage(pageNum) {
+            if (flipbookInstance) {
+                flipbookInstance.goTo(pageNum);
+            }
+        }
+
+        function nextPage() {
+            if (flipbookInstance) {
+                flipbookInstance.next();
+            }
+        }
+
+        function previousPage() {
+            if (flipbookInstance) {
+                flipbookInstance.prev();
+            }
+        }
+
+        function goToLastPage() {
+            if (flipbookInstance && totalPages > 0) {
+                flipbookInstance.goTo(totalPages);
+            }
+        }
+
+        $(document).ready(function() {
+            // Inicializar o flipbook
+            flipbookInstance = $('#meu-flipbook').dearFlip({
+                pdfUrl: 'mulheres.pdf', // Usando o PDF de exemplo
+                width: 900,
+                height: 500,
+                startPage: 1,
+                renderScale: 1.2,
+                pageGap: 10,
+                lazyRenderAhead: 3,
+                onPageFlip: function(pageIndex) {
+                    updatePageInfo(pageIndex);
+                    console.log('Página virada para:', pageIndex);
+                },
+                onReady: function() {
+                    console.log('Flipbook carregado com sucesso!');
+                    // Obter número total de páginas
+                    if (flipbookInstance && flipbookInstance.getTotalPages) {
+                        totalPages = flipbookInstance.getTotalPages();
+                        updatePageInfo(1);
+                    }
+                },
+                onError: function(error) {
+                    console.error('Erro ao carregar flipbook:', error);
+                    $('#meu-flipbook').html('<div style="text-align: center; padding: 50px; color: #d32f2f;">Erro ao carregar PDF: ' + error.message + '</div>');
+                }
+            });
+            
+            // Adicionar controles de teclado
+            $(document).on('keydown', function(e) {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        previousPage();
+                        break;
+                    case 'ArrowRight':
+                        nextPage();
+                        break;
+                    case 'Home':
+                        goToPage(1);
+                        break;
+                    case 'End':
+                        goToLastPage();
+                        break;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
