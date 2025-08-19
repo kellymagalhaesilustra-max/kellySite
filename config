@@ -19,5 +19,3 @@ Host github
     KexAlgorithms +diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha256
     Ciphers +aes256-ctr,aes192-ctr,aes128-ctr
     MACs +hmac-sha2-256,hmac-sha2-512
-
-cd C:\Users\User\Documents\KELLY-SITE
