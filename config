@@ -8,8 +8,3 @@ Host github-kelly
     KexAlgorithms +diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha256
     Ciphers +aes256-ctr,aes192-ctr,aes128-ctr
     MACs +hmac-sha2-256,hmac-sha2-512
-    # The line below is added as per the suggestion
-    256 SHA256:xxxxxx C:\Users\User\.ssh\id_ed25519_empresa2 (ED25519)
-
-Start-Service ssh-agent
-ssh-add -l
