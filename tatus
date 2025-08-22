@@ -1,0 +1,12 @@
+* [33m2e3fcd8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Adicionar página 404 personalizada
+* [33m543a40e[m Adicionar workflow para GitHub Pages
+*   [33mfc4f17b[m Resolver conflito de merge no README.md
+[32m|[m[33m\[m  
+[32m|[m * [33m867319a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Initial commit
+*   [33mb3e3252[m Resolver conflitos após pull
+[34m|[m[35m\[m  
+[34m|[m * [33m9b4bd42[m Initial commit
+* [33m50f603a[m Readd large files using Git LFS
+* [33m24ba7d3[m Remover arquivos grandes do histórico
+* [33m830b402[m Versão inicial do site"
+* [33mcaf7b9f[m Primeiro commit do site
