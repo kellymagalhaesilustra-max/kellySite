@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correção Automática - Kelly Magalhães</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .status.ok {
+            background: rgba(76, 175, 80, 0.2);
+            border-left-color: #4CAF50;
+        }
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border-left-color: #F44336;
+        }
+        .status.warning {
+            background: rgba(255, 152, 0, 0.2);
+            border-left-color: #FF9800;
+        }
+        .fix-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .fix-button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Correção Automática - Kelly Magalhães</h1>
+        
+        <div class="status ok">
+            <h3>✅ Status do Site</h3>
+            <p>Verificando automaticamente todos os recursos...</p>
+        </div>
+
+        <div id="results">
+            <div class="status warning">
+                <h3>⏳ Verificando...</h3>
+                <p>Aguarde enquanto verificamos todos os arquivos...</p>
+            </div>
+        </div>
+
+        <div class="status ok">
+            <h3>🔧 Ações Disponíveis</h3>
+            <button class="fix-button" onclick="testAllResources()">Testar Todos os Recursos</button>
+            <button class="fix-button" onclick="showGitHubPagesSetup()">Configurar GitHub Pages</button>
+            <button class="fix-button" onclick="clearCache()">Limpar Cache</button>
+        </div>
+
+        <div class="status warning">
+            <h3>📋 Checklist Manual</h3>
+            <ul>
+                <li>☐ Verificar se o GitHub Pages está ativo</li>
+                <li>☐ Confirmar se todos os arquivos estão no repositório</li>
+                <li>☐ Testar em navegador privado/incógnito</li>
+                <li>☐ Verificar console do navegador (F12)</li>
+                <li>☐ Testar em diferentes dispositivos</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Lista de recursos para testar
+        const resources = [
+            { name: 'CSS Principal', url: 'css/style.css', type: 'css' },
+            { name: 'CSS Animações', url: 'css/animations.css', type: 'css' },
+            { name: 'Logo Principal', url: 'images/Logo KM Ilustra1.png', type: 'image' },
+            { name: 'Vídeo Demo', url: 'MOJITO_KELLY.mp4', type: 'video' },
+            { name: 'JavaScript', url: 'main.js', type: 'js' }
+        ];
+
+        function testResource(resource) {
+            return new Promise((resolve) => {
+                const element = document.createElement(resource.type === 'image' ? 'img' : 'link');
+                
+                if (resource.type === 'image') {
+                    element.onload = () => resolve({ name: resource.name, status: 'ok' });
+                    element.onerror = () => resolve({ name: resource.name, status: 'error' });
+                    element.src = resource.url;
+                } else if (resource.type === 'css') {
+                    element.rel = 'stylesheet';
+                    element.onload = () => resolve({ name: resource.name, status: 'ok' });
+                    element.onerror = () => resolve({ name: resource.name, status: 'error' });
+                    element.href = resource.url;
+                } else {
+                    element.onload = () => resolve({ name: resource.name, status: 'ok' });
+                    element.onerror = () => resolve({ name: resource.name, status: 'error' });
+                    element.src = resource.url;
+                }
+                
+                document.head.appendChild(element);
+                
+                // Timeout após 5 segundos
+                setTimeout(() => {
+                    if (element.parentNode) {
+                        element.parentNode.removeChild(element);
+                        resolve({ name: resource.name, status: 'timeout' });
+                    }
+                }, 5000);
+            });
+        }
+
+        async function testAllResources() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="status warning"><h3>⏳ Testando recursos...</h3></div>';
+            
+            const results = [];
+            
+            for (const resource of resources) {
+                const result = await testResource(resource);
+                results.push(result);
+            }
+            
+            // Mostrar resultados
+            let html = '<h3>📊 Resultados dos Testes</h3>';
+            
+            results.forEach(result => {
+                const statusClass = result.status === 'ok' ? 'ok' : 'error';
+                const statusIcon = result.status === 'ok' ? '✅' : '❌';
+                html += `<div class="status ${statusClass}">${statusIcon} ${result.name}: ${result.status}</div>`;
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        function showGitHubPagesSetup() {
+            const setup = `
+                <div class="status ok">
+                    <h3>🔧 Como Configurar GitHub Pages</h3>
+                    <ol>
+                        <li>Vá para: <a href="https://github.com/kellymagalhaesilustra-max/kellySite/settings/pages" target="_blank">Configurações do Repositório</a></li>
+                        <li>Na seção "Pages", selecione "Deploy from a branch"</li>
+                        <li>Branch: main</li>
+                        <li>Folder: / (root)</li>
+                        <li>Clique em "Save"</li>
+                        <li>Aguarde alguns minutos para o deploy</li>
+                    </ol>
+                </div>
+            `;
+            document.getElementById('results').innerHTML = setup;
+        }
+
+        function clearCache() {
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => {
+                        caches.delete(name);
+                    });
+                });
+            }
+            alert('Cache limpo! Recarregue a página (Ctrl+F5)');
+        }
+
+        // Testar automaticamente ao carregar a página
+        window.addEventListener('load', () => {
+            setTimeout(testAllResources, 1000);
+        });
+    </script>
+</body>
+</html>
