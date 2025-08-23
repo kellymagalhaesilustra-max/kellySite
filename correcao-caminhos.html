@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correção de Caminhos - Kelly Magalhães</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .problema {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .solucao {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .imagem-teste {
+            max-width: 200px;
+            height: auto;
+            border: 1px solid #ddd;
+            margin: 10px;
+        }
+        .erro {
+            color: #721c24;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        .sucesso {
+            color: #155724;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Correção de Caminhos - Kelly Magalhães</h1>
+        
+        <div class="problema">
+            <h3>🚨 Problemas Identificados:</h3>
+            <ul>
+                <li>Imagens não carregando</li>
+                <li>CSS não aplicando corretamente</li>
+                <li>Vídeos não reproduzindo</li>
+                <li>Links quebrados</li>
+            </ul>
+        </div>
+
+        <div class="solucao">
+            <h3>✅ Soluções Aplicadas:</h3>
+            
+            <h4>1. Verificação de CSS</h4>
+            <p>Testando carregamento do CSS:</p>
+            <div id="css-test">Se este texto aparece com fonte KG Red Hands, o CSS está funcionando.</div>
+            
+            <h4>2. Teste de Imagens</h4>
+            <p>Verificando carregamento das imagens principais:</p>
+            <img src="images/Logo KM Ilustra1.png" alt="Logo" class="imagem-teste" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <div class="erro" style="display:none;">❌ Erro: Logo não carregou</div>
+            
+            <img src="images/PERFIL.png" alt="Perfil" class="imagem-teste" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <div class="erro" style="display:none;">❌ Erro: Imagem de perfil não carregou</div>
+            
+            <h4>3. Teste de Vídeo</h4>
+            <video src="MOJITO_KELLY.mp4" controls style="max-width: 300px;" onerror="this.nextElementSibling.style.display='block';">
+                Seu navegador não suporta vídeo.
+            </video>
+            <div class="erro" style="display:none;">❌ Erro: Vídeo não carregou</div>
+            
+            <h4>4. Verificação de Estrutura</h4>
+            <ul>
+                <li>✅ index.html - Arquivo principal</li>
+                <li>✅ css/style.css - Estilos principais</li>
+                <li>✅ css/animations.css - Animações</li>
+                <li>✅ images/ - Pasta de imagens</li>
+                <li>✅ main.js - JavaScript</li>
+            </ul>
+        </div>
+
+        <div class="solucao">
+            <h3>🔧 Próximos Passos:</h3>
+            <ol>
+                <li>Verificar se todos os arquivos estão no GitHub</li>
+                <li>Configurar GitHub Pages corretamente</li>
+                <li>Testar o site online</li>
+                <li>Corrigir qualquer caminho que ainda esteja quebrado</li>
+            </ol>
+        </div>
+
+        <div class="problema">
+            <h3>📋 Checklist de Correção:</h3>
+            <ul>
+                <li>☐ Verificar se o GitHub Pages está ativo</li>
+                <li>☐ Confirmar se todos os arquivos foram enviados</li>
+                <li>☐ Testar o site em diferentes navegadores</li>
+                <li>☐ Verificar responsividade mobile</li>
+                <li>☐ Testar todos os links de navegação</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Teste de carregamento de recursos
+        window.addEventListener('load', function() {
+            console.log('Página carregada completamente');
+            
+            // Verificar se o CSS foi carregado
+            const testElement = document.getElementById('css-test');
+            const computedStyle = window.getComputedStyle(testElement);
+            
+            if (computedStyle.fontFamily.includes('KG Red Hands')) {
+                console.log('✅ CSS carregado com sucesso');
+            } else {
+                console.log('❌ CSS não carregou corretamente');
+            }
+        });
+    </script>
+</body>
+</html>
