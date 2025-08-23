@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correção de Imagens - Kelly Magalhães</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .status.ok {
+            background: rgba(76, 175, 80, 0.2);
+            border-left-color: #4CAF50;
+        }
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border-left-color: #F44336;
+        }
+        .status.warning {
+            background: rgba(255, 152, 0, 0.2);
+            border-left-color: #FF9800;
+        }
+        .fix-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .fix-button:hover {
+            background: #45a049;
+        }
+        .projeto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .projeto-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+        .projeto-imagem {
+            width: 100%;
+            max-width: 250px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid rgba(255,255,255,0.3);
+            margin-bottom: 10px;
+        }
+        .projeto-titulo {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .erro-imagem {
+            background: rgba(244, 67, 54, 0.3);
+            border: 2px dashed #F44336;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #F44336;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Correção de Imagens - Kelly Magalhães</h1>
+        
+        <div class="status error">
+            <h3>🚨 Problema Identificado:</h3>
+            <p><strong>5 de 6 projetos estão com imagens quebradas!</strong></p>
+            <p>Na seção "Últimos Projetos", apenas 1 projeto está carregando corretamente.</p>
+        </div>
+
+        <div class="status ok">
+            <h3>🔧 Ferramentas de Correção</h3>
+            <button class="fix-button" onclick="verificarTodasImagens()">Verificar Todas as Imagens</button>
+            <button class="fix-button" onclick="configurarGitHubPages()">Configurar GitHub Pages</button>
+            <button class="fix-button" onclick="limparCache()">Limpar Cache</button>
+            <button class="fix-button" onclick="testarNavegador()">Testar em Navegador Privado</button>
+        </div>
+
+        <div id="resultados">
+            <div class="status warning">
+                <h3>⏳ Verificando imagens...</h3>
+                <p>Aguarde enquanto verificamos todas as imagens dos projetos...</p>
+            </div>
+        </div>
+
+        <div class="status ok">
+            <h3>📋 Projetos - Últimos Trabalhos</h3>
+            <div class="projeto-grid">
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 1</h4>
+                    <img src="images/Floyd-1.png" alt="Projeto 1" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ Imagem quebrada';">
+                </div>
+                
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 2</h4>
+                    <img src="images/PERFIL.png" alt="Projeto 2" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ Imagem quebrada';">
+                </div>
+                
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 3</h4>
+                    <img src="images/Identidade Visual _Logotipo_01.png" alt="Projeto 3" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ Imagem quebrada';">
+                </div>
+                
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 4</h4>
+                    <img src="images/forbes revista_capa.png" alt="Projeto 4" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ Imagem quebrada';">
+                </div>
+                
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 5</h4>
+                    <img src="images/anne_quadro_web1.png" alt="Projeto 5" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ Imagem quebrada';">
+                </div>
+                
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 6</h4>
+                    <img src="images/casa rara_capa.png" alt="Projeto 6" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ Imagem quebrada';">
+                </div>
+            </div>
+        </div>
+
+        <div class="status warning">
+            <h3>🔧 Soluções para Imagens Quebradas</h3>
+            <ol>
+                <li><strong>GitHub Pages:</strong> Configure em Settings > Pages > Deploy from branch > main</li>
+                <li><strong>Verificar arquivos:</strong> Confirme se todas as imagens estão na pasta images/</li>
+                <li><strong>Limpar cache:</strong> Use Ctrl+F5 ou teste em navegador privado</li>
+                <li><strong>Verificar nomes:</strong> Confirme se os nomes dos arquivos estão corretos</li>
+                <li><strong>Git LFS:</strong> Verifique se arquivos grandes estão sendo rastreados</li>
+            </ol>
+        </div>
+
+        <div class="status ok">
+            <h3>📊 Status das Imagens</h3>
+            <div id="status-imagens">
+                <p>Clique em "Verificar Todas as Imagens" para ver o status detalhado</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lista de imagens dos projetos
+        const imagensProjetos = [
+            { nome: 'Projeto 1 - Floyd', url: 'images/Floyd-1.png' },
+            { nome: 'Projeto 2 - Perfil', url: 'images/PERFIL.png' },
+            { nome: 'Projeto 3 - Logotipo 1', url: 'images/Identidade Visual _Logotipo_01.png' },
+            { nome: 'Projeto 4 - Forbes', url: 'images/forbes revista_capa.png' },
+            { nome: 'Projeto 5 - Anne', url: 'images/anne_quadro_web1.png' },
+            { nome: 'Projeto 6 - Casa Rara', url: 'images/casa rara_capa.png' },
+            { nome: 'Logo Principal', url: 'images/Logo KM Ilustra1.png' },
+            { nome: 'Logo 2', url: 'images/Logo KM Ilustra2.png' }
+        ];
+
+        function verificarTodasImagens() {
+            const resultadosDiv = document.getElementById('resultados');
+            const statusDiv = document.getElementById('status-imagens');
+            
+            resultadosDiv.innerHTML = '<div class="status warning"><h3>⏳ Verificando imagens...</h3></div>';
+            
+            let resultados = [];
+            let verificadas = 0;
+            
+            imagensProjetos.forEach(imagem => {
+                verificarImagem(imagem).then(resultado => {
+                    resultados.push(resultado);
+                    verificadas++;
+                    
+                    if (verificadas === imagensProjetos.length) {
+                        mostrarResultadosImagens(resultados);
+                    }
+                });
+            });
+        }
+
+        function verificarImagem(imagem) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                
+                img.onload = () => {
+                    resolve({ nome: imagem.nome, status: 'ok', url: imagem.url });
+                };
+                
+                img.onerror = () => {
+                    resolve({ nome: imagem.nome, status: 'erro', url: imagem.url });
+                };
+                
+                img.src = imagem.url;
+                
+                // Timeout após 10 segundos
+                setTimeout(() => {
+                    if (!img.complete) {
+                        resolve({ nome: imagem.nome, status: 'timeout', url: imagem.url });
+                    }
+                }, 10000);
+            });
+        }
+
+        function mostrarResultadosImagens(resultados) {
+            const resultadosDiv = document.getElementById('resultados');
+            const statusDiv = document.getElementById('status-imagens');
+            
+            let html = '<h3>📊 Resultados da Verificação</h3>';
+            let ok = 0, erro = 0;
+            
+            resultados.forEach(resultado => {
+                const statusClass = resultado.status === 'ok' ? 'ok' : 'error';
+                const statusIcon = resultado.status === 'ok' ? '✅' : '❌';
+                html += `<div class="status ${statusClass}">${statusIcon} ${resultado.nome}: ${resultado.status}</div>`;
+                
+                if (resultado.status === 'ok') ok++;
+                else erro++;
+            });
+            
+            html += `<div class="status ${erro === 0 ? 'ok' : 'warning'}">
+                <h4>Resumo: ${ok} funcionando, ${erro} com problemas</h4>
+            </div>`;
+            
+            resultadosDiv.innerHTML = html;
+            
+            // Status resumido
+            statusDiv.innerHTML = `
+                <div class="status ${erro === 0 ? 'ok' : 'error'}">
+                    <h4>Status Geral: ${ok}/${resultados.length} imagens funcionando</h4>
+                    <p>${erro > 0 ? 'Algumas imagens estão quebradas. Configure o GitHub Pages!' : 'Todas as imagens estão funcionando!'}</p>
+                </div>
+            `;
+        }
+
+        function configurarGitHubPages() {
+            window.open('https://github.com/kellymagalhaesilustra-max/kellySite/settings/pages', '_blank');
+        }
+
+        function limparCache() {
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => {
+                        caches.delete(name);
+                    });
+                });
+            }
+            alert('Cache limpo! Recarregue a página (Ctrl+F5)');
+        }
+
+        function testarNavegador() {
+            alert('Para testar em navegador privado:\n1. Pressione Ctrl+Shift+N\n2. Acesse o site\n3. Verifique se as imagens carregam');
+        }
+
+        // Verificar automaticamente ao carregar
+        window.addEventListener('load', () => {
+            setTimeout(verificarTodasImagens, 1000);
+        });
+    </script>
+</body>
+</html>
