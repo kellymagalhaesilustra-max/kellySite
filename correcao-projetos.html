@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correção de Projetos - Kelly Magalhães</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .status.ok {
+            background: rgba(76, 175, 80, 0.2);
+            border-left-color: #4CAF50;
+        }
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border-left-color: #F44336;
+        }
+        .status.warning {
+            background: rgba(255, 152, 0, 0.2);
+            border-left-color: #FF9800;
+        }
+        .fix-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .fix-button:hover {
+            background: #45a049;
+        }
+        .projeto-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .imagem-teste {
+            max-width: 150px;
+            height: auto;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 5px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Correção de Projetos - Kelly Magalhães</h1>
+        
+        <div class="status warning">
+            <h3>🚨 Problemas Identificados:</h3>
+            <ul>
+                <li>Logo não carregando (ícone quebrado)</li>
+                <li>Texto truncado "Des" (provavelmente "Design")</li>
+                <li>Projetos não exibindo corretamente</li>
+                <li>Imagens dos projetos quebradas</li>
+            </ul>
+        </div>
+
+        <div class="status ok">
+            <h3>🔧 Ferramentas de Correção</h3>
+            <button class="fix-button" onclick="verificarProjetos()">Verificar Todos os Projetos</button>
+            <button class="fix-button" onclick="testarImagens()">Testar Imagens</button>
+            <button class="fix-button" onclick="configurarGitHubPages()">Configurar GitHub Pages</button>
+            <button class="fix-button" onclick="limparCache()">Limpar Cache</button>
+        </div>
+
+        <div id="resultados">
+            <div class="status warning">
+                <h3>⏳ Aguardando verificação...</h3>
+                <p>Clique em "Verificar Todos os Projetos" para começar</p>
+            </div>
+        </div>
+
+        <div class="status ok">
+            <h3>📋 Lista de Projetos para Verificar</h3>
+            <div class="projeto-item">
+                <h4>1. Logo Principal</h4>
+                <img src="images/Logo KM Ilustra1.png" alt="Logo" class="imagem-teste" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="status error" style="display:none;">❌ Logo não carregou</div>
+            </div>
+
+            <div class="projeto-item">
+                <h4>2. Projetos de Ilustração</h4>
+                <img src="images/PERFIL.png" alt="Perfil" class="imagem-teste" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="status error" style="display:none;">❌ Imagem de perfil não carregou</div>
+                
+                <img src="images/Floyd-1.png" alt="Floyd" class="imagem-teste" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="status error" style="display:none;">❌ Projeto Floyd não carregou</div>
+            </div>
+
+            <div class="projeto-item">
+                <h4>3. Projetos de Design</h4>
+                <img src="images/Identidade Visual _Logotipo_01.png" alt="Logotipo 1" class="imagem-teste" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="status error" style="display:none;">❌ Logotipo 1 não carregou</div>
+                
+                <img src="images/Identidade Visual _Logotipo_02.png" alt="Logotipo 2" class="imagem-teste" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="status error" style="display:none;">❌ Logotipo 2 não carregou</div>
+            </div>
+
+            <div class="projeto-item">
+                <h4>4. Projetos de Diagramação</h4>
+                <img src="images/forbes revista_capa.png" alt="Forbes" class="imagem-teste" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="status error" style="display:none;">❌ Capa Forbes não carregou</div>
+                
+                <img src="images/casa rara_capa.png" alt="Casa Rara" class="imagem-teste" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="status error" style="display:none;">❌ Capa Casa Rara não carregou</div>
+            </div>
+
+            <div class="projeto-item">
+                <h4>5. Vídeo Demo</h4>
+                <video src="MOJITO_KELLY.mp4" controls style="max-width: 300px;" onerror="this.nextElementSibling.style.display='block';">
+                    Seu navegador não suporta vídeo.
+                </video>
+                <div class="status error" style="display:none;">❌ Vídeo não carregou</div>
+            </div>
+        </div>
+
+        <div class="status warning">
+            <h3>🔧 Soluções Rápidas</h3>
+            <ol>
+                <li><strong>GitHub Pages:</strong> Configure em Settings > Pages > Deploy from branch > main</li>
+                <li><strong>Cache:</strong> Use Ctrl+F5 para limpar cache</li>
+                <li><strong>Navegador:</strong> Teste em modo incógnito</li>
+                <li><strong>Console:</strong> Pressione F12 para ver erros</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Lista de projetos para verificar
+        const projetos = [
+            { nome: 'Logo Principal', url: 'images/Logo KM Ilustra1.png', tipo: 'imagem' },
+            { nome: 'Perfil', url: 'images/PERFIL.png', tipo: 'imagem' },
+            { nome: 'Floyd', url: 'images/Floyd-1.png', tipo: 'imagem' },
+            { nome: 'Logotipo 1', url: 'images/Identidade Visual _Logotipo_01.png', tipo: 'imagem' },
+            { nome: 'Logotipo 2', url: 'images/Identidade Visual _Logotipo_02.png', tipo: 'imagem' },
+            { nome: 'Forbes', url: 'images/forbes revista_capa.png', tipo: 'imagem' },
+            { nome: 'Casa Rara', url: 'images/casa rara_capa.png', tipo: 'imagem' },
+            { nome: 'Vídeo Demo', url: 'MOJITO_KELLY.mp4', tipo: 'video' },
+            { nome: 'CSS Principal', url: 'css/style.css', tipo: 'css' },
+            { nome: 'CSS Animações', url: 'css/animations.css', tipo: 'css' }
+        ];
+
+        function verificarProjetos() {
+            const resultadosDiv = document.getElementById('resultados');
+            resultadosDiv.innerHTML = '<div class="status warning"><h3>⏳ Verificando projetos...</h3></div>';
+            
+            let resultados = [];
+            let verificados = 0;
+            
+            projetos.forEach(projeto => {
+                verificarRecurso(projeto).then(resultado => {
+                    resultados.push(resultado);
+                    verificados++;
+                    
+                    if (verificados === projetos.length) {
+                        mostrarResultados(resultados);
+                    }
+                });
+            });
+        }
+
+        function verificarRecurso(projeto) {
+            return new Promise((resolve) => {
+                const elemento = document.createElement(projeto.tipo === 'imagem' ? 'img' : 'link');
+                
+                if (projeto.tipo === 'imagem') {
+                    elemento.onload = () => resolve({ nome: projeto.nome, status: 'ok' });
+                    elemento.onerror = () => resolve({ nome: projeto.nome, status: 'erro' });
+                    elemento.src = projeto.url;
+                } else if (projeto.tipo === 'css') {
+                    elemento.rel = 'stylesheet';
+                    elemento.onload = () => resolve({ nome: projeto.nome, status: 'ok' });
+                    elemento.onerror = () => resolve({ nome: projeto.nome, status: 'erro' });
+                    elemento.href = projeto.url;
+                } else {
+                    elemento.onload = () => resolve({ nome: projeto.nome, status: 'ok' });
+                    elemento.onerror = () => resolve({ nome: projeto.nome, status: 'erro' });
+                    elemento.src = projeto.url;
+                }
+                
+                document.head.appendChild(elemento);
+                
+                setTimeout(() => {
+                    if (elemento.parentNode) {
+                        elemento.parentNode.removeChild(elemento);
+                        resolve({ nome: projeto.nome, status: 'timeout' });
+                    }
+                }, 5000);
+            });
+        }
+
+        function mostrarResultados(resultados) {
+            const resultadosDiv = document.getElementById('resultados');
+            let html = '<h3>📊 Resultados da Verificação</h3>';
+            
+            let ok = 0, erro = 0;
+            
+            resultados.forEach(resultado => {
+                const statusClass = resultado.status === 'ok' ? 'ok' : 'error';
+                const statusIcon = resultado.status === 'ok' ? '✅' : '❌';
+                html += `<div class="status ${statusClass}">${statusIcon} ${resultado.nome}: ${resultado.status}</div>`;
+                
+                if (resultado.status === 'ok') ok++;
+                else erro++;
+            });
+            
+            html += `<div class="status ${erro === 0 ? 'ok' : 'warning'}">
+                <h4>Resumo: ${ok} funcionando, ${erro} com problemas</h4>
+            </div>`;
+            
+            resultadosDiv.innerHTML = html;
+        }
+
+        function testarImagens() {
+            alert('Testando carregamento de imagens...\nVerifique se as imagens aparecem acima.');
+        }
+
+        function configurarGitHubPages() {
+            window.open('https://github.com/kellymagalhaesilustra-max/kellySite/settings/pages', '_blank');
+        }
+
+        function limparCache() {
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => {
+                        caches.delete(name);
+                    });
+                });
+            }
+            alert('Cache limpo! Recarregue a página (Ctrl+F5)');
+        }
+
+        // Verificar automaticamente ao carregar
+        window.addEventListener('load', () => {
+            setTimeout(verificarProjetos, 1000);
+        });
+    </script>
+</body>
+</html>
