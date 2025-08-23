@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correção de Nomes de Arquivos - Kelly Magalhães</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .status.ok {
+            background: rgba(76, 175, 80, 0.2);
+            border-left-color: #4CAF50;
+        }
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border-left-color: #F44336;
+        }
+        .status.warning {
+            background: rgba(255, 152, 0, 0.2);
+            border-left-color: #FF9800;
+        }
+        .fix-button {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .fix-button:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+        .fix-button.green {
+            background: #4CAF50;
+        }
+        .fix-button.green:hover {
+            background: #45a049;
+        }
+        .file-list {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .file-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+            border-left: 4px solid #FF9800;
+        }
+        .file-item.problem {
+            border-left-color: #F44336;
+        }
+        .file-item.ok {
+            border-left-color: #4CAF50;
+        }
+        .projeto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .projeto-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+        .projeto-imagem {
+            width: 100%;
+            max-width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid rgba(255,255,255,0.3);
+            margin-bottom: 10px;
+        }
+        .projeto-titulo {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .erro-imagem {
+            background: rgba(244, 67, 54, 0.3);
+            border: 2px dashed #F44336;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #F44336;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 CORREÇÃO DE NOMES DE ARQUIVOS - Kelly Magalhães</h1>
+        
+        <div class="status error">
+            <h3>🚨 PROBLEMA IDENTIFICADO:</h3>
+            <p><strong>Problemas de maiúsculas/minúsculas nos nomes dos arquivos!</strong></p>
+            <p>O GitHub Pages é sensível a maiúsculas/minúsculas nos nomes dos arquivos.</p>
+        </div>
+
+        <div class="status ok">
+            <h3>⚡ AÇÕES NECESSÁRIAS:</h3>
+            <button class="fix-button" onclick="verificarArquivos()">🔍 Verificar Arquivos</button>
+            <button class="fix-button green" onclick="configurarGitHubPages()">🔧 Configurar GitHub Pages</button>
+            <button class="fix-button" onclick="mostrarSolucoes()">📋 Mostrar Soluções</button>
+        </div>
+
+        <div class="file-list">
+            <h3>📁 ARQUIVOS IDENTIFICADOS NO SITE:</h3>
+            <div id="arquivos-lista">
+                <p>Clique em "Verificar Arquivos" para analisar</p>
+            </div>
+        </div>
+
+        <div class="status ok">
+            <h3>📋 PROJETOS - Últimos Trabalhos (Index.html)</h3>
+            <div class="projeto-grid">
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 1</h4>
+                    <img src="images/Prancheta 1.png" alt="Projeto 1" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
+                    <p><strong>Arquivo:</strong> Prancheta 1.png</p>
+                </div>
+                
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 2</h4>
+                    <img src="images/Prancheta 2.png" alt="Projeto 2" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
+                    <p><strong>Arquivo:</strong> Prancheta 2.png</p>
+                </div>
+                
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 3</h4>
+                    <img src="images/Prancheta 3.png" alt="Projeto 3" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
+                    <p><strong>Arquivo:</strong> Prancheta 3.png</p>
+                </div>
+                
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 4</h4>
+                    <img src="images/ebook1.png" alt="Projeto 4" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
+                    <p><strong>Arquivo:</strong> ebook1.png</p>
+                </div>
+                
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 5</h4>
+                    <img src="images/Anne 09 01.jfif" alt="Projeto 5" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
+                    <p><strong>Arquivo:</strong> Anne 09 01.jfif</p>
+                </div>
+                
+                <div class="projeto-card">
+                    <h4 class="projeto-titulo">Projeto 6</h4>
+                    <img src="images/Gisele_fada_bruxa_lunar.png" alt="Projeto 6" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
+                    <p><strong>Arquivo:</strong> Gisele_fada_bruxa_lunar.png</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="status warning">
+            <h3>🔍 PROBLEMAS IDENTIFICADOS:</h3>
+            <div id="problemas-lista">
+                <p>Clique em "Verificar Arquivos" para ver os problemas</p>
+            </div>
+        </div>
+
+        <div class="status ok">
+            <h3>📞 SOLUÇÕES:</h3>
+            <div id="solucoes-lista">
+                <p>Clique em "Mostrar Soluções" para ver as correções</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lista de arquivos usados no site
+        const arquivosSite = [
+            { nome: 'Logo Principal', arquivo: 'Logo KM Ilustra1.png', usado: true },
+            { nome: 'Projeto 1', arquivo: 'Prancheta 1.png', usado: true },
+            { nome: 'Projeto 2', arquivo: 'Prancheta 2.png', usado: true },
+            { nome: 'Projeto 3', arquivo: 'Prancheta 3.png', usado: true },
+            { nome: 'Projeto 4', arquivo: 'ebook1.png', usado: true },
+            { nome: 'Projeto 5', arquivo: 'Anne 09 01.jfif', usado: true },
+            { nome: 'Projeto 6', arquivo: 'Gisele_fada_bruxa_lunar.png', usado: true },
+            { nome: 'Floyd', arquivo: 'Floyd-1.png', usado: false },
+            { nome: 'Perfil', arquivo: 'PERFIL.png', usado: false },
+            { nome: 'Logotipo 1', arquivo: 'Identidade Visual _Logotipo_01.png', usado: false },
+            { nome: 'Forbes', arquivo: 'forbes revista_capa.png', usado: false },
+            { nome: 'Casa Rara', arquivo: 'casa rara_capa.png', usado: false }
+        ];
+
+        function verificarArquivos() {
+            const arquivosDiv = document.getElementById('arquivos-lista');
+            const problemasDiv = document.getElementById('problemas-lista');
+            
+            let html = '';
+            let problemas = [];
+            
+            arquivosSite.forEach(arquivo => {
+                const temEspacos = arquivo.arquivo.includes(' ');
+                const temCaracteresEspeciais = /[^a-zA-Z0-9._-]/.test(arquivo.arquivo);
+                const temMaiusculas = /[A-Z]/.test(arquivo.arquivo);
+                
+                let status = 'ok';
+                let problemasArquivo = [];
+                
+                if (temEspacos) {
+                    status = 'problem';
+                    problemasArquivo.push('Contém espaços');
+                }
+                
+                if (temCaracteresEspeciais) {
+                    status = 'problem';
+                    problemasArquivo.push('Caracteres especiais');
+                }
+                
+                if (temMaiusculas) {
+                    status = 'problem';
+                    problemasArquivo.push('Maiúsculas');
+                }
+                
+                if (problemasArquivo.length > 0) {
+                    problemas.push({
+                        nome: arquivo.nome,
+                        arquivo: arquivo.arquivo,
+                        problemas: problemasArquivo
+                    });
+                }
+                
+                html += `<div class="file-item ${status}">
+                    <strong>${arquivo.nome}:</strong> ${arquivo.arquivo}
+                    ${problemasArquivo.length > 0 ? `<br><small>❌ ${problemasArquivo.join(', ')}</small>` : '<br><small>✅ OK</small>'}
+                </div>`;
+            });
+            
+            arquivosDiv.innerHTML = html;
+            
+            // Mostrar problemas
+            let problemasHtml = '';
+            if (problemas.length > 0) {
+                problemasHtml = `<p><strong>${problemas.length} arquivos com problemas:</strong></p>`;
+                problemas.forEach(problema => {
+                    problemasHtml += `<div class="file-item problem">
+                        <strong>${problema.nome}:</strong> ${problema.arquivo}<br>
+                        <small>❌ ${problema.problemas.join(', ')}</small>
+                    </div>`;
+                });
+            } else {
+                problemasHtml = '<p>✅ Nenhum problema encontrado nos nomes dos arquivos!</p>';
+            }
+            
+            problemasDiv.innerHTML = problemasHtml;
+        }
+
+        function mostrarSolucoes() {
+            const solucoesDiv = document.getElementById('solucoes-lista');
+            
+            let html = `
+                <h4>🔧 SOLUÇÕES PARA PROBLEMAS DE NOMES:</h4>
+                <ol>
+                    <li><strong>Espaços nos nomes:</strong> Substitua por hífens (-) ou underscores (_)</li>
+                    <li><strong>Maiúsculas:</strong> Use apenas minúsculas</li>
+                    <li><strong>Caracteres especiais:</strong> Use apenas letras, números, hífens e underscores</li>
+                </ol>
+                
+                <h4>📋 EXEMPLOS DE CORREÇÃO:</h4>
+                <ul>
+                    <li><strong>Antes:</strong> "Logo KM Ilustra1.png" → <strong>Depois:</strong> "logo-km-ilustra1.png"</li>
+                    <li><strong>Antes:</strong> "Prancheta 1.png" → <strong>Depois:</strong> "prancheta-1.png"</li>
+                    <li><strong>Antes:</strong> "Anne 09 01.jfif" → <strong>Depois:</strong> "anne-09-01.jfif"</li>
+                </ul>
+                
+                <h4>⚡ AÇÃO IMEDIATA:</h4>
+                <p>1. <strong>Configure o GitHub Pages</strong> primeiro</p>
+                <p>2. <strong>Se ainda não funcionar</strong>, renomeie os arquivos</p>
+                <p>3. <strong>Atualize as referências</strong> no HTML</p>
+            `;
+            
+            solucoesDiv.innerHTML = html;
+        }
+
+        function configurarGitHubPages() {
+            window.open('https://github.com/kellymagalhaesilustra-max/kellySite/settings/pages', '_blank');
+            alert('Página de configuração aberta!\n\nConfigure:\n- Source: Deploy from a branch\n- Branch: main\n- Folder: / (root)\n- Clique em Save');
+        }
+
+        // Verificar automaticamente ao carregar
+        window.addEventListener('load', () => {
+            setTimeout(verificarArquivos, 2000);
+        });
+    </script>
+</body>
+</html>
