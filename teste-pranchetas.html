@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste das Pranchetas - Kelly Magalhães</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .teste-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .imagem-teste {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        .imagem-teste img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .sucesso { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .erro { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #666; }
+        .url-teste {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="teste-container">
+        <h1>🧪 Teste das Imagens das Pranchetas</h1>
+        
+        <div class="status info">
+            <strong>Status:</strong> Verificando se as imagens das pranchetas carregam corretamente
+        </div>
+
+        <h2>📋 Informações do Teste</h2>
+        <ul>
+            <li><strong>Arquivos testados:</strong> prancheta-1.png, prancheta-2.png, prancheta-3.png</li>
+            <li><strong>Tamanhos esperados:</strong> 4-6MB cada</li>
+            <li><strong>URL do site:</strong> https://kellymagalhaesilustra-max.github.io/kellySite/</li>
+        </ul>
+
+        <h2>🖼️ Teste das Imagens</h2>
+        
+        <div class="imagem-teste">
+            <h3>Prancheta 1</h3>
+            <div class="url-teste">images/prancheta-1.png</div>
+            <img src="images/prancheta-1.png" alt="Prancheta 1" onload="this.parentElement.innerHTML += '<div class=\'status sucesso\'>✅ Carregou com sucesso!</div>'" onerror="this.parentElement.innerHTML += '<div class=\'status erro\'>❌ Erro ao carregar</div>'">
+        </div>
+
+        <div class="imagem-teste">
+            <h3>Prancheta 2</h3>
+            <div class="url-teste">images/prancheta-2.png</div>
+            <img src="images/prancheta-2.png" alt="Prancheta 2" onload="this.parentElement.innerHTML += '<div class=\'status sucesso\'>✅ Carregou com sucesso!</div>'" onerror="this.parentElement.innerHTML += '<div class=\'status erro\'>❌ Erro ao carregar</div>'">
+        </div>
+
+        <div class="imagem-teste">
+            <h3>Prancheta 3</h3>
+            <div class="url-teste">images/prancheta-3.png</div>
+            <img src="images/prancheta-3.png" alt="Prancheta 3" onload="this.parentElement.innerHTML += '<div class=\'status sucesso\'>✅ Carregou com sucesso!</div>'" onerror="this.parentElement.innerHTML += '<div class=\'status erro\'>❌ Erro ao carregar</div>'">
+        </div>
+
+        <h2>🔗 Links para Verificação</h2>
+        <div class="url-teste">
+            <strong>Site principal:</strong> <a href="https://kellymagalhaesilustra-max.github.io/kellySite/" target="_blank">https://kellymagalhaesilustra-max.github.io/kellySite/</a>
+        </div>
+        <div class="url-teste">
+            <strong>Página de diagramação:</strong> <a href="https://kellymagalhaesilustra-max.github.io/kellySite/diagramacao.html" target="_blank">https://kellymagalhaesilustra-max.github.io/kellySite/diagramacao.html</a>
+        </div>
+
+        <h2>📝 Instruções</h2>
+        <div class="status info">
+            <strong>Se as imagens não carregarem:</strong>
+            <ol>
+                <li>Aguarde 5-10 minutos para o GitHub Pages processar</li>
+                <li>Verifique se os arquivos estão no repositório GitHub</li>
+                <li>Confirme se os nomes estão corretos (minúsculas, sem espaços)</li>
+                <li>Teste acessando diretamente: https://kellymagalhaesilustra-max.github.io/kellySite/images/prancheta-1.png</li>
+            </ol>
+        </div>
+
+        <script>
+            // Verificação automática após 3 segundos
+            setTimeout(() => {
+                const imagens = document.querySelectorAll('img');
+                let carregadas = 0;
+                let total = imagens.length;
+                
+                imagens.forEach(img => {
+                    if (img.complete && img.naturalHeight !== 0) {
+                        carregadas++;
+                    }
+                });
+                
+                const resultado = document.createElement('div');
+                resultado.className = carregadas === total ? 'status sucesso' : 'status erro';
+                resultado.innerHTML = `<strong>Resultado:</strong> ${carregadas}/${total} imagens carregadas`;
+                document.querySelector('.teste-container').appendChild(resultado);
+            }, 3000);
+        </script>
+    </div>
+</body>
+</html>
