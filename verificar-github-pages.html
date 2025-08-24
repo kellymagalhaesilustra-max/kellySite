@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar GitHub Pages - Kelly Magalhães</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .status.ok {
+            background: rgba(76, 175, 80, 0.2);
+            border-left-color: #4CAF50;
+        }
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border-left-color: #F44336;
+        }
+        .status.warning {
+            background: rgba(255, 152, 0, 0.2);
+            border-left-color: #FF9800;
+        }
+        .fix-button {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 20px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .fix-button:hover {
+            background: #d32f2f;
+            transform: translateY(-3px);
+        }
+        .fix-button.green {
+            background: #4CAF50;
+        }
+        .fix-button.green:hover {
+            background: #45a049;
+        }
+        .test-results {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .test-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+        }
+        .test-item.success {
+            border-left: 4px solid #4CAF50;
+        }
+        .test-item.error {
+            border-left: 4px solid #F44336;
+        }
+        .steps {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border-left: 5px solid #f44336;
+        }
+        .step-number {
+            background: #f44336;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 VERIFICAR GITHUB PAGES - Kelly Magalhães</h1>
+        
+        <div class="status error">
+            <h3>🚨 PROBLEMA IDENTIFICADO:</h3>
+            <p><strong>GitHub Pages NÃO está ativo!</strong></p>
+            <p>Por isso as imagens continuam quebradas.</p>
+        </div>
+
+        <div class="status ok">
+            <h3>⚡ SOLUÇÃO IMEDIATA:</h3>
+            <a href="https://github.com/kellymagalhaesilustra-max/kellySite/settings/pages" target="_blank" class="fix-button">
+                🔧 ATIVAR GITHUB PAGES AGORA
+            </a>
+            <button class="fix-button green" onclick="verificarStatus()">
+                🔍 VERIFICAR STATUS ATUAL
+            </button>
+        </div>
+
+        <div class="steps">
+            <h3>📋 PASSOS PARA ATIVAR GITHUB PAGES:</h3>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Clique no botão vermelho acima</strong> - Abrirá as configurações do GitHub
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Na seção "Pages" (à esquerda):</strong>
+                <ul>
+                    <li>Em "Source", selecione: <strong>"Deploy from a branch"</strong></li>
+                    <li>Em "Branch", selecione: <strong>"main"</strong></li>
+                    <li>Em "Folder", deixe: <strong>"/ (root)"</strong></li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Clique em "Save"</strong> - O GitHub começará o deploy
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Aguarde 5-10 minutos</strong> - O deploy pode demorar um pouco
+            </div>
+            
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Teste o site:</strong> 
+                <a href="https://kellymagalhaesilustra-max.github.io/kellySite" target="_blank" style="color: #4CAF50; font-weight: bold;">
+                    https://kellymagalhaesilustra-max.github.io/kellySite
+                </a>
+            </div>
+        </div>
+
+        <div id="test-results" class="test-results">
+            <h3>📊 RESULTADOS DOS TESTES:</h3>
+            <div id="results-content">
+                <p>Clique em "VERIFICAR STATUS ATUAL" para testar</p>
+            </div>
+        </div>
+
+        <div class="status warning">
+            <h3>🔍 TESTES AUTOMÁTICOS:</h3>
+            <p>Esta ferramenta vai testar:</p>
+            <ul>
+                <li>✅ Se o GitHub Pages está ativo</li>
+                <li>✅ Se o site principal carrega</li>
+                <li>✅ Se as imagens estão acessíveis</li>
+                <li>✅ Se o CSS está funcionando</li>
+            </ul>
+        </div>
+
+        <div class="status ok">
+            <h3>📞 LINKS IMPORTANTES:</h3>
+            <p><strong>Configurar GitHub Pages:</strong> 
+                <a href="https://github.com/kellymagalhaesilustra-max/kellySite/settings/pages" target="_blank" style="color: #4CAF50;">
+                    https://github.com/kellymagalhaesilustra-max/kellySite/settings/pages
+                </a>
+            </p>
+            <p><strong>Site (quando funcionar):</strong> 
+                <a href="https://kellymagalhaesilustra-max.github.io/kellySite" target="_blank" style="color: #4CAF50;">
+                    https://kellymagalhaesilustra-max.github.io/kellySite
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function verificarStatus() {
+            const resultsDiv = document.getElementById('results-content');
+            resultsDiv.innerHTML = '<p>⏳ Testando...</p>';
+            
+            const tests = [
+                { name: 'GitHub Pages', url: 'https://kellymagalhaesilustra-max.github.io/kellySite' },
+                { name: 'Site Principal', url: 'https://kellymagalhaesilustra-max.github.io/kellySite/index.html' },
+                { name: 'CSS', url: 'https://kellymagalhaesilustra-max.github.io/kellySite/css/style.css' },
+                { name: 'Imagem 1', url: 'https://kellymagalhaesilustra-max.github.io/kellySite/images/prancheta-1.png' },
+                { name: 'Imagem 2', url: 'https://kellymagalhaesilustra-max.github.io/kellySite/images/prancheta-2.png' },
+                { name: 'Logo', url: 'https://kellymagalhaesilustra-max.github.io/kellySite/images/logo-km-ilustra1.png' }
+            ];
+            
+            let results = [];
+            let completed = 0;
+            
+            tests.forEach(test => {
+                testUrl(test).then(result => {
+                    results.push(result);
+                    completed++;
+                    
+                    if (completed === tests.length) {
+                        mostrarResultados(results);
+                    }
+                });
+            });
+        }
+        
+        function testUrl(test) {
+            return new Promise((resolve) => {
+                fetch(test.url, { method: 'HEAD' })
+                    .then(response => {
+                        resolve({
+                            name: test.name,
+                            status: response.ok ? 'success' : 'error',
+                            message: response.ok ? '✅ Funcionando' : '❌ Não encontrado'
+                        });
+                    })
+                    .catch(error => {
+                        resolve({
+                            name: test.name,
+                            status: 'error',
+                            message: '❌ Erro de conexão'
+                        });
+                    });
+            });
+        }
+        
+        function mostrarResultados(results) {
+            const resultsDiv = document.getElementById('results-content');
+            let html = '';
+            
+            results.forEach(result => {
+                html += `<div class="test-item ${result.status}">
+                    <strong>${result.name}:</strong> ${result.message}
+                </div>`;
+            });
+            
+            const successCount = results.filter(r => r.status === 'success').length;
+            const totalCount = results.length;
+            
+            html += `<div class="status ${successCount === totalCount ? 'ok' : 'error'}">
+                <h4>Resumo: ${successCount}/${totalCount} testes passaram</h4>
+                <p>${successCount === totalCount ? '✅ GitHub Pages está funcionando!' : '❌ GitHub Pages precisa ser configurado!'}</p>
+            </div>`;
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        // Verificar automaticamente ao carregar
+        window.addEventListener('load', () => {
+            setTimeout(verificarStatus, 2000);
+        });
+    </script>
+</body>
+</html>
