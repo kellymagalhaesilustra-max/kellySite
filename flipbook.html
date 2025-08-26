@@ -711,29 +711,29 @@
       if (btnLast) btnLast.disabled = currentPage >= totalPages;
     }
 
-         // Função para abrir PDFs grandes no Google Docs Viewer
-     function openInGoogleDocs(googleDriveUrl, buttonElement) {
-       // Atualizar seleção
-       document.querySelectorAll('.cover-thumbnail').forEach(el => el.classList.remove('active'));
-       if (buttonElement) buttonElement.classList.add('active');
-       
-       // Converter URL do Google Drive para Google Docs Viewer
-       const fileId = googleDriveUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
-       if (fileId) {
-         const viewerUrl = `https://docs.google.com/viewer?url=https://drive.google.com/uc?export=download&id=${fileId[1]}&embedded=true`;
-         
-         const flipbook = document.querySelector('.simple-flipbook');
-         if (flipbook) {
-           flipbook.innerHTML = `
-             <iframe 
-               src="${viewerUrl}" 
-               style="width: 100%; height: 100%; border: none; border-radius: 12px;"
-               allowfullscreen>
-             </iframe>
-           `;
-         }
-       }
-     }
+                   // Função para abrir PDFs no Google Drive
+      function openInGoogleDocs(googleDriveUrl, buttonElement) {
+        // Atualizar seleção
+        document.querySelectorAll('.cover-thumbnail').forEach(el => el.classList.remove('active'));
+        if (buttonElement) buttonElement.classList.add('active');
+        
+        // Converter URL do Google Drive para visualização direta
+        const fileId = googleDriveUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+        if (fileId) {
+          const directUrl = `https://drive.google.com/file/d/${fileId[1]}/preview`;
+          
+          const flipbook = document.querySelector('.simple-flipbook');
+          if (flipbook) {
+            flipbook.innerHTML = `
+              <iframe 
+                src="${directUrl}" 
+                style="width: 100%; height: 100%; border: none; border-radius: 12px;"
+                allowfullscreen>
+              </iframe>
+            `;
+          }
+        }
+      }
 
      // Inicialização
      window.addEventListener('load', function() {
