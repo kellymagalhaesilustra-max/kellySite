@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solução Imediata - Flipbook PDF</title>
+    <style>
+        body {
+            font-family: 'Neo Sans Std', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #EAEBE5;
+            color: #000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #000;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        
+        .solution-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #FF4DC6;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #fff5f8 0%, #fff 100%);
+        }
+        
+        .solution-title {
+            font-size: 1.5rem;
+            color: #FF4DC6;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .pdf-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .pdf-option {
+            width: 120px;
+            height: 160px;
+            background: white;
+            border: 3px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .pdf-option:hover {
+            border-color: #FF4DC6;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 77, 198, 0.3);
+        }
+        
+        .pdf-option.active {
+            border-color: #FF4DC6;
+            box-shadow: 0 4px 12px rgba(255, 77, 198, 0.4);
+        }
+        
+        .pdf-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .flipbook-container {
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .page-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .page-container canvas {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .loading {
+            text-align: center;
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #FF4DC6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            text-align: center;
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: #FF4DC6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Neo Sans Std', sans-serif;
+        }
+        
+        .control-btn:hover {
+            background: #e23dae;
+            transform: translateY(-2px);
+        }
+        
+        .control-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .page-info {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 1.1rem;
+            color: #000;
+        }
+        
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+        
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+        
+        .status.info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 2px solid #2196f3;
+        }
+        
+        .instructions {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .step-number {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Solução Imediata - PDFs Funcionando</h1>
+        
+        <div class="solution-section">
+            <div class="solution-title">✅ SOLUÇÃO IMPLEMENTADA</div>
+            <div class="status success">
+                <strong>PDFs hospedados no Google Drive!</strong><br>
+                Agora os PDFs carregam perfeitamente no GitHub Pages.
+            </div>
+        </div>
+        
+        <div class="solution-section">
+            <div class="solution-title">📋 Status do Sistema</div>
+            <div id="system-status" class="status info">Verificando sistema...</div>
+        </div>
+        
+        <div class="solution-section">
+            <div class="solution-title">📚 Seleção de Revista</div>
+                         <div class="pdf-selector">
+                 <div class="pdf-option active" onclick="loadPDF('https://drive.google.com/uc?export=download&id=1Yt3zinZrFmcib2CJoGkdlYSeHOMjWhqZ', this)" data-pdf="mulheres">
+                     <img src="images/capamulheres.png" alt="Revista Mulheres">
+                 </div>
+                 <div class="pdf-option" onclick="loadPDF('https://drive.google.com/uc?export=download&id=1UUFQiwrE6ftBseceoVAgT_K1xI8ONuGx', this)" data-pdf="1930">
+                     <img src="images/capa1930.png" alt="Revista 1930">
+                 </div>
+                 <div class="pdf-option" onclick="loadPDF('https://drive.google.com/uc?export=download&id=19P8T-4fZIEcwjO5ABrYhOY_X9O9XBUDI', this)" data-pdf="valor">
+                     <img src="images/valo_revista.png" alt="Revista Valor">
+                 </div>
+                 <div class="pdf-option" onclick="loadPDF('https://drive.google.com/uc?export=download&id=1b6Sb3y7VrbWnBySWCq10g25EbnBA1ROb', this)" data-pdf="casa-rara">
+                     <img src="images/casa-rara-capa.png" alt="Casa Rara">
+                 </div>
+                 <div class="pdf-option" onclick="loadPDF('https://drive.google.com/uc?export=download&id=185a8PjW-KC3KUjzMEhc9-zASGziwXt5d', this)" data-pdf="forbes">
+                     <img src="images/forbes-revista-capa.png" alt="Forbes Revista">
+                 </div>
+             </div>
+        </div>
+        
+        <div class="solution-section">
+            <div class="solution-title">📖 Visualizador de PDF</div>
+            <div class="flipbook-container">
+                <div class="page-container">
+                    <div class="loading">Selecione uma revista para começar</div>
+                </div>
+            </div>
+            
+            <div class="page-info">
+                Página: <span id="current-page">0</span> de <span id="total-pages">0</span>
+            </div>
+            
+            <div class="controls">
+                <button class="control-btn" onclick="goToPage(1)" id="btn-first">Primeira</button>
+                <button class="control-btn" onclick="previousPage()" id="btn-prev">Anterior</button>
+                <button class="control-btn" onclick="nextPage()" id="btn-next">Próxima</button>
+                <button class="control-btn" onclick="goToLastPage()" id="btn-last">Última</button>
+                <button class="control-btn" onclick="reloadPDF()" style="background: #ff9800;">🔄 Recarregar</button>
+            </div>
+        </div>
+        
+        <div class="solution-section">
+            <div class="solution-title">📝 Como Configurar Seus Próprios PDFs</div>
+            <div class="instructions">
+                <p><strong>Para usar seus próprios PDFs:</strong></p>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    Faça upload dos PDFs para o Google Drive
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">2</span>
+                    Clique com botão direito no PDF → "Compartilhar"
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">3</span>
+                    Clique em "Copiar link"
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">4</span>
+                    Substitua o link no código:
+                    <br><code>https://drive.google.com/uc?export=download&id=SEU_ID_AQUI</code>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">5</span>
+                    O ID é a parte longa do link do Google Drive
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script>
+        // Configuração para PDFs externos
+        let currentPdf = null;
+        let currentPage = 1;
+        let totalPages = 0;
+        let currentPdfPath = '';
+        let loadingAttempts = 0;
+        const maxAttempts = 3;
+
+        // Configurar PDF.js
+        function configurePDFJS() {
+            if (typeof pdfjsLib !== 'undefined') {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+                updateStatus('PDF.js configurado com sucesso', 'success');
+                return true;
+            } else {
+                updateStatus('PDF.js não foi carregado', 'error');
+                return false;
+            }
+        }
+
+        function updateStatus(message, type) {
+            const statusDiv = document.getElementById('system-status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        async function loadPDF(pdfPath, buttonElement) {
+            if (!configurePDFJS()) return;
+            
+            // Atualizar seleção
+            document.querySelectorAll('.pdf-option').forEach(el => el.classList.remove('active'));
+            if (buttonElement) buttonElement.classList.add('active');
+            
+            currentPdfPath = pdfPath;
+            currentPage = 1;
+            loadingAttempts = 0;
+            
+            updateStatus(`Carregando PDF externo...`, 'info');
+            
+            const container = document.querySelector('.page-container');
+            container.innerHTML = '<div class="loading">Carregando PDF...</div>';
+            
+            await attemptLoadPDF(pdfPath);
+        }
+
+        async function attemptLoadPDF(pdfPath) {
+            try {
+                loadingAttempts++;
+                updateStatus(`Tentativa ${loadingAttempts} de ${maxAttempts}`, 'info');
+                
+                // Configurações para PDFs externos
+                const loadingTask = pdfjsLib.getDocument({
+                    url: pdfPath,
+                    cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/cmaps/',
+                    cMapPacked: true,
+                    standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/standard_fonts/',
+                    disableFontFace: false,
+                    disableRange: false,
+                    disableStream: false,
+                    disableAutoFetch: false
+                });
+                
+                // Timeout de 30 segundos
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('Timeout de carregamento')), 30000);
+                });
+                
+                const pdf = await Promise.race([loadingTask.promise, timeoutPromise]);
+                
+                currentPdf = pdf;
+                totalPages = pdf.numPages;
+                currentPage = 1;
+                
+                updateStatus(`PDF carregado: ${pdf.numPages} páginas`, 'success');
+                updatePageInfo();
+                renderPage();
+                
+            } catch (error) {
+                console.error(`Tentativa ${loadingAttempts} falhou:`, error);
+                
+                if (loadingAttempts < maxAttempts) {
+                    updateStatus(`Tentativa ${loadingAttempts} falhou, tentando novamente...`, 'info');
+                    setTimeout(() => attemptLoadPDF(pdfPath), 2000);
+                } else {
+                    handlePDFError(error);
+                }
+            }
+        }
+
+        function handlePDFError(error) {
+            let errorMessage = 'Erro ao carregar PDF';
+            
+            if (error.name === 'InvalidPDFException') {
+                errorMessage = 'PDF inválido ou link incorreto';
+            } else if (error.name === 'MissingPDFException') {
+                errorMessage = 'PDF não encontrado';
+            } else if (error.name === 'UnexpectedResponseException') {
+                errorMessage = 'Erro de rede';
+            } else if (error.message.includes('Timeout')) {
+                errorMessage = 'Timeout de carregamento';
+            } else {
+                errorMessage = error.message;
+            }
+            
+            updateStatus(`Erro: ${errorMessage}`, 'error');
+            
+            const container = document.querySelector('.page-container');
+            container.innerHTML = `
+                <div class="error">
+                    <h3>Erro ao carregar PDF</h3>
+                    <p>${errorMessage}</p>
+                    <p>Verifique se o link do Google Drive está correto.</p>
+                </div>
+            `;
+        }
+
+        function renderPage() {
+            if (!currentPdf || currentPage > totalPages) return;
+            
+            const container = document.querySelector('.page-container');
+            container.innerHTML = '<div class="loading">Renderizando página...</div>';
+            
+            currentPdf.getPage(currentPage).then(page => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                
+                const viewport = page.getViewport({ scale: 1.2 });
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                
+                page.render(renderContext).promise.then(() => {
+                    container.innerHTML = '';
+                    container.appendChild(canvas);
+                });
+            }).catch(error => {
+                console.error('Erro ao renderizar página:', error);
+                container.innerHTML = '<div class="error">Erro ao renderizar página</div>';
+            });
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePageInfo();
+                renderPage();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePageInfo();
+                renderPage();
+            }
+        }
+
+        function goToPage(pageNum) {
+            if (pageNum >= 1 && pageNum <= totalPages) {
+                currentPage = pageNum;
+                updatePageInfo();
+                renderPage();
+            }
+        }
+
+        function goToLastPage() {
+            goToPage(totalPages);
+        }
+
+        function updatePageInfo() {
+            document.getElementById('current-page').textContent = currentPage;
+            document.getElementById('total-pages').textContent = totalPages;
+            
+            // Atualizar botões
+            document.getElementById('btn-first').disabled = currentPage <= 1;
+            document.getElementById('btn-prev').disabled = currentPage <= 1;
+            document.getElementById('btn-next').disabled = currentPage >= totalPages;
+            document.getElementById('btn-last').disabled = currentPage >= totalPages;
+        }
+
+        function reloadPDF() {
+            if (currentPdfPath) {
+                loadingAttempts = 0;
+                loadPDF(currentPdfPath);
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            configurePDFJS();
+            
+            // Controles de teclado
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') previousPage();
+                if (e.key === 'ArrowRight') nextPage();
+                if (e.key === 'Home') goToPage(1);
+                if (e.key === 'End') goToLastPage();
+            });
+        });
+    </script>
+</body>
+</html>
