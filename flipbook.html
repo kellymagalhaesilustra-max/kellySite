@@ -547,47 +547,73 @@
       }
     }
 
-    // Função de carregamento de PDF - VERSÃO ORIGINAL
-    async function loadFlipbook(pdfPath, buttonElement) {
-      if (!configurePDFJS()) {
-        showError('PDF.js não foi carregado corretamente');
-        return;
-      }
-      
-      // Atualizar seleção
-      document.querySelectorAll('.cover-thumbnail').forEach(el => el.classList.remove('active'));
-      if (buttonElement) buttonElement.classList.add('active');
-      
-      currentPdfPath = pdfPath;
-      currentPage = 1;
-      
-      const flipbook = document.querySelector('.simple-flipbook');
-      if (!flipbook) {
-        console.error('Container do flipbook não encontrado');
-        return;
-      }
-      
-      flipbook.innerHTML = '<div class="loading">Carregando PDF...</div>';
-      
-      try {
-        console.log(`Carregando PDF: ${pdfPath}`);
-        
-        const loadingTask = pdfjsLib.getDocument(pdfPath);
-        const pdf = await loadingTask.promise;
-        
-        currentPdf = pdf;
-        totalPages = pdf.numPages;
-        currentPage = 1;
-        
-        console.log(`PDF carregado com sucesso: ${pdf.numPages} páginas`);
-        updatePageInfo();
-        renderPage();
-        
-      } catch (error) {
-        console.error('Erro ao carregar PDF:', error);
-        handlePDFError(error);
-      }
-    }
+         // Função de carregamento de PDF - VERSÃO OTIMIZADA PARA GITHUB PAGES
+     async function loadFlipbook(pdfPath, buttonElement) {
+       if (!configurePDFJS()) {
+         showError('PDF.js não foi carregado corretamente');
+         return;
+       }
+       
+       // Atualizar seleção
+       document.querySelectorAll('.cover-thumbnail').forEach(el => el.classList.remove('active'));
+       if (buttonElement) buttonElement.classList.add('active');
+       
+       currentPdfPath = pdfPath;
+       currentPage = 1;
+       
+       const flipbook = document.querySelector('.simple-flipbook');
+       if (!flipbook) {
+         console.error('Container do flipbook não encontrado');
+         return;
+       }
+       
+       flipbook.innerHTML = '<div class="loading">Carregando PDF...</div>';
+       
+       try {
+         console.log(`Carregando PDF: ${pdfPath}`);
+         
+         // Configuração otimizada para GitHub Pages
+         const loadingTask = pdfjsLib.getDocument({
+           url: pdfPath,
+           cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/cmaps/',
+           cMapPacked: true,
+           disableFontFace: true,
+           standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/standard_fonts/'
+         });
+         
+         const pdf = await loadingTask.promise;
+         
+         currentPdf = pdf;
+         totalPages = pdf.numPages;
+         currentPage = 1;
+         
+         console.log(`PDF carregado com sucesso: ${pdf.numPages} páginas`);
+         updatePageInfo();
+         renderPage();
+         
+       } catch (error) {
+         console.error('Erro ao carregar PDF:', error);
+         
+         // Se falhar com PDF.js, tentar com iframe como fallback
+         if (error.name === 'InvalidPDFException' || error.name === 'MissingPDFException') {
+           console.log('Tentando fallback com iframe...');
+           loadPDFWithIframe(pdfPath, flipbook);
+         } else {
+           handlePDFError(error);
+         }
+       }
+     }
+     
+     // Função de fallback para carregar PDF com iframe
+     function loadPDFWithIframe(pdfPath, flipbook) {
+       flipbook.innerHTML = `
+         <iframe 
+           src="${pdfPath}" 
+           style="width: 100%; height: 100%; border: none; border-radius: 12px;"
+           allowfullscreen>
+         </iframe>
+       `;
+     }
 
     function handlePDFError(error) {
       let errorMessage = 'Erro ao carregar PDF';
