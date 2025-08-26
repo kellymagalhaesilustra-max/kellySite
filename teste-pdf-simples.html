@@ -1,199 +1,286 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teste PDF Simples</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background: #f5f5f5;
-    }
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .test-section {
-      margin: 20px 0;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
-    .error {
-      color: #d32f2f;
-      background: #ffebee;
-      padding: 10px;
-      border-radius: 4px;
-      margin: 10px 0;
-    }
-    .success {
-      color: #2e7d32;
-      background: #e8f5e8;
-      padding: 10px;
-      border-radius: 4px;
-      margin: 10px 0;
-    }
-    button {
-      background: #2196f3;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin: 5px;
-    }
-    button:hover {
-      background: #1976d2;
-    }
-    canvas {
-      border: 1px solid #ddd;
-      margin: 10px 0;
-      max-width: 100%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste PDF Simples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #c62828;
+        }
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #2e7d32;
+        }
+        .info {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #1565c0;
+        }
+        button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1976d2;
+        }
+        .pdf-viewer {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+        .log {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Teste de Carregamento de PDF</h1>
+    <h1>🔍 Teste de Diagnóstico de PDF</h1>
     
-    <div class="test-section">
-      <h3>1. Verificação do PDF.js</h3>
-      <div id="pdfjs-status">Verificando...</div>
-      <button onclick="checkPDFJS()">Verificar PDF.js</button>
+    <div class="test-container">
+        <h2>1. Verificação de Arquivos</h2>
+        <div id="file-check"></div>
+        <button onclick="checkFiles()">Verificar Arquivos PDF</button>
     </div>
-    
-    <div class="test-section">
-      <h3>2. Teste de Fetch dos PDFs</h3>
-      <div id="fetch-results"></div>
-      <button onclick="testFetch()">Testar Fetch dos PDFs</button>
-    </div>
-    
-    <div class="test-section">
-      <h3>3. Teste de Carregamento de PDF</h3>
-      <div id="pdf-results"></div>
-      <button onclick="testPDFLoad()">Carregar PDF Teste</button>
-      <canvas id="pdf-canvas" style="display: none;"></canvas>
-    </div>
-    
-    <div class="test-section">
-      <h3>4. Informações do Sistema</h3>
-      <div id="system-info"></div>
-    </div>
-  </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-  <script>
-    // Configurar PDF.js
-    if (typeof pdfjsLib !== 'undefined') {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-    }
+    <div class="test-container">
+        <h2>2. Teste de Carregamento PDF.js</h2>
+        <div id="pdfjs-check"></div>
+        <button onclick="checkPDFJS()">Testar PDF.js</button>
+    </div>
 
-    function checkPDFJS() {
-      const statusDiv = document.getElementById('pdfjs-status');
-      
-      if (typeof pdfjsLib !== 'undefined') {
-        statusDiv.innerHTML = '<div class="success">✅ PDF.js carregado com sucesso!</div>';
-        statusDiv.innerHTML += '<p>Versão: ' + pdfjsLib.version + '</p>';
-        statusDiv.innerHTML += '<p>Worker: ' + pdfjsLib.GlobalWorkerOptions.workerSrc + '</p>';
-      } else {
-        statusDiv.innerHTML = '<div class="error">❌ PDF.js não foi carregado</div>';
-      }
-    }
+    <div class="test-container">
+        <h2>3. Teste de Carregamento de PDF</h2>
+        <div id="pdf-load-test"></div>
+        <button onclick="testPDFLoad('pdfs/mulheres.pdf')">Testar mulheres.pdf</button>
+        <button onclick="testPDFLoad('pdfs/1930_altagrafica.pdf')">Testar 1930_altagrafica.pdf</button>
+        <button onclick="testPDFLoad('pdfs/Revista Valor Busines.pdf')">Testar Revista Valor</button>
+    </div>
 
-    function testFetch() {
-      const resultsDiv = document.getElementById('fetch-results');
-      resultsDiv.innerHTML = '<p>Testando fetch dos PDFs...</p>';
-      
-      const pdfs = [
-        'pdfs/mulheres.pdf',
-        'pdfs/Revista Valor Busines.pdf',
-        'pdfs/1930_altagrafica.pdf',
-        'pdfs/Revista Casa Rara_compressed.pdf',
-        'pdfs/Magazine_Forbes_July2025.pdf'
-      ];
-      
-      let results = '';
-      
-      pdfs.forEach(pdf => {
-        fetch(pdf, { method: 'HEAD' })
-          .then(response => {
-            if (response.ok) {
-              results += `<div class="success">✅ ${pdf} - OK (${response.headers.get('content-length')} bytes)</div>`;
-            } else {
-              results += `<div class="error">❌ ${pdf} - Erro ${response.status}</div>`;
+    <div class="test-container">
+        <h2>4. Visualizador de PDF</h2>
+        <div id="pdf-viewer" class="pdf-viewer"></div>
+        <button onclick="loadPDFViewer('pdfs/mulheres.pdf')">Carregar mulheres.pdf</button>
+        <button onclick="loadPDFViewer('pdfs/1930_altagrafica.pdf')">Carregar 1930_altagrafica.pdf</button>
+    </div>
+
+    <div class="test-container">
+        <h2>5. Log de Eventos</h2>
+        <div id="log" class="log"></div>
+        <button onclick="clearLog()">Limpar Log</button>
+    </div>
+
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script>
+        // Configurar PDF.js
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+            log('PDF.js configurado com sucesso');
+        } else {
+            log('ERRO: PDF.js não foi carregado', 'error');
+        }
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
+            logDiv.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        async function checkFiles() {
+            const files = [
+                'pdfs/mulheres.pdf',
+                'pdfs/1930_altagrafica.pdf',
+                'pdfs/Revista Valor Busines.pdf',
+                'pdfs/Revista Casa Rara_compressed.pdf',
+                'pdfs/Magazine_Forbes_July2025.pdf'
+            ];
+
+            const checkDiv = document.getElementById('file-check');
+            checkDiv.innerHTML = '<div class="info">Verificando arquivos...</div>';
+
+            for (const file of files) {
+                try {
+                    const response = await fetch(file, { method: 'HEAD' });
+                    if (response.ok) {
+                        const size = response.headers.get('content-length');
+                        const sizeMB = (size / (1024 * 1024)).toFixed(1);
+                        log(`✅ ${file} - ${sizeMB}MB`, 'success');
+                        checkDiv.innerHTML += `<div class="success">✅ ${file} - ${sizeMB}MB</div>`;
+                    } else {
+                        log(`❌ ${file} - HTTP ${response.status}`, 'error');
+                        checkDiv.innerHTML += `<div class="error">❌ ${file} - HTTP ${response.status}</div>`;
+                    }
+                } catch (error) {
+                    log(`❌ ${file} - ${error.message}`, 'error');
+                    checkDiv.innerHTML += `<div class="error">❌ ${file} - ${error.message}</div>`;
+                }
             }
-            resultsDiv.innerHTML = results;
-          })
-          .catch(error => {
-            results += `<div class="error">❌ ${pdf} - ${error.message}</div>`;
-            resultsDiv.innerHTML = results;
-          });
-      });
-    }
+        }
 
-    function testPDFLoad() {
-      const resultsDiv = document.getElementById('pdf-results');
-      const canvas = document.getElementById('pdf-canvas');
-      
-      resultsDiv.innerHTML = '<p>Carregando PDF de teste...</p>';
-      canvas.style.display = 'none';
-      
-      // Testar com o menor PDF
-      const testPDF = 'pdfs/1930_altagrafica.pdf';
-      
-      pdfjsLib.getDocument(testPDF).promise
-        .then(pdf => {
-          resultsDiv.innerHTML = '<div class="success">✅ PDF carregado com sucesso!</div>';
-          resultsDiv.innerHTML += '<p>Páginas: ' + pdf.numPages + '</p>';
-          
-          // Renderizar primeira página
-          return pdf.getPage(1);
-        })
-        .then(page => {
-          const viewport = page.getViewport({ scale: 0.5 });
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-          
-          const context = canvas.getContext('2d');
-          const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-          };
-          
-          return page.render(renderContext).promise;
-        })
-        .then(() => {
-          canvas.style.display = 'block';
-          resultsDiv.innerHTML += '<div class="success">✅ Primeira página renderizada!</div>';
-        })
-        .catch(error => {
-          resultsDiv.innerHTML = '<div class="error">❌ Erro ao carregar PDF: ' + error.message + '</div>';
-          console.error('Erro detalhado:', error);
+        function checkPDFJS() {
+            const checkDiv = document.getElementById('pdfjs-check');
+            
+            if (typeof pdfjsLib !== 'undefined') {
+                log('PDF.js está disponível', 'success');
+                checkDiv.innerHTML = '<div class="success">✅ PDF.js carregado com sucesso</div>';
+                
+                // Testar versão
+                const version = pdfjsLib.version;
+                log(`Versão do PDF.js: ${version}`, 'info');
+                checkDiv.innerHTML += `<div class="info">Versão: ${version}</div>`;
+                
+                // Testar worker
+                if (pdfjsLib.GlobalWorkerOptions.workerSrc) {
+                    log('Worker configurado', 'success');
+                    checkDiv.innerHTML += '<div class="success">✅ Worker configurado</div>';
+                } else {
+                    log('Worker não configurado', 'error');
+                    checkDiv.innerHTML += '<div class="error">❌ Worker não configurado</div>';
+                }
+            } else {
+                log('PDF.js não está disponível', 'error');
+                checkDiv.innerHTML = '<div class="error">❌ PDF.js não está disponível</div>';
+            }
+        }
+
+        async function testPDFLoad(pdfPath) {
+            const testDiv = document.getElementById('pdf-load-test');
+            testDiv.innerHTML = '<div class="info">Testando carregamento...</div>';
+            
+            log(`Iniciando teste de carregamento: ${pdfPath}`, 'info');
+
+            try {
+                // Primeiro verificar se o arquivo existe
+                const headResponse = await fetch(pdfPath, { method: 'HEAD' });
+                if (!headResponse.ok) {
+                    throw new Error(`HTTP ${headResponse.status}: ${headResponse.statusText}`);
+                }
+
+                log(`Arquivo encontrado, tentando carregar com PDF.js...`, 'info');
+
+                // Tentar carregar com PDF.js
+                const loadingTask = pdfjsLib.getDocument({
+                    url: pdfPath,
+                    cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/cmaps/',
+                    cMapPacked: true,
+                    standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/standard_fonts/'
+                });
+
+                const pdf = await loadingTask.promise;
+                log(`✅ PDF carregado com sucesso: ${pdf.numPages} páginas`, 'success');
+                testDiv.innerHTML = `<div class="success">✅ PDF carregado com sucesso: ${pdf.numPages} páginas</div>`;
+
+            } catch (error) {
+                log(`❌ Erro ao carregar PDF: ${error.message}`, 'error');
+                testDiv.innerHTML = `<div class="error">❌ Erro: ${error.message}</div>`;
+                
+                // Detalhes do erro
+                if (error.name === 'InvalidPDFException') {
+                    log('PDF inválido ou corrompido', 'error');
+                } else if (error.name === 'MissingPDFException') {
+                    log('PDF não encontrado', 'error');
+                } else if (error.name === 'UnexpectedResponseException') {
+                    log('Erro de rede', 'error');
+                }
+            }
+        }
+
+        async function loadPDFViewer(pdfPath) {
+            const viewerDiv = document.getElementById('pdf-viewer');
+            viewerDiv.innerHTML = '<div class="info">Carregando PDF...</div>';
+
+            try {
+                const loadingTask = pdfjsLib.getDocument({
+                    url: pdfPath,
+                    cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/cmaps/',
+                    cMapPacked: true,
+                    standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/standard_fonts/'
+                });
+
+                const pdf = await loadingTask.promise;
+                log(`Carregando primeira página de ${pdf.numPages} páginas`, 'info');
+
+                // Renderizar primeira página
+                const page = await pdf.getPage(1);
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                
+                const viewport = page.getViewport({ scale: 1.0 });
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                await page.render(renderContext).promise;
+                
+                viewerDiv.innerHTML = '';
+                viewerDiv.appendChild(canvas);
+                
+                log('Primeira página renderizada com sucesso', 'success');
+
+            } catch (error) {
+                log(`Erro no visualizador: ${error.message}`, 'error');
+                viewerDiv.innerHTML = `<div class="error">Erro: ${error.message}</div>`;
+            }
+        }
+
+        // Auto-executar verificações básicas
+        document.addEventListener('DOMContentLoaded', () => {
+            log('Página carregada, iniciando diagnósticos...', 'info');
+            setTimeout(() => {
+                checkPDFJS();
+            }, 1000);
         });
-    }
-
-    function showSystemInfo() {
-      const infoDiv = document.getElementById('system-info');
-      infoDiv.innerHTML = `
-        <p><strong>User Agent:</strong> ${navigator.userAgent}</p>
-        <p><strong>URL Atual:</strong> ${window.location.href}</p>
-        <p><strong>Protocolo:</strong> ${window.location.protocol}</p>
-        <p><strong>Host:</strong> ${window.location.host}</p>
-        <p><strong>Pathname:</strong> ${window.location.pathname}</p>
-        <p><strong>Online:</strong> ${navigator.onLine ? 'Sim' : 'Não'}</p>
-      `;
-    }
-
-    // Executar verificações automáticas
-    window.addEventListener('load', function() {
-      checkPDFJS();
-      showSystemInfo();
-    });
-  </script>
+    </script>
 </body>
 </html>

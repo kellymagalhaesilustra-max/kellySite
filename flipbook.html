@@ -542,20 +542,262 @@
    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
    
    <script>
-     // Configuração do PDF.js antes de carregar o main.js
-     if (typeof pdfjsLib !== 'undefined') {
-       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-       console.log('PDF.js configurado com sucesso');
-     } else {
-       console.error('PDF.js não foi carregado');
-     }
-     
-     // Aguardar o carregamento completo do PDF.js
-     window.addEventListener('load', function() {
+     // Configuração robusta do PDF.js
+     let currentPdf = null;
+     let currentPage = 1;
+     let totalPages = 0;
+     let currentPdfPath = '';
+     let loadingAttempts = 0;
+     const maxAttempts = 3;
+
+     // Configurar PDF.js com fallbacks
+     function configurePDFJS() {
        if (typeof pdfjsLib !== 'undefined') {
-         console.log('PDF.js carregado e pronto para uso');
+         // Tentar diferentes workers
+         const workers = [
+           'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js',
+           'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.worker.min.js',
+           'https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'
+         ];
+         
+         pdfjsLib.GlobalWorkerOptions.workerSrc = workers[0];
+         console.log('PDF.js configurado com sucesso');
+         return true;
        } else {
-         console.error('PDF.js não foi carregado corretamente');
+         console.error('PDF.js não foi carregado');
+         return false;
+       }
+     }
+
+     // Função robusta de carregamento de PDF
+     async function loadFlipbook(pdfPath, buttonElement) {
+       if (!configurePDFJS()) {
+         showError('PDF.js não foi carregado corretamente');
+         return;
+       }
+       
+       // Atualizar seleção
+       document.querySelectorAll('.cover-thumbnail').forEach(el => el.classList.remove('active'));
+       if (buttonElement) buttonElement.classList.add('active');
+       
+       currentPdfPath = pdfPath;
+       currentPage = 1;
+       loadingAttempts = 0;
+       
+       const flipbook = document.querySelector('.simple-flipbook');
+       if (!flipbook) {
+         console.error('Container do flipbook não encontrado');
+         return;
+       }
+       
+       flipbook.innerHTML = '<div class="loading">Carregando PDF...</div>';
+       
+       await attemptLoadPDF(pdfPath);
+     }
+
+     async function attemptLoadPDF(pdfPath) {
+       try {
+         loadingAttempts++;
+         console.log(`Tentativa ${loadingAttempts} de ${maxAttempts} para carregar: ${pdfPath}`);
+         
+         // Verificar se arquivo existe
+         const headResponse = await fetch(pdfPath, { method: 'HEAD' });
+         if (!headResponse.ok) {
+           throw new Error(`Arquivo não encontrado: HTTP ${headResponse.status}`);
+         }
+         
+         // Configurações de carregamento otimizadas
+         const loadingTask = pdfjsLib.getDocument({
+           url: pdfPath,
+           cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/cmaps/',
+           cMapPacked: true,
+           standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/standard_fonts/',
+           disableFontFace: false,
+           disableRange: false,
+           disableStream: false,
+           disableAutoFetch: false
+         });
+         
+         // Timeout de 30 segundos
+         const timeoutPromise = new Promise((_, reject) => {
+           setTimeout(() => reject(new Error('Timeout de carregamento')), 30000);
+         });
+         
+         const pdf = await Promise.race([loadingTask.promise, timeoutPromise]);
+         
+         currentPdf = pdf;
+         totalPages = pdf.numPages;
+         currentPage = 1;
+         
+         console.log(`PDF carregado com sucesso: ${pdf.numPages} páginas`);
+         updatePageInfo();
+         renderPage();
+         
+       } catch (error) {
+         console.error(`Tentativa ${loadingAttempts} falhou:`, error);
+         
+         if (loadingAttempts < maxAttempts) {
+           console.log(`Tentativa ${loadingAttempts} falhou, tentando novamente em 2 segundos...`);
+           setTimeout(() => attemptLoadPDF(pdfPath), 2000);
+         } else {
+           handlePDFError(error);
+         }
+       }
+     }
+
+     function handlePDFError(error) {
+       let errorMessage = 'Erro ao carregar PDF';
+       
+       if (error.name === 'InvalidPDFException') {
+         errorMessage = 'PDF inválido ou corrompido';
+       } else if (error.name === 'MissingPDFException') {
+         errorMessage = 'PDF não encontrado';
+       } else if (error.name === 'UnexpectedResponseException') {
+         errorMessage = 'Erro de rede ao carregar PDF';
+       } else if (error.message.includes('Timeout')) {
+         errorMessage = 'Timeout de carregamento';
+       } else {
+         errorMessage = error.message;
+       }
+       
+       showError(errorMessage);
+     }
+
+     function showError(message) {
+       const flipbook = document.querySelector('.simple-flipbook');
+       if (flipbook) {
+         flipbook.innerHTML = `
+           <div class="error">
+             <h3>Erro ao carregar PDF</h3>
+             <p>${message}</p>
+             <p>Tente recarregar ou selecionar outro PDF.</p>
+           </div>
+         `;
+       }
+     }
+
+     function renderPage() {
+       const flipbook = document.querySelector('.simple-flipbook');
+       flipbook.innerHTML = '';
+
+       const pageContainer = document.createElement('div');
+       pageContainer.className = 'page-container';
+       
+       if (currentPage <= totalPages) {
+         renderSinglePage(currentPage, pageContainer);
+       } else {
+         pageContainer.innerHTML = '<div class="empty-page">Página não disponível</div>';
+       }
+       flipbook.appendChild(pageContainer);
+     }
+
+     function renderSinglePage(pageNum, container) {
+       currentPdf.getPage(pageNum).then(page => {
+         const canvas = document.createElement('canvas');
+         const context = canvas.getContext('2d');
+         
+         const viewport = page.getViewport({ scale: 1.5 });
+         canvas.width = viewport.width;
+         canvas.height = viewport.height;
+
+         const renderContext = {
+           canvasContext: context,
+           viewport: viewport
+         };
+
+         page.render(renderContext).promise.then(() => {
+           container.appendChild(canvas);
+           
+           // Adicionar elementos de sombra e borda
+           const shadowElement = document.createElement('div');
+           shadowElement.className = 'page-shadow';
+           container.appendChild(shadowElement);
+
+           const borderElement = document.createElement('div');
+           borderElement.className = 'page-border';
+           container.appendChild(borderElement);
+         });
+       });
+     }
+
+     function nextPage() {
+       if (currentPage < totalPages) {
+         currentPage++;
+         updatePageInfo();
+         renderPage();
+       }
+     }
+
+     function previousPage() {
+       if (currentPage > 1) {
+         currentPage--;
+         updatePageInfo();
+         renderPage();
+       }
+     }
+
+     function goToPage(pageNum) {
+       if (pageNum >= 1 && pageNum <= totalPages) {
+         currentPage = pageNum;
+         updatePageInfo();
+         renderPage();
+       }
+     }
+
+     function goToLastPage() {
+       goToPage(totalPages);
+     }
+
+     function updatePageInfo() {
+       const currentPageElement = document.getElementById('current-page');
+       const totalPagesElement = document.getElementById('total-pages');
+       
+       if (currentPageElement) currentPageElement.textContent = currentPage;
+       if (totalPagesElement) totalPagesElement.textContent = totalPages;
+       
+       // Atualizar estado dos botões
+       const btnFirst = document.getElementById('btn-first');
+       const btnPrev = document.getElementById('btn-prev');
+       const btnNext = document.getElementById('btn-next');
+       const btnLast = document.getElementById('btn-last');
+       
+       if (btnFirst) btnFirst.disabled = currentPage <= 1;
+       if (btnPrev) btnPrev.disabled = currentPage <= 1;
+       if (btnNext) btnNext.disabled = currentPage >= totalPages;
+       if (btnLast) btnLast.disabled = currentPage >= totalPages;
+     }
+
+     function testPDF() {
+       console.log('Testando carregamento de PDF...');
+       console.log('PDF.js disponível:', typeof pdfjsLib !== 'undefined');
+       console.log('PDF.js worker configurado:', pdfjsLib?.GlobalWorkerOptions?.workerSrc);
+       
+       const testPath = 'pdfs/mulheres.pdf';
+       console.log('Testando carregamento de:', testPath);
+       
+       const flipbook = document.querySelector('.simple-flipbook');
+       if (flipbook) {
+         flipbook.innerHTML = '<div class="loading">Testando carregamento...</div>';
+       }
+       
+       loadFlipbook(testPath);
+     }
+
+     // Inicialização
+     window.addEventListener('load', function() {
+       configurePDFJS();
+       
+       const flipbookContainer = document.querySelector('.simple-flipbook');
+       if (flipbookContainer) {
+         flipbookContainer.innerHTML = '<div class="loading">Selecione uma revista para começar</div>';
+         
+         // Controles de teclado
+         document.addEventListener('keydown', (e) => {
+           if (e.key === 'ArrowLeft') previousPage();
+           if (e.key === 'ArrowRight') nextPage();
+           if (e.key === 'Home') goToPage(1);
+           if (e.key === 'End') goToLastPage();
+         });
        }
      });
    </script>

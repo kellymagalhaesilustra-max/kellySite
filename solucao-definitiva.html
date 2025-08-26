@@ -3,350 +3,555 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solução Definitiva - Kelly Magalhães</title>
+    <title>Solução Definitiva - Flipbook PDF</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-height: 100vh;
+            font-family: 'Neo Sans Std', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #EAEBE5;
+            color: #000;
         }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
+            background: white;
             border-radius: 15px;
-            backdrop-filter: blur(10px);
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
-        .status {
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border-left: 4px solid;
+        
+        h1 {
+            text-align: center;
+            color: #000;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            font-weight: bold;
         }
-        .status.ok {
-            background: rgba(76, 175, 80, 0.2);
-            border-left-color: #4CAF50;
+        
+        .solution-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #FF4DC6;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #fff5f8 0%, #fff 100%);
         }
-        .status.error {
-            background: rgba(244, 67, 54, 0.2);
-            border-left-color: #F44336;
+        
+        .solution-title {
+            font-size: 1.5rem;
+            color: #FF4DC6;
+            margin-bottom: 15px;
+            font-weight: bold;
         }
-        .status.warning {
-            background: rgba(255, 152, 0, 0.2);
-            border-left-color: #FF9800;
+        
+        .pdf-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 30px 0;
         }
-        .fix-button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 25px;
+        
+        .pdf-option {
+            width: 120px;
+            height: 160px;
+            background: white;
+            border: 3px solid #ddd;
             border-radius: 8px;
             cursor: pointer;
-            margin: 10px;
-            font-size: 16px;
-            font-weight: bold;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        .fix-button:hover {
-            background: #45a049;
-            transform: translateY(-2px);
+        
+        .pdf-option:hover {
+            border-color: #FF4DC6;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 77, 198, 0.3);
         }
-        .fix-button.urgent {
-            background: #f44336;
+        
+        .pdf-option.active {
+            border-color: #FF4DC6;
+            box-shadow: 0 4px 12px rgba(255, 77, 198, 0.4);
         }
-        .fix-button.urgent:hover {
-            background: #d32f2f;
-        }
-        .projeto-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .projeto-card {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.2);
-            text-align: center;
-        }
-        .projeto-imagem {
+        
+        .pdf-option img {
             width: 100%;
-            max-width: 200px;
-            height: 150px;
+            height: 100%;
             object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid rgba(255,255,255,0.3);
-            margin-bottom: 10px;
         }
-        .projeto-titulo {
-            font-size: 16px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        .erro-imagem {
-            background: rgba(244, 67, 54, 0.3);
-            border: 2px dashed #F44336;
+        
+        .flipbook-container {
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #F44336;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .page-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .page-container canvas {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .loading {
+            text-align: center;
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #FF4DC6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            text-align: center;
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: #FF4DC6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Neo Sans Std', sans-serif;
+        }
+        
+        .control-btn:hover {
+            background: #e23dae;
+            transform: translateY(-2px);
+        }
+        
+        .control-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .page-info {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 1.1rem;
+            color: #000;
+        }
+        
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
             font-weight: bold;
+        }
+        
+        .status.success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+        
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+        
+        .status.info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 2px solid #2196f3;
+        }
+        
+        .fallback-options {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #FF4DC6;
+        }
+        
+        .fallback-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
             font-size: 14px;
         }
-        .steps {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        .step {
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 5px;
-            border-left: 4px solid #4CAF50;
+        
+        .fallback-btn:hover {
+            background: #218838;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔧 SOLUÇÃO DEFINITIVA - Kelly Magalhães</h1>
+        <h1>🛠️ Solução Definitiva - Flipbook PDF</h1>
         
-        <div class="status error">
-            <h3>🚨 PROBLEMA CRÍTICO:</h3>
-            <p><strong>5 de 6 imagens estão quebradas!</strong></p>
-            <p>Isso indica que o GitHub Pages não está configurado corretamente.</p>
+        <div class="solution-section">
+            <div class="solution-title">📋 Status do Sistema</div>
+            <div id="system-status" class="status info">Verificando sistema...</div>
         </div>
-
-        <div class="status ok">
-            <h3>⚡ AÇÕES URGENTES</h3>
-            <button class="fix-button urgent" onclick="configurarGitHubPages()">🔧 CONFIGURAR GITHUB PAGES AGORA</button>
-            <button class="fix-button" onclick="verificarStatus()">📊 Verificar Status Atual</button>
-            <button class="fix-button" onclick="limparCacheCompleto()">🧹 Limpar Cache Completo</button>
-            <button class="fix-button" onclick="testarNavegadorPrivado()">🌐 Testar Navegador Privado</button>
+        
+        <div class="solution-section">
+            <div class="solution-title">📚 Seleção de Revista</div>
+            <div class="pdf-selector">
+                <div class="pdf-option active" onclick="loadPDF('pdfs/mulheres.pdf', this)" data-pdf="pdfs/mulheres.pdf">
+                    <img src="images/capamulheres.png" alt="Revista Mulheres">
+                </div>
+                <div class="pdf-option" onclick="loadPDF('pdfs/Revista Valor Busines.pdf', this)" data-pdf="pdfs/Revista Valor Busines.pdf">
+                    <img src="images/valo_revista.png" alt="Revista Valor">
+                </div>
+                <div class="pdf-option" onclick="loadPDF('pdfs/1930_altagrafica.pdf', this)" data-pdf="pdfs/1930_altagrafica.pdf">
+                    <img src="images/capa1930.png" alt="Revista 1930">
+                </div>
+                <div class="pdf-option" onclick="loadPDF('pdfs/Revista Casa Rara_compressed.pdf', this)" data-pdf="pdfs/Revista Casa Rara_compressed.pdf">
+                    <img src="images/casa-rara-capa.png" alt="Casa Rara">
+                </div>
+                <div class="pdf-option" onclick="loadPDF('pdfs/Magazine_Forbes_July2025.pdf', this)" data-pdf="pdfs/Magazine_Forbes_July2025.pdf">
+                    <img src="images/forbes-revista-capa.png" alt="Forbes Revista">
+                </div>
+            </div>
         </div>
-
-        <div class="steps">
-            <h3>📋 PASSOS PARA CORRIGIR (OBRIGATÓRIOS):</h3>
+        
+        <div class="solution-section">
+            <div class="solution-title">📖 Visualizador de PDF</div>
+            <div class="flipbook-container">
+                <div class="page-container">
+                    <div class="loading">Selecione uma revista para começar</div>
+                </div>
+            </div>
             
-            <div class="step">
-                <strong>PASSO 1:</strong> Clique em "CONFIGURAR GITHUB PAGES AGORA" acima
+            <div class="page-info">
+                Página: <span id="current-page">0</span> de <span id="total-pages">0</span>
             </div>
             
-            <div class="step">
-                <strong>PASSO 2:</strong> Na página que abrir, configure:
-                <ul>
-                    <li>Source: "Deploy from a branch"</li>
-                    <li>Branch: "main"</li>
-                    <li>Folder: "/ (root)"</li>
-                    <li>Clique em "Save"</li>
-                </ul>
-            </div>
-            
-            <div class="step">
-                <strong>PASSO 3:</strong> Aguarde 5-10 minutos para o deploy
-            </div>
-            
-            <div class="step">
-                <strong>PASSO 4:</strong> Volte aqui e clique em "Verificar Status Atual"
+            <div class="controls">
+                <button class="control-btn" onclick="goToPage(1)" id="btn-first">Primeira</button>
+                <button class="control-btn" onclick="previousPage()" id="btn-prev">Anterior</button>
+                <button class="control-btn" onclick="nextPage()" id="btn-next">Próxima</button>
+                <button class="control-btn" onclick="goToLastPage()" id="btn-last">Última</button>
+                <button class="control-btn" onclick="reloadPDF()" style="background: #ff9800;">🔄 Recarregar</button>
             </div>
         </div>
-
-        <div id="resultados">
-            <div class="status warning">
-                <h3>⏳ Aguardando verificação...</h3>
-                <p>Clique em "Verificar Status Atual" para ver o progresso</p>
+        
+        <div class="solution-section">
+            <div class="solution-title">🔧 Opções de Fallback</div>
+            <div class="fallback-options">
+                <p>Se o PDF não carregar, tente estas alternativas:</p>
+                <button class="fallback-btn" onclick="tryAlternativeMethod()">Método Alternativo 1</button>
+                <button class="fallback-btn" onclick="tryDirectDownload()">Download Direto</button>
+                <button class="fallback-btn" onclick="tryDifferentWorker()">Worker Diferente</button>
+                <button class="fallback-btn" onclick="clearCache()">Limpar Cache</button>
             </div>
-        </div>
-
-        <div class="status ok">
-            <h3>📋 Projetos - Status Atual</h3>
-            <div class="projeto-grid">
-                <div class="projeto-card">
-                    <h4 class="projeto-titulo">Projeto 1</h4>
-                    <img src="images/Floyd-1.png" alt="Projeto 1" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
-                </div>
-                
-                <div class="projeto-card">
-                    <h4 class="projeto-titulo">Projeto 2</h4>
-                    <img src="images/PERFIL.png" alt="Projeto 2" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
-                </div>
-                
-                <div class="projeto-card">
-                    <h4 class="projeto-titulo">Projeto 3</h4>
-                    <img src="images/Identidade Visual _Logotipo_01.png" alt="Projeto 3" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
-                </div>
-                
-                <div class="projeto-card">
-                    <h4 class="projeto-titulo">Projeto 4</h4>
-                    <img src="images/forbes revista_capa.png" alt="Projeto 4" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
-                </div>
-                
-                <div class="projeto-card">
-                    <h4 class="projeto-titulo">Projeto 5</h4>
-                    <img src="images/anne_quadro_web1.png" alt="Projeto 5" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
-                </div>
-                
-                <div class="projeto-card">
-                    <h4 class="projeto-titulo">Projeto 6</h4>
-                    <img src="images/casa rara_capa.png" alt="Projeto 6" class="projeto-imagem" onerror="this.classList.add('erro-imagem'); this.innerHTML='❌ QUEBRADA';">
-                </div>
-            </div>
-        </div>
-
-        <div class="status warning">
-            <h3>🔍 DIAGNÓSTICO AUTOMÁTICO</h3>
-            <div id="diagnostico">
-                <p>Clique em "Verificar Status Atual" para diagnóstico completo</p>
-            </div>
-        </div>
-
-        <div class="status ok">
-            <h3>📞 SUPORTE RÁPIDO</h3>
-            <p>Se o problema persistir após seguir os passos:</p>
-            <ul>
-                <li>Verifique se todos os arquivos estão no repositório GitHub</li>
-                <li>Confirme se o Git LFS está configurado para arquivos grandes</li>
-                <li>Teste em navegador privado/incógnito</li>
-                <li>Verifique o console do navegador (F12) para erros</li>
-            </ul>
         </div>
     </div>
 
+    <!-- PDF.js com múltiplas versões -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script>
-        // Lista de imagens críticas
-        const imagensCriticas = [
-            { nome: 'Projeto 1 - Floyd', url: 'images/Floyd-1.png' },
-            { nome: 'Projeto 2 - Perfil', url: 'images/PERFIL.png' },
-            { nome: 'Projeto 3 - Logotipo 1', url: 'images/Identidade Visual _Logotipo_01.png' },
-            { nome: 'Projeto 4 - Forbes', url: 'images/forbes revista_capa.png' },
-            { nome: 'Projeto 5 - Anne', url: 'images/anne_quadro_web1.png' },
-            { nome: 'Projeto 6 - Casa Rara', url: 'images/casa rara_capa.png' },
-                            { nome: 'Logo Principal', url: 'images/02-logo-brilhan.png' }
-        ];
+        // Configuração robusta do PDF.js
+        let currentPdf = null;
+        let currentPage = 1;
+        let totalPages = 0;
+        let currentPdfPath = '';
+        let loadingAttempts = 0;
+        const maxAttempts = 3;
 
-        function verificarStatus() {
-            const resultadosDiv = document.getElementById('resultados');
-            const diagnosticoDiv = document.getElementById('diagnostico');
-            
-            resultadosDiv.innerHTML = '<div class="status warning"><h3>⏳ Verificando status...</h3></div>';
-            
-            let resultados = [];
-            let verificadas = 0;
-            
-            imagensCriticas.forEach(imagem => {
-                verificarImagem(imagem).then(resultado => {
-                    resultados.push(resultado);
-                    verificadas++;
-                    
-                    if (verificadas === imagensCriticas.length) {
-                        mostrarDiagnostico(resultados);
-                    }
-                });
-            });
-        }
-
-        function verificarImagem(imagem) {
-            return new Promise((resolve) => {
-                const img = new Image();
+        // Configurar PDF.js com fallbacks
+        function configurePDFJS() {
+            if (typeof pdfjsLib !== 'undefined') {
+                // Tentar diferentes workers
+                const workers = [
+                    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js',
+                    'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.worker.min.js',
+                    'https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'
+                ];
                 
-                img.onload = () => {
-                    resolve({ nome: imagem.nome, status: 'ok', url: imagem.url });
-                };
-                
-                img.onerror = () => {
-                    resolve({ nome: imagem.nome, status: 'erro', url: imagem.url });
-                };
-                
-                img.src = imagem.url;
-                
-                setTimeout(() => {
-                    if (!img.complete) {
-                        resolve({ nome: imagem.nome, status: 'timeout', url: imagem.url });
-                    }
-                }, 8000);
-            });
-        }
-
-        function mostrarDiagnostico(resultados) {
-            const resultadosDiv = document.getElementById('resultados');
-            const diagnosticoDiv = document.getElementById('diagnostico');
-            
-            let ok = 0, erro = 0;
-            
-            resultados.forEach(resultado => {
-                if (resultado.status === 'ok') ok++;
-                else erro++;
-            });
-            
-            let html = '<h3>📊 Diagnóstico Completo</h3>';
-            
-            resultados.forEach(resultado => {
-                const statusClass = resultado.status === 'ok' ? 'ok' : 'error';
-                const statusIcon = resultado.status === 'ok' ? '✅' : '❌';
-                html += `<div class="status ${statusClass}">${statusIcon} ${resultado.nome}: ${resultado.status}</div>`;
-            });
-            
-            html += `<div class="status ${erro === 0 ? 'ok' : 'error'}">
-                <h4>RESULTADO: ${ok}/${resultados.length} imagens funcionando</h4>
-                <p>${erro > 0 ? '❌ PROBLEMA: GitHub Pages não configurado!' : '✅ SUCESSO: Todas as imagens funcionando!'}</p>
-            </div>`;
-            
-            resultadosDiv.innerHTML = html;
-            
-            // Diagnóstico
-            let diagnostico = '';
-            if (erro > 0) {
-                diagnostico = `
-                    <div class="status error">
-                        <h4>🚨 DIAGNÓSTICO: ${erro} imagens quebradas</h4>
-                        <p><strong>CAUSA:</strong> GitHub Pages não está configurado ou não foi feito deploy</p>
-                        <p><strong>SOLUÇÃO:</strong> Configure o GitHub Pages seguindo os passos acima</p>
-                    </div>
-                `;
+                pdfjsLib.GlobalWorkerOptions.workerSrc = workers[0];
+                updateStatus('PDF.js configurado com sucesso', 'success');
+                return true;
             } else {
-                diagnostico = `
-                    <div class="status ok">
-                        <h4>✅ DIAGNÓSTICO: Todas as imagens funcionando!</h4>
-                        <p>O site está funcionando perfeitamente!</p>
-                    </div>
-                `;
+                updateStatus('PDF.js não foi carregado', 'error');
+                return false;
+            }
+        }
+
+        function updateStatus(message, type) {
+            const statusDiv = document.getElementById('system-status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        async function loadPDF(pdfPath, buttonElement) {
+            if (!configurePDFJS()) return;
+            
+            // Atualizar seleção
+            document.querySelectorAll('.pdf-option').forEach(el => el.classList.remove('active'));
+            if (buttonElement) buttonElement.classList.add('active');
+            
+            currentPdfPath = pdfPath;
+            currentPage = 1;
+            loadingAttempts = 0;
+            
+            updateStatus(`Carregando: ${pdfPath}`, 'info');
+            
+            const container = document.querySelector('.page-container');
+            container.innerHTML = '<div class="loading">Carregando PDF...</div>';
+            
+            await attemptLoadPDF(pdfPath);
+        }
+
+        async function attemptLoadPDF(pdfPath) {
+            try {
+                loadingAttempts++;
+                updateStatus(`Tentativa ${loadingAttempts} de ${maxAttempts}`, 'info');
+                
+                // Verificar se arquivo existe
+                const headResponse = await fetch(pdfPath, { method: 'HEAD' });
+                if (!headResponse.ok) {
+                    throw new Error(`Arquivo não encontrado: HTTP ${headResponse.status}`);
+                }
+                
+                // Configurações de carregamento
+                const loadingTask = pdfjsLib.getDocument({
+                    url: pdfPath,
+                    cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/cmaps/',
+                    cMapPacked: true,
+                    standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/standard_fonts/',
+                    disableFontFace: false,
+                    disableRange: false,
+                    disableStream: false,
+                    disableAutoFetch: false
+                });
+                
+                // Timeout de 30 segundos
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('Timeout de carregamento')), 30000);
+                });
+                
+                const pdf = await Promise.race([loadingTask.promise, timeoutPromise]);
+                
+                currentPdf = pdf;
+                totalPages = pdf.numPages;
+                currentPage = 1;
+                
+                updateStatus(`PDF carregado: ${pdf.numPages} páginas`, 'success');
+                updatePageInfo();
+                renderPage();
+                
+            } catch (error) {
+                console.error(`Tentativa ${loadingAttempts} falhou:`, error);
+                
+                if (loadingAttempts < maxAttempts) {
+                    updateStatus(`Tentativa ${loadingAttempts} falhou, tentando novamente...`, 'info');
+                    setTimeout(() => attemptLoadPDF(pdfPath), 2000);
+                } else {
+                    handlePDFError(error);
+                }
+            }
+        }
+
+        function handlePDFError(error) {
+            let errorMessage = 'Erro ao carregar PDF';
+            
+            if (error.name === 'InvalidPDFException') {
+                errorMessage = 'PDF inválido ou corrompido';
+            } else if (error.name === 'MissingPDFException') {
+                errorMessage = 'PDF não encontrado';
+            } else if (error.name === 'UnexpectedResponseException') {
+                errorMessage = 'Erro de rede';
+            } else if (error.message.includes('Timeout')) {
+                errorMessage = 'Timeout de carregamento';
+            } else {
+                errorMessage = error.message;
             }
             
-            diagnosticoDiv.innerHTML = diagnostico;
+            updateStatus(`Erro: ${errorMessage}`, 'error');
+            
+            const container = document.querySelector('.page-container');
+            container.innerHTML = `
+                <div class="error">
+                    <h3>Erro ao carregar PDF</h3>
+                    <p>${errorMessage}</p>
+                    <p>Tente usar as opções de fallback abaixo.</p>
+                </div>
+            `;
         }
 
-        function configurarGitHubPages() {
-            window.open('https://github.com/kellymagalhaesilustra-max/kellySite/settings/pages', '_blank');
-            alert('Página de configuração aberta!\n\nConfigure:\n- Source: Deploy from a branch\n- Branch: main\n- Folder: / (root)\n- Clique em Save\n\nAguarde 5-10 minutos e volte aqui para verificar.');
+        function renderPage() {
+            if (!currentPdf || currentPage > totalPages) return;
+            
+            const container = document.querySelector('.page-container');
+            container.innerHTML = '<div class="loading">Renderizando página...</div>';
+            
+            currentPdf.getPage(currentPage).then(page => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                
+                const viewport = page.getViewport({ scale: 1.2 });
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                
+                page.render(renderContext).promise.then(() => {
+                    container.innerHTML = '';
+                    container.appendChild(canvas);
+                });
+            }).catch(error => {
+                console.error('Erro ao renderizar página:', error);
+                container.innerHTML = '<div class="error">Erro ao renderizar página</div>';
+            });
         }
 
-        function limparCacheCompleto() {
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePageInfo();
+                renderPage();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePageInfo();
+                renderPage();
+            }
+        }
+
+        function goToPage(pageNum) {
+            if (pageNum >= 1 && pageNum <= totalPages) {
+                currentPage = pageNum;
+                updatePageInfo();
+                renderPage();
+            }
+        }
+
+        function goToLastPage() {
+            goToPage(totalPages);
+        }
+
+        function updatePageInfo() {
+            document.getElementById('current-page').textContent = currentPage;
+            document.getElementById('total-pages').textContent = totalPages;
+            
+            // Atualizar botões
+            document.getElementById('btn-first').disabled = currentPage <= 1;
+            document.getElementById('btn-prev').disabled = currentPage <= 1;
+            document.getElementById('btn-next').disabled = currentPage >= totalPages;
+            document.getElementById('btn-last').disabled = currentPage >= totalPages;
+        }
+
+        function reloadPDF() {
+            if (currentPdfPath) {
+                loadingAttempts = 0;
+                loadPDF(currentPdfPath);
+            }
+        }
+
+        // Funções de fallback
+        function tryAlternativeMethod() {
+            updateStatus('Tentando método alternativo...', 'info');
+            // Implementar método alternativo aqui
+        }
+
+        function tryDirectDownload() {
+            if (currentPdfPath) {
+                updateStatus('Iniciando download direto...', 'info');
+                const link = document.createElement('a');
+                link.href = currentPdfPath;
+                link.download = currentPdfPath.split('/').pop();
+                link.click();
+            }
+        }
+
+        function tryDifferentWorker() {
+            updateStatus('Tentando worker diferente...', 'info');
+            if (typeof pdfjsLib !== 'undefined') {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.worker.min.js';
+                reloadPDF();
+            }
+        }
+
+        function clearCache() {
+            updateStatus('Limpando cache...', 'info');
             if ('caches' in window) {
                 caches.keys().then(names => {
-                    names.forEach(name => {
-                        caches.delete(name);
-                    });
+                    names.forEach(name => caches.delete(name));
                 });
             }
-            
-            // Limpar localStorage e sessionStorage
-            localStorage.clear();
-            sessionStorage.clear();
-            
-            alert('Cache completamente limpo!\n\nAgora:\n1. Pressione Ctrl+F5\n2. Ou teste em navegador privado\n3. Verifique se as imagens carregam');
+            reloadPDF();
         }
 
-        function testarNavegadorPrivado() {
-            alert('Para testar em navegador privado:\n\n1. Pressione Ctrl+Shift+N (Chrome/Edge)\n2. Ou Ctrl+Shift+P (Firefox)\n3. Acesse: https://kellymagalhaesilustra-max.github.io/kellySite\n4. Verifique se as imagens carregam\n\nSe funcionar no privado, é problema de cache!');
-        }
-
-        // Verificar automaticamente ao carregar
-        window.addEventListener('load', () => {
-            setTimeout(verificarStatus, 2000);
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            configurePDFJS();
+            
+            // Controles de teclado
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') previousPage();
+                if (e.key === 'ArrowRight') nextPage();
+                if (e.key === 'Home') goToPage(1);
+                if (e.key === 'End') goToLastPage();
+            });
         });
     </script>
 </body>
