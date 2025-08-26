@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Drag DearFlip</title>
+    <link rel="stylesheet" href="dearflip.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .instructions {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196F3;
+        }
+        .test-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste de Drag/Swipe - DearFlip</h1>
+        
+        <div class="instructions">
+            <h3>📋 Instruções de Teste:</h3>
+            <ul>
+                <li><strong>Mouse:</strong> Clique e arraste as páginas para virá-las</li>
+                <li><strong>Touch:</strong> Toque e deslize nas páginas (dispositivos móveis)</li>
+                <li><strong>Teclado:</strong> Use as setas ← → para navegar</li>
+                <li><strong>Botões:</strong> Clique nos botões ‹ › para navegar</li>
+            </ul>
+        </div>
+
+        <div class="test-area">
+            <div id="flipbook-test"></div>
+        </div>
+
+        <div class="instructions">
+            <h3>🔧 Funcionalidades Implementadas:</h3>
+            <ul>
+                <li>✅ Drag com mouse (mousedown + mousemove + mouseup)</li>
+                <li>✅ Swipe com touch (touchstart + touchmove + touchend)</li>
+                <li>✅ Rotação 3D proporcional ao arrasto</li>
+                <li>✅ Virar página quando arrasto > 50% da largura</li>
+                <li>✅ Retorno à posição original se arrasto < 50%</li>
+                <li>✅ Efeito 3D com transform-style: preserve-3d</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- DearFlip Plugin -->
+    <script src="dearflip-jquery-plugin.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            console.log('Iniciando teste de drag...');
+            
+            // Verificar se o plugin está carregado
+            if (typeof $.fn.dearFlip === 'undefined') {
+                alert('ERRO: Plugin DearFlip não está carregado!');
+                return;
+            }
+
+            // Configuração do flipbook de teste
+            const flipbookInstance = $('#flipbook-test').dearFlip({
+                width: 800,
+                height: 520,
+                pageGap: 8,
+                startPage: 1,
+                totalPages: 10, // Páginas de teste
+                renderScale: 1.5,
+                lazyRenderAhead: 2,
+                className: 'dearflip',
+                onPageFlip: function(pageIndex) {
+                    console.log('Página virada para:', pageIndex);
+                }
+            });
+
+            console.log('Flipbook inicializado com sucesso!');
+            console.log('Teste o drag/swipe nas páginas...');
+        });
+    </script>
+</body>
+</html>

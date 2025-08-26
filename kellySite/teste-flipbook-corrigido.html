@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teste Flipbook Corrigido</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .simple-flipbook {
+      width: 100%;
+      height: 600px;
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      user-select: none;
+      margin-bottom: 20px;
+    }
+    
+    .simple-flipbook:active {
+      cursor: grabbing;
+    }
+    
+    .swipe-indicator {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 25px;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .swipe-indicator.left {
+      left: 20px;
+    }
+    
+    .swipe-indicator.right {
+      right: 20px;
+    }
+    
+    .swipe-indicator.show {
+      opacity: 1;
+    }
+    
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #666;
+      z-index: 10;
+      font-size: 1.2rem;
+    }
+    
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #FF4DC6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .error {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #d32f2f;
+      background: #ffebee;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      z-index: 10;
+    }
+    
+    .page-info {
+      text-align: center;
+      margin: 15px 0;
+      color: #333;
+      font-size: 1.1rem;
+    }
+    
+    .flipbook-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    
+    .control-btn {
+      background: #FF4DC6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .control-btn:hover {
+      background: #e23dae;
+      transform: translateY(-1px);
+    }
+    
+    .control-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .pdf-selector {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    
+    .pdf-btn {
+      background: #FF4DC6;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+    
+    .pdf-btn:hover {
+      background: #e23dae;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(255, 77, 198, 0.3);
+    }
+    
+    .pdf-btn.active {
+      background: #e23dae;
+      box-shadow: 0 2px 4px rgba(255, 77, 198, 0.3);
+    }
+    
+    .instructions {
+      background: #e8f4fd;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      border-left: 4px solid #2196F3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Teste Flipbook Corrigido</h1>
+    
+    <div class="instructions">
+      <h3>📋 Instruções de Teste:</h3>
+      <ul>
+        <li><strong>Mouse:</strong> Clique e arraste para virar páginas</li>
+        <li><strong>Touch:</strong> Toque e deslize (dispositivos móveis)</li>
+        <li><strong>Teclado:</strong> Use as setas ← → para navegar</li>
+        <li><strong>Botões:</strong> Clique nos botões para navegar</li>
+        <li><strong>PDFs:</strong> Clique nos botões para trocar de revista</li>
+      </ul>
+    </div>
+    
+    <div class="simple-flipbook">
+      <div class="loading">Carregando PDF...</div>
+      <div class="swipe-indicator left">← Página Anterior</div>
+      <div class="swipe-indicator right">Próxima Página →</div>
+    </div>
+    
+    <div class="page-info">
+      Página atual: <span id="current-page">1</span> de <span id="total-pages">0</span>
+    </div>
+    
+    <div class="flipbook-controls">
+      <button class="control-btn" onclick="goToPage(1)" id="btn-first">Primeira</button>
+      <button class="control-btn" onclick="previousPage()" id="btn-prev">Anterior</button>
+      <button class="control-btn" onclick="nextPage()" id="btn-next">Próxima</button>
+      <button class="control-btn" onclick="goToLastPage()" id="btn-last">Última</button>
+    </div>
+    
+    <div class="pdf-selector">
+      <button class="pdf-btn active" onclick="loadFlipbook('pdfs/mulheres.pdf', this)">📖 Mulheres</button>
+      <button class="pdf-btn" onclick="loadFlipbook('pdfs/Revista Valor Busines.pdf', this)">📖 Valor</button>
+      <button class="pdf-btn" onclick="loadFlipbook('pdfs/1930_altagrafica.pdf', this)">📖 1930</button>
+      <button class="pdf-btn" onclick="loadFlipbook('pdfs/Revista Casa Rara.pdf', this)">📖 Casa Rara</button>
+      <button class="pdf-btn" onclick="loadFlipbook('pdfs/Magazine_Forbes_July2025.pdf', this)">📖 Forbes</button>
+    </div>
+  </div>
+  
+  <!-- Scripts necessários -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    console.log('Teste Flipbook Corrigido carregado! 🎨');
+  </script>
+</body>
+</html>

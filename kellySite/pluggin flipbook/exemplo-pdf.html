@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DearFlip - Teste com PDF</title>
+    <link rel="stylesheet" href="dearflip.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .controls button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .controls button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .page-info {
+            color: white;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        
+        .flipbook-container {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .status {
+            color: white;
+            font-size: 14px;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        
+        .file-input {
+            margin: 20px 0;
+        }
+        
+        .file-input input {
+            display: none;
+        }
+        
+        .file-input label {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input label:hover {
+            background: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 DearFlip - Teste com PDF</h1>
+        
+        <div class="status" id="status">
+            Status: Aguardando carregamento...
+        </div>
+        
+        <div class="file-input">
+            <label for="pdf-file">
+                📄 Escolher PDF
+                <input type="file" id="pdf-file" accept=".pdf" onchange="loadPDFFile(this)">
+            </label>
+        </div>
+        
+        <div class="controls">
+            <button onclick="loadSamplePDF()">Carregar PDF de Exemplo</button>
+            <button onclick="goToPage(1)">Primeira Página</button>
+            <button onclick="previousPage()">Anterior</button>
+            <button onclick="nextPage()">Próxima</button>
+            <button onclick="destroyFlipbook()">Destruir</button>
+            <button onclick="recreateFlipbook()">Recriar</button>
+        </div>
+        
+        <div class="page-info">
+            Página atual: <span id="current-page">1</span> de <span id="total-pages">0</span>
+        </div>
+        
+        <div class="flipbook-container">
+            <div id="my-flipbook"></div>
+        </div>
+    </div>
+
+    <!-- Dependências -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="dearflip-jquery-plugin.js"></script>
+
+    <script>
+        // Configuração do PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+        
+        let flipbookInstance;
+        let currentPDFUrl = null;
+        
+        // PDF de exemplo (público e acessível)
+        const samplePDFs = [
+            'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
+            'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+            'https://www.africau.edu/images/default/sample.pdf'
+        ];
+        
+        function updateStatus(message) {
+            document.getElementById('status').textContent = 'Status: ' + message;
+            console.log(message);
+        }
+        
+        function loadSamplePDF() {
+            const randomPDF = samplePDFs[Math.floor(Math.random() * samplePDFs.length)];
+            loadPDF(randomPDF);
+        }
+        
+        function loadPDFFile(input) {
+            const file = input.files[0];
+            if (file) {
+                updateStatus('Processando arquivo PDF...');
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const arrayBuffer = e.target.result;
+                    loadPDFFromArrayBuffer(arrayBuffer);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+        
+        function loadPDFFromArrayBuffer(arrayBuffer) {
+            updateStatus('Carregando PDF do arquivo...');
+            currentPDFUrl = arrayBuffer;
+            initFlipbook();
+        }
+        
+        function loadPDF(url) {
+            updateStatus('Carregando PDF da URL...');
+            currentPDFUrl = url;
+            initFlipbook();
+        }
+        
+        function initFlipbook() {
+            if (flipbookInstance) {
+                flipbookInstance.destroy();
+            }
+            
+            updateStatus('Inicializando flipbook...');
+            
+            const options = {
+                width: 900,
+                height: 600,
+                startPage: 1,
+                renderScale: 1.2,
+                pageGap: 10,
+                lazyRenderAhead: 3,
+                onPageFlip: function(pageIndex) {
+                    updatePageInfo(pageIndex);
+                    updateStatus('Página ' + pageIndex + ' carregada');
+                }
+            };
+            
+            // Se temos um PDF, use-o; senão, use imagens de exemplo
+            if (currentPDFUrl) {
+                if (currentPDFUrl instanceof ArrayBuffer) {
+                    // PDF carregado como ArrayBuffer
+                    options.pdfData = currentPDFUrl;
+                } else {
+                    // PDF carregado como URL
+                    options.pdfUrl = currentPDFUrl;
+                }
+            } else {
+                // Fallback para imagens
+                options.images = [
+                    'https://via.placeholder.com/400x600/FF6B6B/FFFFFF?text=Página+1',
+                    'https://via.placeholder.com/400x600/4ECDC4/FFFFFF?text=Página+2',
+                    'https://via.placeholder.com/400x600/45B7D1/FFFFFF?text=Página+3'
+                ];
+            }
+            
+            flipbookInstance = $('#my-flipbook').dearFlip(options);
+            
+            // Atualizar informações da página
+            updatePageInfo(1);
+        }
+        
+        function updatePageInfo(currentPage) {
+            document.getElementById('current-page').textContent = currentPage;
+            if (flipbookInstance && flipbookInstance.total) {
+                document.getElementById('total-pages').textContent = flipbookInstance.total;
+            }
+        }
+        
+        function goToPage(pageNum) {
+            if (flipbookInstance) {
+                flipbookInstance.goTo(pageNum);
+            }
+        }
+        
+        function nextPage() {
+            if (flipbookInstance) {
+                flipbookInstance.next();
+            }
+        }
+        
+        function previousPage() {
+            if (flipbookInstance) {
+                flipbookInstance.prev();
+            }
+        }
+        
+        function destroyFlipbook() {
+            if (flipbookInstance) {
+                flipbookInstance.destroy();
+                flipbookInstance = null;
+                updateStatus('Flipbook destruído');
+            }
+        }
+        
+        function recreateFlipbook() {
+            destroyFlipbook();
+            setTimeout(initFlipbook, 100);
+        }
+        
+        // Inicializar quando a página carregar
+        $(document).ready(function() {
+            updateStatus('Página carregada. Escolha um PDF para testar.');
+            
+            // Adicionar controles de teclado
+            $(document).on('keydown', function(e) {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        previousPage();
+                        break;
+                    case 'ArrowRight':
+                        nextPage();
+                        break;
+                    case 'Home':
+                        goToPage(1);
+                        break;
+                    case 'End':
+                        if (flipbookInstance && flipbookInstance.total) {
+                            goToPage(flipbookInstance.total);
+                        }
+                        break;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

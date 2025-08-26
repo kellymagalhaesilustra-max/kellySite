@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste PDF Simples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-area {
+            border: 2px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .error {
+            color: red;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success {
+            color: green;
+            background: #e6ffe6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste PDF Simples</h1>
+        
+        <div class="test-area">
+            <h3>Status do PDF.js</h3>
+            <div id="status">Verificando...</div>
+        </div>
+        
+        <div class="test-area">
+            <h3>Teste de Carregamento</h3>
+            <button onclick="testPDFJS()">Testar PDF.js</button>
+            <button onclick="testPDFFile()">Testar Arquivo PDF</button>
+            <button onclick="testFetch()">Testar Fetch</button>
+        </div>
+        
+        <div class="test-area">
+            <h3>Resultado</h3>
+            <div id="result">Aguardando teste...</div>
+            <canvas id="pdfCanvas" style="display: none;"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script>
+        // Configurar PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+        
+        function updateResult(message, type = 'info') {
+            const result = document.getElementById('result');
+            result.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+        
+        // Verificar status inicial
+        if (typeof pdfjsLib !== 'undefined') {
+            updateStatus('✅ PDF.js carregado com sucesso', 'success');
+        } else {
+            updateStatus('❌ PDF.js não foi carregado', 'error');
+        }
+        
+        function testPDFJS() {
+            updateResult('Testando PDF.js...', 'info');
+            
+            try {
+                console.log('PDF.js disponível:', typeof pdfjsLib !== 'undefined');
+                console.log('PDF.js versão:', pdfjsLib.version);
+                console.log('Worker configurado:', pdfjsLib.GlobalWorkerOptions.workerSrc);
+                
+                updateResult('✅ PDF.js está funcionando corretamente', 'success');
+            } catch (error) {
+                console.error('Erro no teste PDF.js:', error);
+                updateResult('❌ Erro no PDF.js: ' + error.message, 'error');
+            }
+        }
+        
+        function testFetch() {
+            updateResult('Testando fetch do arquivo PDF...', 'info');
+            
+            fetch('pdfs/mulheres.pdf')
+                .then(response => {
+                    console.log('Fetch response:', response);
+                    if (response.ok) {
+                        updateResult('✅ Arquivo PDF encontrado via fetch', 'success');
+                    } else {
+                        updateResult('❌ Erro no fetch: ' + response.status + ' ' + response.statusText, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro no fetch:', error);
+                    updateResult('❌ Erro no fetch: ' + error.message, 'error');
+                });
+        }
+        
+        function testPDFFile() {
+            updateResult('Carregando PDF...', 'info');
+            
+            const canvas = document.getElementById('pdfCanvas');
+            canvas.style.display = 'none';
+            
+            pdfjsLib.getDocument('pdfs/mulheres.pdf').promise
+                .then(pdf => {
+                    console.log('PDF carregado:', pdf.numPages, 'páginas');
+                    updateResult(`✅ PDF carregado com sucesso! ${pdf.numPages} páginas`, 'success');
+                    
+                    // Renderizar primeira página
+                    return pdf.getPage(1);
+                })
+                .then(page => {
+                    const viewport = page.getViewport({ scale: 1.0 });
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    
+                    const context = canvas.getContext('2d');
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    
+                    return page.render(renderContext).promise;
+                })
+                .then(() => {
+                    canvas.style.display = 'block';
+                    updateResult('✅ Primeira página renderizada com sucesso!', 'success');
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar PDF:', error);
+                    updateResult('❌ Erro ao carregar PDF: ' + error.message, 'error');
+                });
+        }
+    </script>
+</body>
+</html>

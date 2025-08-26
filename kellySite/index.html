@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelly Magalhães – Portfólio de Ilustração, Design e Diagramação</title>
+    <meta name="description" content="Portfólio artístico de Kelly Magalhães - Ilustradora, Designer e Diagramadora especializada em criação de personagens e projetos editoriais">
+    <meta name="keywords" content="ilustração, design, diagramação, personagens, portfólio, Kelly Magalhães">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=KG+Red+Hands&display=swap" rel="stylesheet">
+    
+    <!-- Fontes customizadas -->
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <!-- Menu Principal Sticky -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="images/logotipoKMilustra.png" alt="Kelly Magalhães" class="logo">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="ilustracao.html" class="nav-link">Ilustração</a></li>
+                <li><a href="diagramacao.html" class="nav-link">Diagramação</a></li>
+                <li><a href="design.html" class="nav-link">Design</a></li>
+                <li><a href="pinturas.html" class="nav-link">Pinturas</a></li>
+                <li><a href="flipbook.html" class="nav-link">Flipbook 3D</a></li>
+                <li><a href="https://wa.me/5519994940258?text=Gostaria%20de%20fazer%20meu%20projeto%20com%20voc%C3%AA!" target="_blank" class="nav-link btn-contratar">✅ Contratar Kelly</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Seção 1 - Destaque Inicial -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <div class="hero-illustration">
+                <div class="banda-muertos">
+                    <div class="musico accordion"></div>
+                    <div class="musico dança"></div>
+                    <div class="musico baixo"></div>
+                    <div class="musico guitarra"></div>
+                    <div class="musico trompete"></div>
+                </div>
+                <div class="decorative-elements">
+                    <div class="sugar-skull"></div>
+                    <div class="starburst"></div>
+                </div>
+            </div>
+            <h1 class="hero-title">CRIAÇÃO DE PERSONAGENS, ILUSTRAÇÃO E DIAGRAMAÇÃO</h1>
+            <p class="hero-description">
+                Transformando ideias em arte visual através de ilustrações únicas, 
+                design criativo e diagramação profissional para projetos editoriais.
+            </p>
+        </div>
+        <div class="wave-border"></div>
+    </section>
+
+    <!-- Seção 2 - Criação de Personagens -->
+    <section id="ilustracao" class="personagens-section">
+        <div class="container">
+            <h2 class="section-title">CRIAÇÃO DE PERSONAGENS</h2>
+            <div class="video-demo">
+                <div class="video-placeholder">
+                    <video 
+                        src="MOJITO_KELLY.mp4" 
+                        autoplay 
+                        muted 
+                        loop 
+                        playsinline
+                        style="width: 100%; height: 100%; border-radius: 15px; object-fit: cover;">
+                    </video>
+                </div>
+            </div>
+            <div class="tools-showcase">
+                <div class="arrow-left"></div>
+                <div class="tools-logos">
+                    <div class="tool-logo">
+                        <span>Toon Boom</span>
+                    </div>
+                    <div class="tool-logo">
+                        <span>Adobe Illustrator</span>
+                    </div>
+                </div>
+                <div class="arrow-right"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção 3 - Ilustração e Diagramação -->
+    <section id="diagramacao" class="ilustracao-section">
+        <div class="container">
+            <h3 class="headline">Especializada em Ilustração</h3>
+            <h2 class="main-title koblenz">ILUSTRAÇÃO E DIAGRAMAÇÃO</h2>
+            
+            <div class="three-columns">
+                <div class="column">
+                    <h4>Processo de Ilustração</h4>
+                    <p>Desenvolvimento de personagens únicos com personalidade própria, 
+                    desde o conceito inicial até a finalização digital. Especializada 
+                    em estilos diversos, do lúdico ao editorial.</p>
+                </div>
+                <div class="column">
+                    <h4>Projetos Diagramados</h4>
+                    <p>Criação de layouts editoriais para revistas, livros e materiais 
+                    promocionais. Organização visual que harmoniza texto e imagem 
+                    de forma profissional e atrativa.</p>
+                </div>
+                <div class="column">
+                    <h4>Experiência Freelance</h4>
+                    <p>Mais de 5 anos de experiência trabalhando com clientes 
+                    diversos, desde pequenos projetos até grandes editoras. 
+                    Compromisso com prazos e qualidade.</p>
+                </div>
+            </div>
+            
+            <div class="cta-center">
+                <button class="btn-projeto" onclick="openForm()">Crie seu projeto comigo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal do Formulário -->
+    <div id="formModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeForm()">&times;</span>
+            <h3>Crie seu projeto comigo</h3>
+            <form class="project-form">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefone">Telefone / WhatsApp</label>
+                    <input type="tel" id="telefone" name="telefone" required>
+                </div>
+                <div class="form-group">
+                    <label for="projeto">Tipo de Projeto</label>
+                    <select id="projeto" name="projeto" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="revista">REVISTA</option>
+                        <option value="livro">LIVRO</option>
+                        <option value="ilustracao">ILUSTRAÇÃO</option>
+                        <option value="logotipo">LOGOTIPO</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Enviar Projeto</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Seção 4 - Últimos Projetos -->
+    <section id="design" class="projetos-section">
+        <div class="container">
+            <h2 class="section-title">Últimos Projetos</h2>
+            <div class="projetos-grid">
+                <div class="projeto-card">
+                    <img src="images/Prancheta 1.png" alt="Projeto 1">
+                    <div class="card-overlay">
+                        <h4>Projeto Editorial</h4>
+                        <p>Diagramação de revista</p>
+                    </div>
+                </div>
+                <div class="projeto-card">
+                    <img src="images/Prancheta 2.png" alt="Projeto 2">
+                    <div class="card-overlay">
+                        <h4>Ilustração Editorial</h4>
+                        <p>Capa de revista</p>
+                    </div>
+                </div>
+                <div class="projeto-card">
+                    <img src="images/Prancheta 3.png" alt="Projeto 3">
+                    <div class="card-overlay">
+                        <h4>Personagem</h4>
+                        <p>Criação de personagem</p>
+                    </div>
+                </div>
+                <div class="projeto-card">
+                    <img src="images/ebook1.png" alt="Projeto 4">
+                    <div class="card-overlay">
+                        <h4>Ilustração Digital</h4>
+                        <p>Estilo cartoon</p>
+                    </div>
+                </div>
+                <div class="projeto-card">
+                    <img src="images/Anne 09 01.jfif" alt="Projeto 5">
+                    <div class="card-overlay">
+                        <h4>Ilustração Digital</h4>
+                        <p>Estilo cartoon</p>
+                    </div>
+                </div>
+                <div class="projeto-card">
+                    <img src="images/Gisele_fada_bruxa_lunar.png" alt="Projeto 6">
+                    <div class="card-overlay">
+                        <h4>Ilustração Digital</h4>
+                        <p>Estilo cartoon</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção 5 - Galeria Interativa -->
+    <section id="pinturas" class="galeria-section">
+        <div class="container">
+            <h2 class="section-title">Galeria de Trabalhos</h2>
+            <div class="galeria-container">
+                <button class="galeria-nav prev">←</button>
+                <div class="galeria-wrapper">
+                    <div class="galeria-track">
+                        <div class="galeria-item">
+                            <img src="images/Ghosts in the Bottle.png" alt="Ilustração 1" onclick="openLightbox(this)">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/gorilaz.png" alt="Ilustração 2" onclick="openLightbox(this)">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/gotico.png" alt="Ilustração 3" onclick="openLightbox(this)">
+                        </div>
+                    </div>
+                </div>
+                <button class="galeria-nav next">→</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <!-- Seção Ilustradora Animada -->
+    <section class="ilustradora-section">
+        <div class="container">
+            <h2 class="ilustradora-title">ILUSTRADORA</h2>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Sobre</h4>
+                    <p>Kelly Magalhães é uma ilustradora e diagramadora apaixonada por criar 
+                    personagens únicos e layouts editoriais que contam histórias.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/kellymagalhaesarts/" target="_blank" class="social-link"><img src="images/instagram.png" alt="Instagram"></a>
+                        <a href="https://www.facebook.com/kellymagalhaesarts" target="_blank" class="social-link"><img src="images/facebook.png" alt="Facebook"></a>
+                        <a href="https://www.linkedin.com/in/kelly-magalh%C3%A3es-93580112b/" target="_blank" class="social-link"><img src="images/linkedin.png" alt="LinkedIn"></a>
+                        <a href="https://www.behance.net/kellymagalhaes" target="_blank" class="social-link"><img src="images/behance.png" alt="Behance"></a>
+                        <a href="https://wa.me/5519994940258?text=Ol%C3%A1%2C%20preciso%20de%20um%20servi%C3%A7o%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento.%0APodemos%20falar%20por%20aqui%3F" target="_blank" class="social-link"><img src="images/whatsapp.png" alt="WhatsApp"></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Seu e-mail" required>
+                        <button type="submit">Inscrever</button>
+                    </form>
+                    <img src="images/LOGO_BRANCO.png" alt="Logo Kelly Magalhães" style="width: 50px; height: auto; margin-top: 10px;">
+                </div>
+            </div>
+                         <div class="footer-bottom">
+                 <p>&copy; 2024 Kelly Magalhães — Todos os direitos reservados | Desenvolvido por <a href="https://linkzinencurtador.online/index.html?r=yUfWLQ" target="_blank" style="color: inherit; text-decoration: none; transition: color 0.3s ease;">Bruno Ulrich</a></p>
+             </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    
+    <!-- Proteções contra clique direito e salvamento de imagens -->
+    <script>
+        // Bloquear clique direito
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Bloquear teclas de atalho para salvar
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S, Ctrl+Shift+S, F12
+            if ((e.ctrlKey && e.key === 's') || 
+                (e.ctrlKey && e.shiftKey && e.key === 'S') || 
+                e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Bloquear arrastar imagens
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Bloquear seleção de texto
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Desabilitar menu de contexto em imagens
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(function(img) {
+                img.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+git lfs track "*.mp4"
+git lfs track "*.pdf"
+git lfs track "*.zip"
+git add .gitattributes

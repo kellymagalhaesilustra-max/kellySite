@@ -1,0 +1,21 @@
+# KellyIlustra
+Host github-kelly
+    HostName github.com
+    User git
+    IdentityFile C:\Users\User\.ssh\id_ed25519_empresa2
+    PubkeyAcceptedAlgorithms +ssh-ed25519
+    HostkeyAlgorithms +ssh-ed25519
+    KexAlgorithms +diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha256
+    Ciphers +aes256-ctr,aes192-ctr,aes128-ctr
+    MACs +hmac-sha2-256,hmac-sha2-512
+
+# Default GitHub
+Host github
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa
+    PubkeyAcceptedAlgorithms +ssh-rsa
+    HostkeyAlgorithms +ssh-rsa
+    KexAlgorithms +diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha256
+    Ciphers +aes256-ctr,aes192-ctr,aes128-ctr
+    MACs +hmac-sha2-256,hmac-sha2-512

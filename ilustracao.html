@@ -16,13 +16,18 @@
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/animations.css">
+    
+    <!-- Preload das imagens mais importantes da galeria -->
+    <link rel="preload" as="image" href="images/Adele.png">
+    <link rel="preload" as="image" href="images/BG_Mario2 (1).png">
+    <link rel="preload" as="image" href="images/ilusdigital 3.png">
 </head>
 <body>
     <!-- Menu Principal Sticky -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <img src="images/02-logo-brilhan.png" alt="Logo Kelly Magalhães" class="logo">
+                <img src="images/logotipoKMilustra.png" alt="Logo Kelly Magalhães" class="logo">
             </div>
             <ul class="nav-menu">
                 <li><a href="index.html" class="nav-link">Home</a></li>
@@ -124,26 +129,46 @@
                 <div class="galeria-wrapper">
                     <div class="galeria-track">
                         <div class="galeria-item">
-                            <img src="images/beauty_01 (1).png" alt="Beauty Ilustração 1" onclick="openLightbox(this)">
+                            <img src="images/Adele.png" alt="Adele - Ilustração" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
                         </div>
                         <div class="galeria-item">
-                            <img src="images/beauty_02.png" alt="Beauty Ilustração 2" onclick="openLightbox(this)">
+                            <img src="images/BG_Mario2 (1).png" alt="Mario - Ilustração" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
                         </div>
                         <div class="galeria-item">
-                            <img src="images/beauty_3.png" alt="Beauty Ilustração 3" onclick="openLightbox(this)">
+                            <img src="images/ilusdigital 3.png" alt="Ilustração Digital 3" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
                         </div>
                         <div class="galeria-item">
-                            <img src="images/orange_01 (1).png" alt="Orange Ilustração 1" onclick="openLightbox(this)">
+                            <img src="images/Desenho1_Duda.png" alt="Duda Beat - Cantora e Compositora Brasileira" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
                         </div>
                         <div class="galeria-item">
-                            <img src="images/orange_02.png" alt="Orange Ilustração 2" onclick="openLightbox(this)">
+                            <img src="images/orang-ilustra-kelly.png" alt="Orange Ilustração Kelly" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
                         </div>
                         <div class="galeria-item">
-                            <img src="images/Duda Beat, é uma cantora e compositora brasileira.png" alt="Duda Beat - Cantora e Compositora Brasileira" onclick="openLightbox(this)">
+                            <img src="images/orang-ilustra-kelly2.png" alt="Orange Ilustração Kelly 2" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/farmaceuticas-farma-vida.png" alt="Farmacêuticas Farma Vida" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/eu-kelly-ilustra.png" alt="Eu Kelly Ilustra" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/ilustração1.png" alt="Ilustração 1" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/ilustração2.png" alt="Ilustração 2" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/ilustração3.png" alt="Ilustração 3" loading="lazy" onclick="openLightbox(this)" onerror="this.onerror=null; this.src='images/placeholder.png'; this.alt='Imagem não disponível';">
                         </div>
                     </div>
                 </div>
                 <button class="galeria-nav next">→</button>
+            </div>
+            <!-- Indicador de carregamento -->
+            <div id="galeria-loading" class="galeria-loading" style="text-align: center; padding: 20px; display: none;">
+                <div class="loading-spinner"></div>
+                <p>Carregando galeria...</p>
             </div>
         </div>
     </section>
@@ -199,11 +224,11 @@
                 <div class="footer-section">
                     <h4>Contato</h4>
                     <div class="social-links">
-                        <a href="#" class="social-link"><img src="images/instagram.png" alt="Instagram"></a>
-                        <a href="#" class="social-link"><img src="images/facebook.png" alt="Facebook"></a>
-                        <a href="#" class="social-link"><img src="images/linkedin.png" alt="LinkedIn"></a>
-                        <a href="#" class="social-link"><img src="images/behance.png" alt="Behance"></a>
-                        <a href="#" class="social-link"><img src="images/whatsapp.png" alt="WhatsApp"></a>
+                        <a href="https://www.behance.net/kellymagalhaes" target="_blank" class="social-link"><img src="images/behance.png" alt="Behance"></a>
+                        <a href="https://www.instagram.com/kellymagalhaesarts/" target="_blank" class="social-link"><img src="images/instagram.png" alt="Instagram"></a>
+                        <a href="https://www.facebook.com/kellymagalhaesarts" target="_blank" class="social-link"><img src="images/facebook.png" alt="Facebook"></a>
+                        <a href="https://www.linkedin.com/in/kelly-magalh%C3%A3es-93580112b/" target="_blank" class="social-link"><img src="images/linkedin.png" alt="LinkedIn"></a>
+                        <a href="#" target="_blank" class="social-link"><img src="images/tiktok.png" alt="TikTok"></a>
                     </div>
                 </div>
                 <div class="footer-section">

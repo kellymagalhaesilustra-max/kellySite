@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinturas - Kelly Magalhães</title>
+    <meta name="description" content="Galeria de pinturas e obras artísticas de Kelly Magalhães - Arte tradicional e contemporânea">
+    <meta name="keywords" content="pinturas, arte, galeria, Kelly Magalhães, obras artísticas">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=KG+Red+Hands&display=swap" rel="stylesheet">
+    
+    <!-- Fontes customizadas -->
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <!-- Menu Principal Sticky -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="images/logotipoKMilustra.png" alt="Kelly Magalhães" class="logo">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="ilustracao.html" class="nav-link">Ilustração</a></li>
+                <li><a href="diagramacao.html" class="nav-link">Diagramação</a></li>
+                <li><a href="design.html" class="nav-link">Design</a></li>
+                <li><a href="pinturas.html" class="nav-link">Pinturas</a></li>
+                <li><a href="flipbook.html" class="nav-link">Flipbook 3D</a></li>
+                <li><a href="#contato" class="nav-link btn-contratar">✅ Contratar Kelly</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Seção Hero - Pinturas -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">GALERIA DE PINTURAS</h1>
+            <p class="hero-description">
+                Explore uma coleção única de pinturas e obras artísticas que expressam 
+                criatividade, emoção e técnica através de diferentes estilos e técnicas.
+            </p>
+        </div>
+        <div class="wave-border"></div>
+    </section>
+
+    <!-- Seção Galeria Principal -->
+    <section class="galeria-section">
+        <div class="container">
+            <h2 class="section-title">Galeria de Trabalhos</h2>
+            <div class="galeria-container">
+                <button class="galeria-nav prev">←</button>
+                <div class="galeria-wrapper">
+                    <div class="galeria-track">
+                        <div class="galeria-item">
+                            <img src="images/queem.jpg" alt="Pintura Queen" onclick="openLightbox(this)">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/Anne 09 01.jfif" alt="Pintura Anne" onclick="openLightbox(this)">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/Gisele_fada_bruxa_lunar.png" alt="Pintura Gisele" onclick="openLightbox(this)">
+                        </div>
+                        <div class="galeria-item">
+                            <img src="images/pintura coringa1.png" alt="Pintura Coringa" onclick="openLightbox(this)">
+                        </div>
+                    </div>
+                </div>
+                <button class="galeria-nav next">→</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Estilos Artísticos -->
+    <section class="ilustracao-section">
+        <div class="container">
+            <h3 class="headline">Diversidade Artística</h3>
+            <h2 class="main-title koblenz">ESTILOS E TÉCNICAS</h2>
+            
+            <div class="three-columns">
+                <div class="column">
+                    <h4>Arte Contemporânea</h4>
+                    <p>Exploração de técnicas modernas e conceitos contemporâneos, 
+                    criando obras que refletem a sociedade atual e expressam 
+                    sentimentos e ideias através da arte visual.</p>
+                </div>
+                <div class="column">
+                    <h4>Estilo Gótico</h4>
+                    <p>Influências góticas e medievais que trazem elementos místicos 
+                    e dramáticos, criando atmosferas únicas e expressivas através 
+                    de cores e composições características.</p>
+                </div>
+                <div class="column">
+                    <h4>Retratos Artísticos</h4>
+                    <p>Criação de retratos que capturam a essência e personalidade 
+                    dos sujeitos, combinando técnica tradicional com interpretação 
+                    artística única e expressiva.</p>
+                </div>
+            </div>
+            
+            <div class="cta-center">
+                <button class="btn-projeto" onclick="openForm()">Encomende sua pintura</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Processo Criativo -->
+    <section class="galeria-section">
+        <div class="container">
+            <h2 class="section-title">Processo Criativo</h2>
+            <div class="three-columns">
+                <div class="column">
+                    <h4>Inspiração</h4>
+                    <p>Cada obra nasce de uma inspiração única, seja através de 
+                    experiências pessoais, referências artísticas ou conceitos 
+                    que despertam a criatividade e o desejo de expressar.</p>
+                </div>
+                <div class="column">
+                    <h4>Execução</h4>
+                    <p>Desenvolvimento da técnica e aplicação dos materiais, 
+                    explorando diferentes texturas, cores e composições para 
+                    criar obras que transmitem a visão artística desejada.</p>
+                </div>
+                <div class="column">
+                    <h4>Finalização</h4>
+                    <p>Polimento final e ajustes que elevam a qualidade da obra, 
+                    garantindo que cada pintura seja uma expressão única e 
+                    completa da criatividade artística.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Galeria Adicional -->
+    <section class="projetos-section">
+        <div class="container">
+            <h2 class="section-title">Obras em Destaque</h2>
+            <div class="projetos-grid">
+                <div class="projeto-card">
+                    <img src="images/pintura coringa1.png" alt="Pintura Coringa">
+                    <div class="card-overlay">
+                        <h4>Pintura Coringa</h4>
+                        <p>Arte expressiva</p>
+                    </div>
+                </div>
+                <div class="projeto-card">
+                    <img src="images/Floyd-1.png" alt="Pintura Floyd">
+                    <div class="card-overlay">
+                        <h4>Pintura Floyd</h4>
+                        <p>Inspiração musical</p>
+                    </div>
+                </div>
+                <div class="projeto-card">
+                    <img src="images/queem.jpg" alt="Obra Queen">
+                    <div class="card-overlay">
+                        <h4>Homenagem Musical</h4>
+                        <p>Inspiração rock</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal do Formulário -->
+    <div id="formModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeForm()">&times;</span>
+            <h3>Encomende sua pintura</h3>
+            <form class="project-form">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefone">Telefone / WhatsApp</label>
+                    <input type="tel" id="telefone" name="telefone" required>
+                </div>
+                <div class="form-group">
+                    <label for="projeto">Tipo de Obra</label>
+                    <select id="projeto" name="projeto" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="retrato">RETRATO</option>
+                        <option value="paisagem">PAISAGEM</option>
+                        <option value="abstrato">ABSTRATO</option>
+                        <option value="gótico">ESTILO GÓTICO</option>
+                        <option value="outro">OUTRO</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Enviar Encomenda</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Sobre</h4>
+                    <p>Kelly Magalhães é uma artista plástica que expressa sua criatividade 
+                    através de pinturas únicas e obras que contam histórias visuais.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><img src="images/instagram.png" alt="Instagram"></a>
+                        <a href="#" class="social-link"><img src="images/facebook.png" alt="Facebook"></a>
+                        <a href="#" class="social-link"><img src="images/linkedin.png" alt="LinkedIn"></a>
+                        <a href="#" class="social-link"><img src="images/behance.png" alt="Behance"></a>
+                        <a href="#" class="social-link"><img src="images/whatsapp.png" alt="WhatsApp"></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Seu e-mail" required>
+                        <button type="submit">Inscrever</button>
+                    </form>
+                    <img src="images/LOGO_BRANCO.png" alt="Logo Kelly Magalhães" style="width: 50px; height: auto; margin-top: 10px;">
+                </div>
+            </div>
+                         <div class="footer-bottom">
+                 <p>&copy; 2024 Kelly Magalhães — Todos os direitos reservados | Desenvolvido por <a href="https://linkzinencurtador.online/index.html?r=yUfWLQ" target="_blank" style="color: inherit; text-decoration: none; transition: color 0.3s ease;">Bruno Ulrich</a></p>
+             </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

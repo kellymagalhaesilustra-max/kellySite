@@ -5,30 +5,48 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    left: 0;
+    top: 0;
+    transform: none;
+}
+
 body {
     font-family: 'KG Red Hands', cursive;
     background-color: #EAEBE5;
     color: #333;
     line-height: 1.6;
-    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+    transform: none;
+    left: 0;
+    top: 0;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    position: relative;
+    width: 100%;
 }
 
 /* Navbar Sticky */
 .navbar {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     background: rgba(234, 235, 229, 0.95);
     backdrop-filter: blur(10px);
     z-index: 1000;
     padding: 15px 0;
     border-bottom: 2px solid #FA6DCD;
+    transform: none;
 }
 
 .nav-container {
@@ -38,6 +56,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    width: 100%;
 }
 
 .nav-logo .logo {
@@ -102,6 +122,23 @@ body {
     text-align: center;
     position: relative;
     background: #EAEBE5;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    transform: none;
+}
+
+.hero-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
 }
 
 .hero-illustration {
@@ -195,6 +232,12 @@ body {
 /* Seções Gerais */
 section {
     padding: 80px 0;
+    position: relative;
+    width: 100%;
+    display: block;
+    left: 0;
+    top: 0;
+    transform: none;
 }
 
 .section-title {
@@ -554,16 +597,25 @@ section {
 
 .galeria-track {
     display: flex;
-    transition: transform 0.5s ease;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease;
 }
 
 .galeria-item {
-    min-width: 300px;
-    margin: 0 15px;
+    flex: 0 0 300px;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     transition: transform 0.3s ease;
+    opacity: 1;
+    transform: scale(1);
+    background: #f8f8f8;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .galeria-item:hover {
@@ -575,6 +627,36 @@ section {
     height: 250px;
     object-fit: cover;
     cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.galeria-item img[loading] {
+    opacity: 0.7;
+}
+
+.galeria-item img.loaded {
+    opacity: 1;
+}
+
+/* Indicador de carregamento */
+.galeria-loading {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #FA6DCD;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .galeria-nav {
@@ -604,6 +686,12 @@ section {
 .galeria-nav:hover {
     background: #FF6B9D;
     transform: translateY(-50%) scale(1.1);
+}
+
+.galeria-nav:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* Lightbox */
@@ -666,6 +754,11 @@ section {
     background: #333;
     color: #FEFEFE;
     padding: 60px 0 20px;
+    position: relative;
+    width: 100%;
+    left: 0;
+    top: 0;
+    transform: none;
 }
 
 .footer-content {
@@ -684,8 +777,9 @@ section {
 
 .social-links {
     display: flex;
-    gap: 15px;
+    gap: 8px;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .social-link {
@@ -698,9 +792,11 @@ section {
 }
 
 .social-link img {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     filter: brightness(0) invert(1);
+    object-fit: contain;
+    object-position: center;
 }
 
 .newsletter-form {

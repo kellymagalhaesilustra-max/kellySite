@@ -184,11 +184,56 @@
 
 /* Animação para galeria */
 .galeria-item {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.galeria-item:nth-child(1) { animation-delay: 0.1s; }
+.galeria-item:nth-child(2) { animation-delay: 0.2s; }
+.galeria-item:nth-child(3) { animation-delay: 0.3s; }
+.galeria-item:nth-child(4) { animation-delay: 0.4s; }
+.galeria-item:nth-child(5) { animation-delay: 0.5s; }
+.galeria-item:nth-child(6) { animation-delay: 0.6s; }
+
+.galeria-item:hover {
+    animation: pulse 0.3s ease-in-out;
+}
+
+/* Animação para carregamento de imagens */
+.galeria-item img {
     transition: all 0.3s ease;
 }
 
-.galeria-item:hover {
-    animation: bounce 0.6s ease-in-out;
+.galeria-item img.loaded {
+    animation: imageLoaded 0.5s ease-out;
+}
+
+@keyframes imageLoaded {
+    0% {
+        opacity: 0.7;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Animação para setas da galeria */
+.galeria-nav {
+    animation: slideIn 0.4s ease-out;
+}
+
+.galeria-nav:hover {
+    animation: bounce 0.3s ease-in-out;
+}
+
+/* Animação para indicador de carregamento */
+.galeria-loading {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.loading-spinner {
+    animation: spin 1s linear infinite, pulse 2s ease-in-out infinite;
 }
 
 /* Animação para menu mobile */
@@ -212,15 +257,6 @@
 /* Animação para lightbox */
 .lightbox img {
     animation: fadeInUp 0.3s ease-out;
-}
-
-/* Animação para setas da galeria */
-.galeria-nav {
-    transition: all 0.3s ease;
-}
-
-.galeria-nav:hover {
-    animation: pulse 0.6s ease-in-out;
 }
 
 /* Animação para elementos de ferramentas */

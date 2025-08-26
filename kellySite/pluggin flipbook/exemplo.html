@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DearFlip - Plugin de Flipbook 3D</title>
+    <link rel="stylesheet" href="dearflip.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .controls button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .controls button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .page-info {
+            color: white;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        
+        .flipbook-container {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 DearFlip - Plugin de Flipbook 3D</h1>
+        
+        <div class="controls">
+            <button onclick="goToPage(1)">Primeira Página</button>
+            <button onclick="previousPage()">Anterior</button>
+            <button onclick="nextPage()">Próxima</button>
+            <button onclick="goToPage(10)">Página 10</button>
+            <button onclick="destroyFlipbook()">Destruir</button>
+            <button onclick="recreateFlipbook()">Recriar</button>
+        </div>
+        
+        <div class="page-info">
+            Página atual: <span id="current-page">1</span> de <span id="total-pages">0</span>
+        </div>
+        
+        <div class="flipbook-container">
+            <div id="my-flipbook"></div>
+        </div>
+    </div>
+
+    <!-- Dependências -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="dearflip-jquery-plugin.js"></script>
+
+    <script>
+        // Configuração do PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+        
+        let flipbookInstance;
+        
+        // Array de imagens de exemplo (você pode substituir por um PDF)
+        const sampleImages = [
+            'https://via.placeholder.com/400x600/FF6B6B/FFFFFF?text=Página+1',
+            'https://via.placeholder.com/400x600/4ECDC4/FFFFFF?text=Página+2',
+            'https://via.placeholder.com/400x600/45B7D1/FFFFFF?text=Página+3',
+            'https://via.placeholder.com/400x600/96CEB4/FFFFFF?text=Página+4',
+            'https://via.placeholder.com/400x600/FFEAA7/000000?text=Página+5',
+            'https://via.placeholder.com/400x600/DDA0DD/FFFFFF?text=Página+6',
+            'https://via.placeholder.com/400x600/98D8C8/FFFFFF?text=Página+7',
+            'https://via.placeholder.com/400x600/F7DC6F/000000?text=Página+8',
+            'https://via.placeholder.com/400x600/BB8FCE/FFFFFF?text=Página+9',
+            'https://via.placeholder.com/400x600/85C1E9/FFFFFF?text=Página+10'
+        ];
+        
+        function initFlipbook() {
+            flipbookInstance = $('#my-flipbook').dearFlip({
+                // pdfUrl: '/path/to/your/document.pdf', // Descomente para usar PDF
+                images: sampleImages, // Usando array de imagens
+                width: 900,
+                height: 600,
+                startPage: 1,
+                renderScale: 1.2,
+                pageGap: 10,
+                lazyRenderAhead: 3,
+                onPageFlip: function(pageIndex) {
+                    updatePageInfo(pageIndex);
+                    console.log('Página virada para:', pageIndex);
+                }
+            });
+            
+            // Atualizar informações da página
+            updatePageInfo(1);
+        }
+        
+        function updatePageInfo(currentPage) {
+            document.getElementById('current-page').textContent = currentPage;
+            document.getElementById('total-pages').textContent = sampleImages.length;
+        }
+        
+        function goToPage(pageNum) {
+            if (flipbookInstance) {
+                flipbookInstance.goTo(pageNum);
+            }
+        }
+        
+        function nextPage() {
+            if (flipbookInstance) {
+                flipbookInstance.next();
+            }
+        }
+        
+        function previousPage() {
+            if (flipbookInstance) {
+                flipbookInstance.prev();
+            }
+        }
+        
+        function destroyFlipbook() {
+            if (flipbookInstance) {
+                flipbookInstance.destroy();
+                flipbookInstance = null;
+                console.log('Flipbook destruído');
+            }
+        }
+        
+        function recreateFlipbook() {
+            destroyFlipbook();
+            setTimeout(initFlipbook, 100);
+        }
+        
+        // Inicializar quando a página carregar
+        $(document).ready(function() {
+            initFlipbook();
+            
+            // Adicionar controles de teclado
+            $(document).on('keydown', function(e) {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        previousPage();
+                        break;
+                    case 'ArrowRight':
+                        nextPage();
+                        break;
+                    case 'Home':
+                        goToPage(1);
+                        break;
+                    case 'End':
+                        goToPage(sampleImages.length);
+                        break;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
