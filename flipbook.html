@@ -723,7 +723,18 @@
       
       const flipbookContainer = document.querySelector('.simple-flipbook');
       if (flipbookContainer) {
-        flipbookContainer.innerHTML = '<div class="loading">Selecione uma revista para começar</div>';
+        // Verificar se está no GitHub Pages
+        if (window.location.hostname.includes('github.io')) {
+          flipbookContainer.innerHTML = `
+            <div class="error">
+              <h3>⚠️ PDFs não disponíveis no GitHub Pages</h3>
+              <p>Os PDFs não carregam no GitHub Pages devido a limitações de arquivos grandes.</p>
+              <p><strong>Para testar:</strong> Use Live Server localmente ou hospede os PDFs externamente.</p>
+            </div>
+          `;
+        } else {
+          flipbookContainer.innerHTML = '<div class="loading">Selecione uma revista para começar</div>';
+        }
         
         // Controles de teclado
         document.addEventListener('keydown', (e) => {
