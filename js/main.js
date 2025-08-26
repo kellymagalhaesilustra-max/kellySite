@@ -15,6 +15,7 @@ function loadFlipbook(pdfPath, buttonElement) {
   // Verificar se PDF.js está disponível
   if (typeof pdfjsLib === 'undefined') {
     console.error('PDF.js não está disponível');
+    showError('PDF.js não foi carregado corretamente');
     return;
   }
   
@@ -34,39 +35,72 @@ function loadFlipbook(pdfPath, buttonElement) {
   
   flipbook.innerHTML = '<div class="loading">Carregando PDF...</div>';
 
-  // Carregar PDF com timeout
-  const loadingTask = pdfjsLib.getDocument(pdfPath);
-  
-  // Adicionar timeout de 30 segundos
-  const timeout = setTimeout(() => {
-    console.error('Timeout ao carregar PDF');
-    flipbook.innerHTML = '<div class="error">Timeout ao carregar PDF. Verifique sua conexão.</div>';
-  }, 30000);
+  // Primeiro, verificar se o arquivo existe
+  fetch(pdfPath, { method: 'HEAD' })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Arquivo não encontrado: ${response.status} ${response.statusText}`);
+      }
+      console.log('Arquivo encontrado, iniciando carregamento...');
+      
+      // Carregar PDF com configurações melhoradas
+      const loadingTask = pdfjsLib.getDocument({
+        url: pdfPath,
+        cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/cmaps/',
+        cMapPacked: true,
+        standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/standard_fonts/'
+      });
+      
+      // Adicionar timeout de 30 segundos
+      const timeout = setTimeout(() => {
+        console.error('Timeout ao carregar PDF');
+        showError('Timeout ao carregar PDF. Verifique sua conexão.');
+      }, 30000);
 
-  loadingTask.promise.then(pdf => {
-    clearTimeout(timeout);
-    console.log('PDF carregado com sucesso:', pdf.numPages, 'páginas');
-    currentPdf = pdf;
-    totalPages = pdf.numPages;
-    updatePageInfo();
-    renderPage();
-  }).catch(error => {
-    clearTimeout(timeout);
-    console.error('Erro ao carregar PDF:', error);
-    let errorMessage = 'Erro ao carregar PDF';
-    
-    if (error.name === 'MissingPDFException') {
-      errorMessage = 'Arquivo PDF não encontrado';
-    } else if (error.name === 'InvalidPDFException') {
-      errorMessage = 'Arquivo PDF inválido';
-    } else if (error.name === 'UnexpectedResponseException') {
-      errorMessage = 'Erro de rede ao carregar PDF';
-    } else {
-      errorMessage = 'Erro ao carregar PDF: ' + error.message;
-    }
-    
-    flipbook.innerHTML = '<div class="error">' + errorMessage + '</div>';
-  });
+      loadingTask.promise.then(pdf => {
+        clearTimeout(timeout);
+        console.log('PDF carregado com sucesso:', pdf.numPages, 'páginas');
+        currentPdf = pdf;
+        totalPages = pdf.numPages;
+        updatePageInfo();
+        renderPage();
+      }).catch(error => {
+        clearTimeout(timeout);
+        console.error('Erro ao carregar PDF:', error);
+        handlePDFError(error);
+      });
+    })
+    .catch(error => {
+      console.error('Erro ao verificar arquivo:', error);
+      showError('Arquivo PDF não encontrado ou inacessível');
+    });
+}
+
+function handlePDFError(error) {
+  let errorMessage = 'Erro ao carregar PDF';
+  
+  if (error.name === 'MissingPDFException') {
+    errorMessage = 'Arquivo PDF não encontrado';
+  } else if (error.name === 'InvalidPDFException') {
+    errorMessage = 'Arquivo PDF inválido ou corrompido';
+  } else if (error.name === 'UnexpectedResponseException') {
+    errorMessage = 'Erro de rede ao carregar PDF';
+  } else if (error.name === 'PasswordException') {
+    errorMessage = 'PDF protegido por senha';
+  } else if (error.message.includes('CORS')) {
+    errorMessage = 'Erro de CORS - PDF não pode ser carregado';
+  } else {
+    errorMessage = 'Erro ao carregar PDF: ' + error.message;
+  }
+  
+  showError(errorMessage);
+}
+
+function showError(message) {
+  const flipbook = document.querySelector('.simple-flipbook');
+  if (flipbook) {
+    flipbook.innerHTML = '<div class="error">' + message + '</div>';
+  }
 }
 
 function renderPage() {

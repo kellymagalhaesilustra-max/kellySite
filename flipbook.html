@@ -541,15 +541,24 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
    
-        <script>
-       // Configuração do PDF.js antes de carregar o main.js
+   <script>
+     // Configuração do PDF.js antes de carregar o main.js
+     if (typeof pdfjsLib !== 'undefined') {
+       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+       console.log('PDF.js configurado com sucesso');
+     } else {
+       console.error('PDF.js não foi carregado');
+     }
+     
+     // Aguardar o carregamento completo do PDF.js
+     window.addEventListener('load', function() {
        if (typeof pdfjsLib !== 'undefined') {
-         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-         console.log('PDF.js configurado com sucesso');
+         console.log('PDF.js carregado e pronto para uso');
        } else {
-         console.error('PDF.js não foi carregado');
+         console.error('PDF.js não foi carregado corretamente');
        }
-     </script>
+     });
+   </script>
    
    <script src="js/main.js"></script>
 
