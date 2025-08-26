@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solução Google Docs Viewer - Flipbook PDF</title>
+    <style>
+        body {
+            font-family: 'Neo Sans Std', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #EAEBE5;
+            color: #000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #000;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        
+        .solution-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #FF4DC6;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #fff5f8 0%, #fff 100%);
+        }
+        
+        .solution-title {
+            font-size: 1.5rem;
+            color: #FF4DC6;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .pdf-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .pdf-option {
+            width: 120px;
+            height: 160px;
+            background: white;
+            border: 3px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .pdf-option:hover {
+            border-color: #FF4DC6;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 77, 198, 0.3);
+        }
+        
+        .pdf-option.active {
+            border-color: #FF4DC6;
+            box-shadow: 0 4px 12px rgba(255, 77, 198, 0.4);
+        }
+        
+        .pdf-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .viewer-container {
+            width: 100%;
+            height: 700px;
+            border: 2px solid #FF4DC6;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+            background: #f8f9fa;
+        }
+        
+        .google-docs-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+        
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+        
+        .status.info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 2px solid #2196f3;
+        }
+        
+        .instructions {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .step-number {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: #FF4DC6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Neo Sans Std', sans-serif;
+        }
+        
+        .control-btn:hover {
+            background: #e23dae;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Solução Google Docs Viewer</h1>
+        
+        <div class="solution-section">
+            <div class="solution-title">✅ SOLUÇÃO ALTERNATIVA</div>
+            <div class="status success">
+                <strong>Google Docs Viewer - Mais Confiável!</strong><br>
+                Esta solução usa o visualizador nativo do Google para PDFs.
+            </div>
+        </div>
+        
+        <div class="solution-section">
+            <div class="solution-title">📚 Seleção de Revista</div>
+            <div class="pdf-selector">
+                <div class="pdf-option active" onclick="loadPDF(1, this)" data-pdf="mulheres">
+                    <img src="images/capamulheres.png" alt="Revista Mulheres">
+                </div>
+                <div class="pdf-option" onclick="loadPDF(2, this)" data-pdf="1930">
+                    <img src="images/capa1930.png" alt="Revista 1930">
+                </div>
+                <div class="pdf-option" onclick="loadPDF(3, this)" data-pdf="valor">
+                    <img src="images/valo_revista.png" alt="Revista Valor">
+                </div>
+                <div class="pdf-option" onclick="loadPDF(4, this)" data-pdf="casa-rara">
+                    <img src="images/casa-rara-capa.png" alt="Casa Rara">
+                </div>
+                <div class="pdf-option" onclick="loadPDF(5, this)" data-pdf="forbes">
+                    <img src="images/forbes-revista-capa.png" alt="Forbes Revista">
+                </div>
+            </div>
+        </div>
+        
+        <div class="solution-section">
+            <div class="solution-title">📖 Visualizador Google Docs</div>
+            <div class="viewer-container">
+                <iframe id="google-docs-viewer" class="google-docs-viewer" src=""></iframe>
+            </div>
+            
+            <div class="controls">
+                <button class="control-btn" onclick="openInNewTab()">🔗 Abrir em Nova Aba</button>
+                <button class="control-btn" onclick="downloadPDF()">⬇️ Download PDF</button>
+                <button class="control-btn" onclick="reloadViewer()">🔄 Recarregar</button>
+            </div>
+        </div>
+        
+        <div class="solution-section">
+            <div class="solution-title">📝 Como Funciona</div>
+            <div class="instructions">
+                <p><strong>Vantagens do Google Docs Viewer:</strong></p>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>Mais Confiável:</strong> Usa o visualizador nativo do Google
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>Sem Problemas de CORS:</strong> Não há restrições de origem cruzada
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>Funciona em Todos os Navegadores:</strong> Compatibilidade total
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>Zoom e Navegação:</strong> Controles nativos do Google
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <strong>Download Direto:</strong> Botão de download integrado
+                </div>
+            </div>
+        </div>
+        
+        <div class="solution-section">
+            <div class="solution-title">🔧 Configuração para Seu Site</div>
+            <div class="instructions">
+                <p><strong>Para usar no seu flipbook principal:</strong></p>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    Substitua o PDF.js pelo Google Docs Viewer
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">2</span>
+                    Use o formato: <code>https://docs.google.com/viewer?url=URL_DO_PDF&embedded=true</code>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">3</span>
+                    Ou use diretamente: <code>https://drive.google.com/file/d/ID/view</code>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">4</span>
+                    Mantenha os mesmos links do Google Drive que já configuramos
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const pdfLinks = {
+            1: 'https://drive.google.com/file/d/1Yt3zinZrFmcib2CJoGkdlYSeHOMjWhqZ/view',
+            2: 'https://drive.google.com/file/d/1UUFQiwrE6ftBseceoVAgT_K1xI8ONuGx/view',
+            3: 'https://drive.google.com/file/d/19P8T-4fZIEcwjO5ABrYhOY_X9O9XBUDI/view',
+            4: 'https://drive.google.com/file/d/1b6Sb3y7VrbWnBySWCq10g25EbnBA1ROb/view',
+            5: 'https://drive.google.com/file/d/185a8PjW-KC3KUjzMEhc9-zASGziwXt5d/view'
+        };
+
+        const pdfNames = {
+            1: 'Revista Mulheres',
+            2: 'Revista 1930',
+            3: 'Revista Valor',
+            4: 'Casa Rara',
+            5: 'Forbes'
+        };
+
+        let currentPDF = 1;
+
+        function loadPDF(num, buttonElement) {
+            // Atualizar seleção
+            document.querySelectorAll('.pdf-option').forEach(el => el.classList.remove('active'));
+            if (buttonElement) buttonElement.classList.add('active');
+            
+            currentPDF = num;
+            
+            const viewer = document.getElementById('google-docs-viewer');
+            const url = pdfLinks[num];
+            
+            // Usar Google Docs Viewer
+            viewer.src = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+            
+            console.log(`Carregando ${pdfNames[num]}: ${url}`);
+        }
+
+        function openInNewTab() {
+            const url = pdfLinks[currentPDF];
+            window.open(url, '_blank');
+        }
+
+        function downloadPDF() {
+            const url = pdfLinks[currentPDF];
+            const downloadUrl = url.replace('/view', '/preview');
+            window.open(downloadUrl, '_blank');
+        }
+
+        function reloadViewer() {
+            loadPDF(currentPDF);
+        }
+
+        // Carregar primeiro PDF ao iniciar
+        window.addEventListener('load', () => {
+            loadPDF(1);
+        });
+    </script>
+</body>
+</html>

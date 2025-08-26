@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Google Drive - PDFs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .pdf-link {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #1976d2;
+            word-break: break-all;
+        }
+        .pdf-link:hover {
+            background: #bbdefb;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.success { background: #c8e6c9; color: #2e7d32; }
+        .status.error { background: #ffcdd2; color: #c62828; }
+        .status.info { background: #e3f2fd; color: #1565c0; }
+        button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1976d2;
+        }
+        .pdf-viewer {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Teste de Links do Google Drive</h1>
+        
+        <div class="test-section">
+            <h2>📋 Links Configurados</h2>
+            <div id="status" class="status info">Verificando links...</div>
+            
+            <h3>1. Revista Mulheres</h3>
+            <a href="https://drive.google.com/uc?export=download&id=1Yt3zinZrFmcib2CJoGkdlYSeHOMjWhqZ" target="_blank" class="pdf-link">
+                https://drive.google.com/uc?export=download&id=1Yt3zinZrFmcib2CJoGkdlYSeHOMjWhqZ
+            </a>
+            
+            <h3>2. Revista 1930</h3>
+            <a href="https://drive.google.com/uc?export=download&id=1UUFQiwrE6ftBseceoVAgT_K1xI8ONuGx" target="_blank" class="pdf-link">
+                https://drive.google.com/uc?export=download&id=1UUFQiwrE6ftBseceoVAgT_K1xI8ONuGx
+            </a>
+            
+            <h3>3. Revista Valor</h3>
+            <a href="https://drive.google.com/uc?export=download&id=19P8T-4fZIEcwjO5ABrYhOY_X9O9XBUDI" target="_blank" class="pdf-link">
+                https://drive.google.com/uc?export=download&id=19P8T-4fZIEcwjO5ABrYhOY_X9O9XBUDI
+            </a>
+            
+            <h3>4. Casa Rara</h3>
+            <a href="https://drive.google.com/uc?export=download&id=1b6Sb3y7VrbWnBySWCq10g25EbnBA1ROb" target="_blank" class="pdf-link">
+                https://drive.google.com/uc?export=download&id=1b6Sb3y7VrbWnBySWCq10g25EbnBA1ROb
+            </a>
+            
+            <h3>5. Forbes</h3>
+            <a href="https://drive.google.com/uc?export=download&id=185a8PjW-KC3KUjzMEhc9-zASGziwXt5d" target="_blank" class="pdf-link">
+                https://drive.google.com/uc?export=download&id=185a8PjW-KC3KUjzMEhc9-zASGziwXt5d
+            </a>
+        </div>
+        
+        <div class="test-section">
+            <h2>🧪 Teste de Carregamento</h2>
+            <button onclick="testLink(1)">Testar Revista Mulheres</button>
+            <button onclick="testLink(2)">Testar Revista 1930</button>
+            <button onclick="testLink(3)">Testar Revista Valor</button>
+            <button onclick="testLink(4)">Testar Casa Rara</button>
+            <button onclick="testLink(5)">Testar Forbes</button>
+            
+            <div id="test-result" class="status info" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📖 Visualizador de Teste</h2>
+            <iframe id="pdf-viewer" class="pdf-viewer" src=""></iframe>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔧 Soluções Alternativas</h2>
+            <p><strong>Se os links não funcionarem:</strong></p>
+            <ol>
+                <li>Verifique se os PDFs estão realmente no Google Drive</li>
+                <li>Confirme se os links estão configurados como "Qualquer pessoa com o link pode visualizar"</li>
+                <li>Tente usar o formato alternativo: <code>https://drive.google.com/file/d/ID/view</code></li>
+                <li>Considere usar o Google Docs Viewer: <code>https://docs.google.com/viewer?url=URL_DO_PDF&embedded=true</code></li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const links = {
+            1: 'https://drive.google.com/uc?export=download&id=1Yt3zinZrFmcib2CJoGkdlYSeHOMjWhqZ',
+            2: 'https://drive.google.com/uc?export=download&id=1UUFQiwrE6ftBseceoVAgT_K1xI8ONuGx',
+            3: 'https://drive.google.com/uc?export=download&id=19P8T-4fZIEcwjO5ABrYhOY_X9O9XBUDI',
+            4: 'https://drive.google.com/uc?export=download&id=1b6Sb3y7VrbWnBySWCq10g25EbnBA1ROb',
+            5: 'https://drive.google.com/uc?export=download&id=185a8PjW-KC3KUjzMEhc9-zASGziwXt5d'
+        };
+
+        const names = {
+            1: 'Revista Mulheres',
+            2: 'Revista 1930',
+            3: 'Revista Valor',
+            4: 'Casa Rara',
+            5: 'Forbes'
+        };
+
+        async function testLink(num) {
+            const resultDiv = document.getElementById('test-result');
+            const viewer = document.getElementById('pdf-viewer');
+            
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'status info';
+            resultDiv.textContent = `Testando ${names[num]}...`;
+            
+            try {
+                const response = await fetch(links[num], { method: 'HEAD' });
+                
+                if (response.ok) {
+                    resultDiv.className = 'status success';
+                    resultDiv.textContent = `✅ ${names[num]} - Link funcionando! (Status: ${response.status})`;
+                    
+                    // Tentar carregar no visualizador
+                    viewer.src = links[num];
+                } else {
+                    resultDiv.className = 'status error';
+                    resultDiv.textContent = `❌ ${names[num]} - Erro HTTP: ${response.status}`;
+                    viewer.src = '';
+                }
+            } catch (error) {
+                resultDiv.className = 'status error';
+                resultDiv.textContent = `❌ ${names[num]} - Erro: ${error.message}`;
+                viewer.src = '';
+            }
+        }
+
+        // Teste automático ao carregar a página
+        window.addEventListener('load', () => {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status success';
+            statusDiv.textContent = '✅ Links configurados. Clique nos botões para testar.';
+        });
+    </script>
+</body>
+</html>
