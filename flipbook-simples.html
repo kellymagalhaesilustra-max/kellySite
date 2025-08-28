@@ -1,172 +1,402 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Flipbook Simples - Teste</title>
-
-  <!-- CSS do Flipbook -->
-  <link rel="stylesheet" href="jq-3d-flip-book/css/white-book-view.css" />
-  <link rel="stylesheet" href="jq-3d-flip-book/css/font-awesome.min.css" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flipbook Simples - Kelly Magalhães</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
+      font-family: 'Neo Sans Std', Arial, sans-serif;
       margin: 0;
       padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
     }
 
     .container {
       max-width: 1200px;
       margin: 0 auto;
       background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
       overflow: hidden;
     }
 
     .header {
-      background: #FF4DC6;
+      background: linear-gradient(135deg, #FF4DC6 0%, #FF6B9D 100%);
       color: white;
-      padding: 15px 20px;
+      padding: 30px;
       text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      margin: 10px 0 0 0;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .revista-selector {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .revista-btn {
+      background: linear-gradient(135deg, #FF4DC6 0%, #FF6B9D 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 77, 198, 0.3);
+    }
+
+    .revista-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 77, 198, 0.4);
+    }
+
+    .revista-btn.active {
+      background: linear-gradient(135deg, #333 0%, #555 100%);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
     .flipbook-container {
+      width: 100%;
       height: 600px;
+      background: #f8f9fa;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .page-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-image {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .page-info {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .control-btn {
+      background: linear-gradient(135deg, #FF4DC6 0%, #FF6B9D 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 77, 198, 0.3);
+    }
+
+    .control-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 77, 198, 0.4);
+    }
+
+    .control-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
 
     .loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       text-align: center;
       color: #666;
-      z-index: 10;
+      font-size: 1.2rem;
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #FF4DC6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .error {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       text-align: center;
       color: #d32f2f;
       background: #ffebee;
       padding: 20px;
-      border-radius: 8px;
-      max-width: 400px;
-      z-index: 10;
-    }
-
-    .controls {
-      background: #f8f9fa;
-      padding: 15px;
-      text-align: center;
-    }
-
-    button {
-      background: #FF4DC6;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 5px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #e23dae;
+      border-radius: 10px;
+      margin: 20px;
     }
   </style>
 </head>
 <body>
-
   <div class="container">
     <div class="header">
-      <h1>Flipbook Simples - Teste</h1>
+      <h1>Kelly Magalhães</h1>
+      <p>Revistas Digitais - Flipbook Interativo</p>
     </div>
 
-    <div class="flipbook-container" id="flipbook-container">
-      <div class="loading">Carregando...</div>
-    </div>
+    <div class="content">
+      <div class="revista-selector">
+        <button class="revista-btn active" onclick="loadRevista('1930')">Revista 1930</button>
+        <button class="revista-btn" onclick="loadRevista('valor')">Revista Valor</button>
+        <button class="revista-btn" onclick="loadRevista('forbes')">Forbes Revista</button>
+        <button class="revista-btn" onclick="loadRevista('mulheres')">Revista Mulheres</button>
+        <button class="revista-btn" onclick="loadRevista('casa-rara')">Casa Rara Revista</button>
+      </div>
 
-    <div class="controls">
-      <button onclick="loadPDF('mulheres.pdf')">Carregar Mulheres.pdf</button>
-      <button onclick="loadPDF('jq-3d-flip-book/books/pdf/CondoLiving.pdf')">Carregar CondoLiving.pdf</button>
-      <button onclick="loadPDF('jq-3d-flip-book/books/pdf/TheThreeMusketeers.pdf')">Carregar TheThreeMusketeers.pdf</button>
+      <div class="flipbook-container">
+        <div class="page-container" id="page-container">
+          <div class="loading">Selecione uma revista para começar</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="control-btn" onclick="previousPage()" id="btn-prev">◀ Anterior</button>
+        <button class="control-btn" onclick="goToPage(1)" id="btn-first">Primeira</button>
+        <button class="control-btn" onclick="nextPage()" id="btn-next">Próxima ▶</button>
+        <button class="control-btn" onclick="goToLastPage()" id="btn-last">Última</button>
+      </div>
     </div>
   </div>
 
-  <!-- Scripts necessários -->
-  <script src="jq-3d-flip-book/js/jquery.min.js"></script>
-  <script src="jq-3d-flip-book/js/html2canvas.min.js"></script>
-  <script src="jq-3d-flip-book/js/three.min.js"></script>
-  <script src="jq-3d-flip-book/js/pdf.min.js"></script>
-  
-  <!-- Configurar worker do PDF.js -->
   <script>
-    if (typeof PDFJS !== 'undefined') {
-      PDFJS.workerSrc = 'jq-3d-flip-book/js/pdf.worker.js';
-    }
-  </script>
-  
-  <script src="jq-3d-flip-book/js/3dflipbook.min.js"></script>
+    // Configuração das revistas
+    const REVISTAS = {
+              '1930': {
+          nome: 'Revista 1930',
+          totalPages: 17,
+          folder: '1930'
+        },
+        'valor': {
+          nome: 'Revista Valor',
+          totalPages: 26,
+          folder: 'Valor'
+        },
+        'forbes': {
+          nome: 'Forbes Revista',
+          totalPages: 15,
+          folder: 'Forbes'
+        },
+        'mulheres': {
+          nome: 'Revista Mulheres',
+          totalPages: 37,
+          folder: 'Mulheres'
+        },
+        'casa-rara': {
+          nome: 'Casa Rara Revista',
+          totalPages: 31,
+          folder: 'CasaRara'
+        }
+    };
 
-  <script>
-    function loadPDF(pdfPath) {
-      console.log('Carregando PDF:', pdfPath);
+    let currentRevista = null;
+    let currentPage = 1;
+
+    function loadRevista(revistaKey) {
+      // Atualizar seleção
+      document.querySelectorAll('.revista-btn').forEach(el => el.classList.remove('active'));
+      event.target.classList.add('active');
       
-      const container = $('#flipbook-container');
-      container.empty();
-      container.html('<div class="loading">Carregando PDF...</div>');
-
-      try {
-        container.FlipBook({
-          pdf: pdfPath,
-          template: {
-            html: 'jq-3d-flip-book/templates/default-book-view.html',
-            styles: [
-              'jq-3d-flip-book/css/white-book-view.css'
-            ],
-            links: [
-              { rel: 'stylesheet', href: 'jq-3d-flip-book/css/font-awesome.min.css' }
-            ],
-            script: 'jq-3d-flip-book/js/default-book-view.js'
-          },
-          ready: function(scene) {
-            console.log('Flipbook carregado com sucesso!');
-            $('.loading').remove();
-          }
-        });
-      } catch (error) {
-        console.error('Erro ao carregar flipbook:', error);
-        container.html('<div class="error">Erro ao carregar PDF: ' + error.message + '</div>');
+      const revista = REVISTAS[revistaKey];
+      if (!revista) {
+        console.error('Revista não encontrada:', revistaKey);
+        return;
       }
+      
+      currentRevista = revista;
+      currentPage = 1;
+      
+      console.log(`Carregando revista: ${revista.nome} com ${revista.totalPages} páginas`);
+      
+      // Mostrar loading
+      const container = document.getElementById('page-container');
+      container.innerHTML = '<div class="loading">Carregando revista...</div>';
+      
+      // Carregar primeira página
+      setTimeout(() => {
+        loadPage(1);
+      }, 500);
     }
 
-    $(document).ready(function() {
-      console.log('Página carregada');
+    function loadPage(pageNumber) {
+      if (!currentRevista) return;
       
-      // Verificar dependências
-      const dependencies = {
-        'jQuery': typeof $ !== 'undefined',
-        'PDF.js': typeof PDFJS !== 'undefined',
-        'Three.js': typeof THREE !== 'undefined',
-        'html2canvas': typeof html2canvas !== 'undefined'
+      const container = document.getElementById('page-container');
+      // Tentar primeiro o formato novo, depois o antigo
+      let imagePath = `REVISTA/${currentRevista.folder}/Pag${pageNumber}.jpg`;
+      
+      console.log('Carregando página:', imagePath);
+      
+      // Criar elemento de imagem
+      const img = document.createElement('img');
+      img.className = 'page-image';
+      img.alt = `Página ${pageNumber} - ${currentRevista.nome}`;
+      
+      // Mostrar loading
+      container.innerHTML = '<div class="loading">Carregando página...</div>';
+      
+      // Carregar imagem
+      img.onload = function() {
+        container.innerHTML = '';
+        container.appendChild(img);
+        
+        // Adicionar info da página
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+        pageInfo.textContent = `Página ${pageNumber} de ${currentRevista.totalPages}`;
+        container.appendChild(pageInfo);
+        
+        currentPage = pageNumber;
+        updateControls();
       };
       
-      console.log('Dependências:', dependencies);
+             img.onerror = function() {
+         // Se falhar, tentar o formato antigo
+         const oldFormatPath = `REVISTA/${currentRevista.folder}/Pag (${pageNumber}).jpg`;
+         const img2 = new Image();
+         img2.onload = function() {
+           container.innerHTML = '';
+           const newImg = document.createElement('img');
+           newImg.src = oldFormatPath;
+           newImg.alt = `Página ${pageNumber}`;
+           newImg.className = 'page-image';
+           container.appendChild(newImg);
+           
+           const pageInfo = document.createElement('div');
+           pageInfo.className = 'page-info-overlay';
+           pageInfo.textContent = `Página ${pageNumber} de ${currentRevista.totalPages}`;
+           container.appendChild(pageInfo);
+           
+           currentPage = pageNumber;
+           updateControls();
+         };
+         img2.onerror = function() {
+           container.innerHTML = `
+             <div class="error">
+               <h3>Erro ao carregar página</h3>
+               <p>Não foi possível carregar: ${imagePath}</p>
+               <p>Verifique se o arquivo existe no caminho especificado.</p>
+             </div>
+           `;
+         };
+         img2.src = oldFormatPath;
+       };
       
-      // Carregar primeiro PDF automaticamente
-      setTimeout(function() {
-        loadPDF('mulheres.pdf');
-      }, 1000);
+      img.src = imagePath;
+    }
+
+    function nextPage() {
+      if (!currentRevista || currentPage >= currentRevista.totalPages) return;
+      loadPage(currentPage + 1);
+    }
+
+    function previousPage() {
+      if (!currentRevista || currentPage <= 1) return;
+      loadPage(currentPage - 1);
+    }
+
+    function goToPage(pageNum) {
+      if (!currentRevista) return;
+      if (pageNum < 1 || pageNum > currentRevista.totalPages) return;
+      loadPage(pageNum);
+    }
+
+    function goToLastPage() {
+      if (!currentRevista) return;
+      loadPage(currentRevista.totalPages);
+    }
+
+    function updateControls() {
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const btnFirst = document.getElementById('btn-first');
+      const btnLast = document.getElementById('btn-last');
+      
+      if (!currentRevista) {
+        btnPrev.disabled = true;
+        btnNext.disabled = true;
+        btnFirst.disabled = true;
+        btnLast.disabled = true;
+        return;
+      }
+      
+      btnPrev.disabled = currentPage <= 1;
+      btnNext.disabled = currentPage >= currentRevista.totalPages;
+      btnFirst.disabled = currentPage <= 1;
+      btnLast.disabled = currentPage >= currentRevista.totalPages;
+    }
+
+    // Controles de teclado
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') previousPage();
+      if (e.key === 'ArrowRight') nextPage();
+      if (e.key === 'Home') goToPage(1);
+      if (e.key === 'End') goToLastPage();
+    });
+
+    // Inicialização
+    window.addEventListener('load', function() {
+      // Carregar a primeira revista por padrão
+      loadRevista('1930');
     });
   </script>
-
 </body>
 </html>

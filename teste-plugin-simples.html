@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste Plugin Simples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f0f0f0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .flipbook-container {
+      width: 100%;
+      height: 600px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .controls {
+      text-align: center;
+      margin: 20px 0;
+    }
+    button {
+      background: #FF4DC6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #e23dae;
+    }
+    .revista-selector {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .revista-btn {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .revista-btn:hover {
+      background: #555;
+    }
+    .revista-btn.active {
+      background: #FF4DC6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Teste Plugin jq-3d-flip-book</h1>
+    <p>Testando o plugin com as imagens das revistas</p>
+    
+    <div class="revista-selector">
+      <button class="revista-btn active" onclick="loadRevista('1930')">Revista 1930</button>
+      <button class="revista-btn" onclick="loadRevista('valor')">Revista Valor</button>
+      <button class="revista-btn" onclick="loadRevista('forbes')">Forbes Revista</button>
+      <button class="revista-btn" onclick="loadRevista('mulheres')">Revista Mulheres</button>
+      <button class="revista-btn" onclick="loadRevista('casa-rara')">Casa Rara Revista</button>
+    </div>
+    
+    <div class="flipbook-container" id="flipbook-container">
+      <div style="text-align: center; padding: 50px;">
+        <h3>Selecione uma revista para começar</h3>
+        <p>Clique em uma das revistas acima</p>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button onclick="previousPage()">◀ Anterior</button>
+      <button onclick="nextPage()">Próxima ▶</button>
+      <button onclick="goToPage(1)">Primeira</button>
+      <button onclick="goToLastPage()">Última</button>
+    </div>
+  </div>
+
+  <!-- Scripts do plugin -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="jq-3d-flip-book/js/html2canvas.min.js"></script>
+  <script src="jq-3d-flip-book/js/three.min.js"></script>
+  <script src="jq-3d-flip-book/js/3dflipbook.min.js"></script>
+
+  <script>
+    // Configuração do template
+    var template = {
+      html: 'jq-3d-flip-book/templates/default-book-view.html',
+      links: [{
+        rel: 'stylesheet',
+        href: 'jq-3d-flip-book/css/font-awesome.min.css'
+      }],
+      styles: [
+        'jq-3d-flip-book/css/short-black-book-view.css'
+      ],
+      script: 'jq-3d-flip-book/js/default-book-view.js'
+    };
+
+    // Configuração das revistas
+    const REVISTAS = {
+              '1930': {
+          nome: 'Revista 1930',
+          totalPages: 17,
+          folder: '1930'
+        },
+        'valor': {
+          nome: 'Revista Valor',
+          totalPages: 26,
+          folder: 'Valor'
+        },
+        'forbes': {
+          nome: 'Forbes Revista',
+          totalPages: 15,
+          folder: 'Forbes'
+        },
+        'mulheres': {
+          nome: 'Revista Mulheres',
+          totalPages: 37,
+          folder: 'Mulheres'
+        },
+        'casa-rara': {
+          nome: 'Casa Rara Revista',
+          totalPages: 31,
+          folder: 'CasaRara'
+        }
+    };
+
+    let currentFlipbook = null;
+
+    function loadRevista(revistaKey) {
+      // Atualizar seleção
+      document.querySelectorAll('.revista-btn').forEach(el => el.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const revista = REVISTAS[revistaKey];
+      if (!revista) {
+        console.error('Revista não encontrada:', revistaKey);
+        return;
+      }
+      
+      console.log(`Carregando revista: ${revista.nome} com ${revista.totalPages} páginas`);
+      
+      // Destruir flipbook anterior se existir
+      if (currentFlipbook) {
+        currentFlipbook.destroy();
+      }
+      
+      // Limpar container
+      const container = document.getElementById('flipbook-container');
+      container.innerHTML = '';
+      
+      // Criar novo flipbook
+      currentFlipbook = $('#flipbook-container').FlipBook({
+        pageCallback: function(pageNumber) {
+          // Retorna o caminho da imagem para cada página
+          // Tentar primeiro o formato novo, depois o antigo
+          const newFormatPath = `REVISTA/${revista.folder}/Pag${pageNumber}.jpg`;
+          const oldFormatPath = `REVISTA/${revista.folder}/Pag (${pageNumber}).jpg`;
+          
+          // Verificar se o arquivo novo existe
+          const testImg = new Image();
+          testImg.onload = function() {
+            return newFormatPath;
+          };
+          testImg.onerror = function() {
+            return oldFormatPath;
+          };
+          testImg.src = newFormatPath;
+          
+          // Por padrão, retornar o formato novo
+          return newFormatPath;
+        },
+        totalPages: revista.totalPages,
+        template: template,
+        autoEnableOutline: false,
+        autoEnableThumbnail: false,
+        hard: 'cover',
+        pageMode: 'double',
+        backgroundColor: '#333',
+        autoPlay: false,
+        autoPlayDuration: 3000,
+        autoPlayStart: false,
+        disableFlipByClick: false,
+        disableFlipByScroll: false,
+        disableFlipByTouch: false,
+        flipDuration: 1000,
+        flipSound: false,
+        hardCover: true,
+        height: 600,
+        width: 900,
+        size: 'stretch',
+        startPage: 1,
+        startZIndex: 1,
+        usePortrait: false,
+        zoom: 1,
+        zoomMax: 3,
+        zoomMin: 0.5,
+        zoomStep: 0.1
+      });
+    }
+
+    // Funções de navegação
+    function nextPage() {
+      if (currentFlipbook) {
+        currentFlipbook.next();
+      }
+    }
+
+    function previousPage() {
+      if (currentFlipbook) {
+        currentFlipbook.prev();
+      }
+    }
+
+    function goToPage(pageNum) {
+      if (currentFlipbook) {
+        currentFlipbook.gotoPage(pageNum);
+      }
+    }
+
+    function goToLastPage() {
+      if (currentFlipbook) {
+        const activeBtn = document.querySelector('.revista-btn.active');
+        const revistaKey = activeBtn ? activeBtn.textContent.toLowerCase().replace('revista ', '').replace(' ', '-') : '1930';
+        const revista = REVISTAS[revistaKey];
+        if (revista) {
+          currentFlipbook.gotoPage(revista.totalPages);
+        }
+      }
+    }
+
+    // Inicialização
+    window.addEventListener('load', function() {
+      // Carregar a primeira revista por padrão
+      loadRevista('1930');
+      
+      // Controles de teclado
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') previousPage();
+        if (e.key === 'ArrowRight') nextPage();
+        if (e.key === 'Home') goToPage(1);
+        if (e.key === 'End') goToLastPage();
+      });
+    });
+  </script>
+</body>
+</html>

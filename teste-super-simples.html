@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste Super Simples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f0f0f0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .flipbook-container {
+      width: 100%;
+      height: 600px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    button {
+      background: #FF4DC6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #e23dae;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Teste Super Simples - Plugin jq-3d-flip-book</h1>
+    <p>Testando com apenas uma revista</p>
+    
+    <button onclick="loadRevista()">Carregar Revista 1930</button>
+    
+    <div class="flipbook-container" id="flipbook-container">
+      <div style="text-align: center; padding: 50px;">
+        <h3>Clique no botão para carregar a revista</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts do plugin -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="jq-3d-flip-book/js/html2canvas.min.js"></script>
+  <script src="jq-3d-flip-book/js/three.min.js"></script>
+  <script src="jq-3d-flip-book/js/3dflipbook.min.js"></script>
+
+  <script>
+    let currentFlipbook = null;
+
+    function loadRevista() {
+      console.log('Carregando revista...');
+      
+      // Destruir flipbook anterior se existir
+      if (currentFlipbook) {
+        currentFlipbook.destroy();
+      }
+      
+      // Limpar container
+      const container = document.getElementById('flipbook-container');
+      container.innerHTML = '';
+      
+      // Criar novo flipbook
+      currentFlipbook = $('#flipbook-container').FlipBook({
+        pageCallback: function(pageNumber) {
+          console.log('Carregando página:', pageNumber);
+          return `REVISTA/1930/Pag${pageNumber}.jpg`;
+        },
+        totalPages: 17,
+        template: {
+          html: 'jq-3d-flip-book/templates/default-book-view.html',
+          links: [{
+            rel: 'stylesheet',
+            href: 'jq-3d-flip-book/css/font-awesome.min.css'
+          }],
+          styles: [
+            'jq-3d-flip-book/css/short-black-book-view.css'
+          ],
+          script: 'jq-3d-flip-book/js/default-book-view.js'
+        },
+        autoEnableOutline: false,
+        autoEnableThumbnail: false,
+        hard: 'cover',
+        pageMode: 'double',
+        backgroundColor: '#333',
+        autoPlay: false,
+        flipDuration: 1000,
+        flipSound: false,
+        hardCover: true,
+        height: 600,
+        width: 900,
+        size: 'stretch',
+        startPage: 1,
+        startZIndex: 1,
+        usePortrait: false,
+        zoom: 1,
+        zoomMax: 3,
+        zoomMin: 0.5,
+        zoomStep: 0.1
+      });
+      
+      console.log('Flipbook criado:', currentFlipbook);
+    }
+
+    // Inicialização
+    window.addEventListener('load', function() {
+      console.log('Página carregada, plugin pronto');
+    });
+  </script>
+</body>
+</html>
