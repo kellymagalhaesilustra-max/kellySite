@@ -626,8 +626,7 @@
     // Função para detectar se está rodando no GitHub Pages
     function isGitHubPages() {
       return window.location.hostname === 'kellymagalhaesilustra-max.github.io' || 
-             window.location.hostname.includes('github.io') ||
-             window.location.pathname.includes('/kellySite/');
+             window.location.hostname.includes('github.io');
     }
 
 
@@ -637,8 +636,16 @@
       
       const container = document.getElementById('page-container');
       
+      // Determinar o caminho base correto
+      let basePath = './';
+      if (isGitHubPages()) {
+        basePath = '/kellySite/';
+      }
+      
       // Tentar diferentes formatos de caminho
       const possiblePaths = [
+        `${basePath}REVISTA/${currentRevista.folder}/Pag${pageNumber}.jpg`,
+        `${basePath}REVISTA/${currentRevista.folder}/Pag (${pageNumber}).jpg`,
         `./REVISTA/${currentRevista.folder}/Pag${pageNumber}.jpg`,
         `./REVISTA/${currentRevista.folder}/Pag (${pageNumber}).jpg`,
         `REVISTA/${currentRevista.folder}/Pag${pageNumber}.jpg`,
@@ -646,6 +653,8 @@
       ];
       
       console.log('Tentando carregar página:', pageNumber);
+      console.log('Base path:', basePath);
+      console.log('GitHub Pages:', isGitHubPages());
       
       // Mostrar loading
       container.innerHTML = '<div class="loading">Carregando página...</div>';
@@ -659,7 +668,7 @@
               <h3>Erro ao carregar página</h3>
               <p>Não foi possível carregar a página ${pageNumber}.</p>
               <p>Verifique se o arquivo existe no caminho especificado.</p>
-              <p>Base path: ./</p>
+              <p>Base path: ${basePath}</p>
               <p>GitHub Pages: ${isGitHubPages()}</p>
             </div>
           `;
