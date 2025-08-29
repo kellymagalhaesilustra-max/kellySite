@@ -623,14 +623,33 @@
       }, 500);
     }
 
+    // Função para detectar se está rodando no GitHub Pages
+    function isGitHubPages() {
+      return window.location.hostname === 'kellymagalhaesilustra-max.github.io' || 
+             window.location.hostname.includes('github.io');
+    }
+
+    // Função para obter o caminho base correto
+    function getBasePath() {
+      if (isGitHubPages()) {
+        // No GitHub Pages, usar o nome do repositório como base
+        return '/kellySite/';
+      }
+      return './';
+    }
+
     function loadPage(pageNumber) {
       if (!currentRevista) return;
       
       const container = document.getElementById('page-container');
+      const basePath = getBasePath();
+      
       // Tentar primeiro o formato novo, depois o antigo
-      let imagePath = `REVISTA/${currentRevista.folder}/Pag${pageNumber}.jpg`;
+      let imagePath = `${basePath}REVISTA/${currentRevista.folder}/Pag${pageNumber}.jpg`;
       
       console.log('Carregando página:', imagePath);
+      console.log('Base path:', basePath);
+      console.log('GitHub Pages:', isGitHubPages());
       
       // Criar elemento de imagem
       const img = document.createElement('img');
@@ -657,7 +676,7 @@
       
       img.onerror = function() {
         // Se falhar, tentar o formato antigo
-        const oldFormatPath = `REVISTA/${currentRevista.folder}/Pag (${pageNumber}).jpg`;
+        const oldFormatPath = `${basePath}REVISTA/${currentRevista.folder}/Pag (${pageNumber}).jpg`;
         const img2 = new Image();
         img2.onload = function() {
           container.innerHTML = '';
@@ -681,6 +700,8 @@
               <h3>Erro ao carregar página</h3>
               <p>Não foi possível carregar: ${imagePath}</p>
               <p>Verifique se o arquivo existe no caminho especificado.</p>
+              <p>Base path: ${basePath}</p>
+              <p>GitHub Pages: ${isGitHubPages()}</p>
             </div>
           `;
         };
