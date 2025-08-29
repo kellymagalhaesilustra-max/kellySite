@@ -626,66 +626,59 @@
     // Função para detectar se está rodando no GitHub Pages
     function isGitHubPages() {
       return window.location.hostname === 'kellymagalhaesilustra-max.github.io' || 
-             window.location.hostname.includes('github.io');
+             window.location.hostname.includes('github.io') ||
+             window.location.pathname.includes('/kellySite/');
     }
 
-    // Função para obter o caminho base correto
-    function getBasePath() {
-      if (isGitHubPages()) {
-        // No GitHub Pages, usar o nome do repositório como base
-        return '/kellySite/';
-      }
-      return './';
-    }
+
 
     function loadPage(pageNumber) {
       if (!currentRevista) return;
       
       const container = document.getElementById('page-container');
-      const basePath = getBasePath();
       
-      // Tentar primeiro o formato novo, depois o antigo
-      let imagePath = `${basePath}REVISTA/${currentRevista.folder}/Pag${pageNumber}.jpg`;
+      // Tentar diferentes formatos de caminho
+      const possiblePaths = [
+        `./REVISTA/${currentRevista.folder}/Pag${pageNumber}.jpg`,
+        `./REVISTA/${currentRevista.folder}/Pag (${pageNumber}).jpg`,
+        `REVISTA/${currentRevista.folder}/Pag${pageNumber}.jpg`,
+        `REVISTA/${currentRevista.folder}/Pag (${pageNumber}).jpg`
+      ];
       
-      console.log('Carregando página:', imagePath);
-      console.log('Base path:', basePath);
-      console.log('GitHub Pages:', isGitHubPages());
-      
-      // Criar elemento de imagem
-      const img = document.createElement('img');
-      img.className = 'page-image';
-      img.alt = `Página ${pageNumber} - ${currentRevista.nome}`;
+      console.log('Tentando carregar página:', pageNumber);
       
       // Mostrar loading
       container.innerHTML = '<div class="loading">Carregando página...</div>';
       
-      // Carregar imagem
-      img.onload = function() {
-        container.innerHTML = '';
-        container.appendChild(img);
+      // Função para tentar carregar uma imagem
+      function tryLoadImage(pathIndex) {
+        if (pathIndex >= possiblePaths.length) {
+          // Todas as tentativas falharam
+          container.innerHTML = `
+            <div class="error">
+              <h3>Erro ao carregar página</h3>
+              <p>Não foi possível carregar a página ${pageNumber}.</p>
+              <p>Verifique se o arquivo existe no caminho especificado.</p>
+              <p>Base path: ./</p>
+              <p>GitHub Pages: ${isGitHubPages()}</p>
+            </div>
+          `;
+          return;
+        }
         
-        // Adicionar info da página
-        const pageInfo = document.createElement('div');
-        pageInfo.className = 'page-info-overlay';
-        pageInfo.textContent = `Página ${pageNumber} de ${currentRevista.totalPages}`;
-        container.appendChild(pageInfo);
+        const imagePath = possiblePaths[pathIndex];
+        console.log(`Tentativa ${pathIndex + 1}: ${imagePath}`);
         
-        currentPage = pageNumber;
-        updateControls();
-      };
-      
-      img.onerror = function() {
-        // Se falhar, tentar o formato antigo
-        const oldFormatPath = `${basePath}REVISTA/${currentRevista.folder}/Pag (${pageNumber}).jpg`;
-        const img2 = new Image();
-        img2.onload = function() {
+        const img = new Image();
+        img.className = 'page-image';
+        img.alt = `Página ${pageNumber} - ${currentRevista.nome}`;
+        
+        img.onload = function() {
+          console.log(`Sucesso! Imagem carregada: ${imagePath}`);
           container.innerHTML = '';
-          const newImg = document.createElement('img');
-          newImg.src = oldFormatPath;
-          newImg.alt = `Página ${pageNumber}`;
-          newImg.className = 'page-image';
-          container.appendChild(newImg);
+          container.appendChild(img);
           
+          // Adicionar info da página
           const pageInfo = document.createElement('div');
           pageInfo.className = 'page-info-overlay';
           pageInfo.textContent = `Página ${pageNumber} de ${currentRevista.totalPages}`;
@@ -694,21 +687,18 @@
           currentPage = pageNumber;
           updateControls();
         };
-        img2.onerror = function() {
-          container.innerHTML = `
-            <div class="error">
-              <h3>Erro ao carregar página</h3>
-              <p>Não foi possível carregar: ${imagePath}</p>
-              <p>Verifique se o arquivo existe no caminho especificado.</p>
-              <p>Base path: ${basePath}</p>
-              <p>GitHub Pages: ${isGitHubPages()}</p>
-            </div>
-          `;
+        
+        img.onerror = function() {
+          console.log(`Falha na tentativa ${pathIndex + 1}: ${imagePath}`);
+          // Tentar próximo caminho
+          tryLoadImage(pathIndex + 1);
         };
-        img2.src = oldFormatPath;
-      };
+        
+        img.src = imagePath;
+      }
       
-      img.src = imagePath;
+      // Iniciar tentativas
+      tryLoadImage(0);
     }
 
     function nextPage() {
