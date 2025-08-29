@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar Arquivo Atual - Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-info {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .test-image {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Verificação de Arquivo Atual - Debug</h1>
+    
+    <div class="debug-info">
+        <h2>Informações do Ambiente</h2>
+        <p><strong>URL Atual:</strong> <span id="current-url"></span></p>
+        <p><strong>Hostname:</strong> <span id="hostname"></span></p>
+        <p><strong>É GitHub Pages:</strong> <span id="is-github-pages"></span></p>
+        <p><strong>Caminho Base:</strong> <span id="base-path"></span></p>
+    </div>
+
+    <div class="debug-info">
+        <h2>Teste de Caminhos de Imagem</h2>
+        <p>Vamos testar se conseguimos carregar a imagem REVISTA/1930/Pag1.jpg:</p>
+        
+        <button onclick="testImage('REVISTA/1930/Pag1.jpg')">Testar: REVISTA/1930/Pag1.jpg</button>
+        <button onclick="testImage('./REVISTA/1930/Pag1.jpg')">Testar: ./REVISTA/1930/Pag1.jpg</button>
+        <button onclick="testImage('/kellySite/REVISTA/1930/Pag1.jpg')">Testar: /kellySite/REVISTA/1930/Pag1.jpg</button>
+        
+        <div id="test-result"></div>
+        <img id="test-image" class="test-image" style="display: none;">
+    </div>
+
+    <div class="debug-info">
+        <h2>Links para Testar</h2>
+        <p><a href="flipbook.html" target="_blank">flipbook.html</a></p>
+        <p><a href="flipbook-revistas-unificado.html" target="_blank">flipbook-revistas-unificado.html</a></p>
+        <p><a href="teste-flipbook-novo.html" target="_blank">teste-flipbook-novo.html</a></p>
+    </div>
+
+    <script>
+        // Função para detectar se está rodando no GitHub Pages
+        function isGitHubPages() {
+            return window.location.hostname === 'kellymagalhaesilustra-max.github.io' || 
+                   window.location.hostname.includes('github.io');
+        }
+
+        // Função para obter o caminho base correto
+        function getBasePath() {
+            if (isGitHubPages()) {
+                return '/kellySite/';
+            }
+            return './';
+        }
+
+        // Atualizar informações na página
+        document.getElementById('current-url').textContent = window.location.href;
+        document.getElementById('hostname').textContent = window.location.hostname;
+        document.getElementById('is-github-pages').textContent = isGitHubPages() ? 'Sim' : 'Não';
+        document.getElementById('base-path').textContent = getBasePath();
+
+        // Função para testar carregamento de imagem
+        function testImage(imagePath) {
+            const resultDiv = document.getElementById('test-result');
+            const testImg = document.getElementById('test-image');
+            
+            resultDiv.innerHTML = '<div class="success">Testando carregamento...</div>';
+            testImg.style.display = 'none';
+            
+            const img = new Image();
+            
+            img.onload = function() {
+                resultDiv.innerHTML = `<div class="success">✅ Sucesso! Imagem carregada: ${imagePath}</div>`;
+                testImg.src = imagePath;
+                testImg.style.display = 'block';
+            };
+            
+            img.onerror = function() {
+                resultDiv.innerHTML = `<div class="error">❌ Erro! Não foi possível carregar: ${imagePath}</div>`;
+                testImg.style.display = 'none';
+            };
+            
+            img.src = imagePath;
+        }
+
+        // Teste automático ao carregar a página
+        window.onload = function() {
+            const basePath = getBasePath();
+            const testPath = basePath + 'REVISTA/1930/Pag1.jpg';
+            testImage(testPath);
+        };
+    </script>
+</body>
+</html>

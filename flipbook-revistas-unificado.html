@@ -623,52 +623,71 @@
       loadPage(1);
     }
 
-         // Função para carregar uma página específica
-     function loadPage(pageNumber) {
-       if (!currentRevista) return;
-       
-       const revista = REVISTAS[currentRevista];
-       if (pageNumber < 1 || pageNumber > revista.totalPages) return;
-       
-       currentPage = pageNumber;
-       
-       const pageContainer = document.getElementById('page-container');
-       
-       // Tentar primeiro o formato novo, depois o antigo
-       let imagePath = `REVISTA/${revista.folder}/Pag${pageNumber}.jpg`;
-       
-       showLoading(`Carregando página ${pageNumber}...`);
-       
-       const img = new Image();
-       img.onload = function() {
-         pageContainer.innerHTML = `
-           <img src="${imagePath}" alt="Página ${pageNumber}" class="page-image">
-           <div class="page-info-overlay">Página ${pageNumber} de ${revista.totalPages}</div>
-         `;
-         updatePageInfo();
-         updateControls();
-       };
-       
-       img.onerror = function() {
-         // Se falhar, tentar o formato antigo
-         const oldFormatPath = `REVISTA/${revista.folder}/Pag (${pageNumber}).jpg`;
-         const img2 = new Image();
-         img2.onload = function() {
-           pageContainer.innerHTML = `
-             <img src="${oldFormatPath}" alt="Página ${pageNumber}" class="page-image">
-             <div class="page-info-overlay">Página ${pageNumber} de ${revista.totalPages}</div>
-           `;
-           updatePageInfo();
-           updateControls();
-         };
-         img2.onerror = function() {
-           showError(`Erro ao carregar página ${pageNumber}`);
-         };
-         img2.src = oldFormatPath;
-       };
-       
-       img.src = imagePath;
-     }
+    // Função para detectar se está rodando no GitHub Pages
+    function isGitHubPages() {
+      return window.location.hostname === 'kellymagalhaesilustra-max.github.io' || 
+             window.location.hostname.includes('github.io');
+    }
+
+    // Função para obter o caminho base correto
+    function getBasePath() {
+      if (isGitHubPages()) {
+        // No GitHub Pages, usar o nome do repositório como base
+        return '/kellySite/';
+      }
+      return './';
+    }
+
+    function loadPage(pageNumber) {
+      if (!currentRevista) return;
+      
+      const revista = REVISTAS[currentRevista];
+      if (pageNumber < 1 || pageNumber > revista.totalPages) return;
+      
+      currentPage = pageNumber;
+      
+      const pageContainer = document.getElementById('page-container');
+      const basePath = getBasePath();
+      
+      // Tentar primeiro o formato novo, depois o antigo
+      let imagePath = `${basePath}REVISTA/${revista.folder}/Pag${pageNumber}.jpg`;
+      
+      console.log('Carregando página:', imagePath);
+      console.log('Base path:', basePath);
+      console.log('GitHub Pages:', isGitHubPages());
+      
+      showLoading(`Carregando página ${pageNumber}...`);
+      
+      const img = new Image();
+      img.onload = function() {
+        pageContainer.innerHTML = `
+          <img src="${imagePath}" alt="Página ${pageNumber}" class="page-image">
+          <div class="page-info-overlay">Página ${pageNumber} de ${revista.totalPages}</div>
+        `;
+        updatePageInfo();
+        updateControls();
+      };
+      
+      img.onerror = function() {
+        // Se falhar, tentar o formato antigo
+        const oldFormatPath = `${basePath}REVISTA/${revista.folder}/Pag (${pageNumber}).jpg`;
+        const img2 = new Image();
+        img2.onload = function() {
+          pageContainer.innerHTML = `
+            <img src="${oldFormatPath}" alt="Página ${pageNumber}" class="page-image">
+            <div class="page-info-overlay">Página ${pageNumber} de ${revista.totalPages}</div>
+          `;
+          updatePageInfo();
+          updateControls();
+        };
+        img2.onerror = function() {
+          showError(`Erro ao carregar página ${pageNumber}. Caminho: ${imagePath}. Base path: ${basePath}. GitHub Pages: ${isGitHubPages()}`);
+        };
+        img2.src = oldFormatPath;
+      };
+      
+      img.src = imagePath;
+    }
 
     // Função para mostrar loading
     function showLoading(message) {
